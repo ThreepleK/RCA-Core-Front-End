@@ -1,0 +1,8 @@
+# Nginx Serve Stage
+FROM nginx:alpine
+
+# 원격 앱 인자 값
+ARG DIST_PATH
+
+# 정적 파일 복사
+COPY ${DIST_PATH} /usr/share/nginx/html

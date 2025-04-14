@@ -1,0 +1,8 @@
+# Nginx Serve Stage
+FROM nginx:alpine
+
+# 정적 파일 복사
+COPY ./dist /usr/share/nginx/html
+
+# nginx 설정 덮어쓰기
+COPY ./nginx.conf /etc/nginx/nginx.conf

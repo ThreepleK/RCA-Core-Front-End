@@ -1,0 +1,15 @@
+# 프로젝트 모듈
+node_modules
+.turbo
+
+# 앱 모듈, 캐시, 빌드 데이터 제외
+apps/*/node_modules
+apps/*/.turbo
+apps/*/.__mf__temp
+apps/*/dist
+
+# 공용 패키지 모듈 제외
+packages/*/node_modules
+
+# 배포 빌드 제외
+docker-compose/*/dist
