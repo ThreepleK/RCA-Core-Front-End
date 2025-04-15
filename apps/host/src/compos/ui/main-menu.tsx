@@ -1,5 +1,5 @@
 import { Badge, NavLink } from '@mantine/core';
-import { IconHome2, IconGauge, IconChevronRight, IconActivity, IconCircleOff } from '@tabler/icons-react';
+import { IconHome2, IconPresentationAnalytics } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
 export const MainMenu = () => {
@@ -14,7 +14,7 @@ export const MainMenu = () => {
             />
             <NavLink
                 label="Rca"
-                leftSection={<IconHome2 size={16} stroke={1.5} />}
+                leftSection={<IconPresentationAnalytics size={16} stroke={1.5} />}
                 onClick={() => navigate('/rca')}
             />
         </div>
