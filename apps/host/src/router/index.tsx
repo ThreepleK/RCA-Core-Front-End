@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import type { RouteObject } from 'react-router-dom';
 import { lazy } from 'react'
 import Layout from '@/compos/layout/comm-layout'
+import { protectedLoader } from './protected'
 
 // 메인 메뉴 모음
 const Main = {
@@ -24,14 +25,14 @@ const Main = {
 //     Display: lazy(() => import('@/features/settings/display')),
 // };
 
-// // 인증 (로그인/가입 등)
-// const Auth = {
-//     SignIn: lazy(() => import('@/features/auth/sign-in')),
-//     SignIn2: lazy(() => import('@/features/auth/sign-in/sign-in-2')),
-//     SignUp: lazy(() => import('@/features/auth/sign-up')),
-//     ForgotPassword: lazy(() => import('@/features/auth/forgot-password')),
-//     Otp: lazy(() => import('@/features/auth/otp')),
-// };
+// 인증 (로그인/가입 등)
+const Auth = {
+    SignIn: lazy(() => import('@/features/auth/sign-in')),
+    SignOut: lazy(() => import('@/features/auth/sign-out')),
+    // SignUp: lazy(() => import('@/features/auth/sign-up')),
+    // ForgotPassword: lazy(() => import('@/features/auth/forgot-password')),
+    // Otp: lazy(() => import('@/features/auth/otp')),
+};
 
 // 에러 관련
 const Errors = {
@@ -47,6 +48,7 @@ const routeList: RouteObject[] = [
     {
         path: '/',
         element: <Layout />,
+        loader: protectedLoader,
         children: [
             // { path: '/', element: <Main.Dashboard /> },
             { path: '/rca/*', element: <Main.Rca /> },
@@ -72,7 +74,8 @@ const routeList: RouteObject[] = [
         ]
     },
 
-    // { path: '/sign-in', element: <Auth.SignIn />},
+    { path: '/sign-in', element: <Auth.SignIn />},
+    { path: '/sign-out', element: <Auth.SignOut />},
     // { path: '/sign-up', element: <Auth.SignUp />},
     // { path: '/forgot-password', element: <Auth.ForgotPassword />},
     // { path: '/otp', element: <Auth.Otp />},

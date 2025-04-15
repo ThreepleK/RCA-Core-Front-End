@@ -38,7 +38,13 @@ export default defineConfig((({ mode }: any) => {
       tailwindcss(),
     ],
     server: {
-      port: 5000
+      port: 5000,
+      proxy: {
+        '/api': {
+          target: 'http://192.168.8.111:9081/platform',
+          changeOrigin: true,
+        }
+      }
     },
     resolve: {
       alias: {
@@ -46,5 +52,6 @@ export default defineConfig((({ mode }: any) => {
         '@tabler/icons-react': '@tabler/icons-react/dist/esm/icons/index.mjs'
       },
     },
+    
   };
 }))
