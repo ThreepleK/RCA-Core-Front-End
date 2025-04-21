@@ -10,11 +10,9 @@ import { useNavigate } from 'react-router-dom';
  */
 async function loginApi(id: string, pw: string){
   try {
-    const res = await axios.post('/api/auth/login', {
+    const res = await axios.post('/auth/api/login', {
       username: encodeURIComponent(id).trim(),
       password: encodeURIComponent(pw).trim(),
-    }, {
-      withCredentials: true
     });
 
     // 로그인 성공
@@ -84,8 +82,8 @@ export function UserAuthForm({className}: any) {
     }
 
     // 로그인 상태 기록
-    const {user, token} = res;
-    login(user, token);
+    const {user, accessToken, expiresIn} = res;
+    login(user, accessToken, expiresIn);
   }
 
   // input 엔터

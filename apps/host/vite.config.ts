@@ -40,8 +40,8 @@ export default defineConfig((({ mode }: any) => {
     server: {
       port: 5000,
       proxy: {
-        '/api': {
-          target: 'http://192.168.8.111:9081/platform',
+        '/auth': {
+          target: 'http://192.168.8.111:9081',
           changeOrigin: true,
         }
       }
