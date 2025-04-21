@@ -10,45 +10,58 @@ const _CHANNEL = new BroadcastChannel('auth-refresh-token');
 let _LEADER_ID = uuidv4();      //* 리더 ID
 let _LEADER_CHANGE_TIME = 0;    //* 리더 교체에 들어간 시간
 
+// console.log('TAB-ID', _LEADER_ID);
+
 //* 리더 탭 관련
 const leaderTab = new (class {
     #storage = localStorage;    // 리더 탭 될 스토리지 설정
     #key = 'leader-tab';        // 리더 탭 전용 키 값
-    #isLeader = false;          // 현재 리더 설정 여부
 
     // 현재 탭 리더 여부
     isLeader(){
-        return this.#isLeader;
+        const id = this.getID();
+
+        if( id.length === 0 ){ return false; }
+
+        // 리더로 되어 있지만 우선순위 id에 지정되어 있는지 확인
+        return _LEADER_ID === id[0];
     }
 
     // 현재 리더 탭 ID 설정
     setID(id: string){
-        this.#isLeader = true;
-        this.#storage.setItem(this.#key, id);
+        const idList = this.getID();
+        idList.push(id);
+
+        this.#storage.setItem(this.#key, JSON.stringify(idList));
     }
 
     // 현재 리터 탭 ID 가져오기
     getID(){
-        return this.#storage.getItem(this.#key);
+        const data = this.#storage.getItem(this.#key);
+
+        if( data === undefined || data === null || data === '' ){
+            return JSON.parse('[]');
+        }
+
+        return JSON.parse(data as any);
     }
 
     // 현재 리터 탭 ID 제거
     rmID(){
-        this.#isLeader = false;
         this.#storage.removeItem(this.#key);
     }
 
     // 리더 인수 (*여러 탭 동시에 처리 됨)
     takeOverLeader(callback: (delay: number)=>void){
         // 동시에 위임 받지 않기 위해서 랜덤 시간 부여
-        const delay = (Math.random() * 2000);
+        const delay = 100 + (Math.random() * 2000);
 
         setTimeout(() => {
             // 현재 리더가 누구인지 가져오기
             const currLeader = leaderTab.getID();
-    
+
             // 이미 정해져 있다면 건너 뜀
-            if( !(currLeader === null || currLeader === '') ){ return; }
+            if( currLeader.length > 0 ){ return; }
             
             // 리더 탭 위임 받는데 지연 된 시간 전달
             callback(delay);
@@ -179,6 +192,8 @@ _CHANNEL.onmessage = (e: MessageEvent) => {
         case 'TOKEN_UPDATE': {
             const {token, expiresIn} = data;
 
+            // console.log('리더 -> 토큰 업데이트', token);
+
             // 리더 브라우저 탭 상태에서 보내준 토큰 정보 업데이트
             accessData.setItem({token, expiresIn});
         }; break;
@@ -198,6 +213,9 @@ function startWorker(){
     // 이미 워커가 동작 중이면 처리 안함
     if( worker.isRunning() ){ return; }
 
+    // 리더가 아니면 시작 안함
+    if( !leaderTab.isLeader() ){ return; }
+
     // 워커 만들기
     worker.createWorker();
 
@@ -207,8 +225,8 @@ function startWorker(){
     // [탭 → 워커] 리프레시 토큰 시작 전달
     worker.sendMessage('refresh-start', {
         token,
-        // delay: expiresIn * 1000,
-        loopTime: 15 * 1000,                 // 리프레시 반복 시간
+        delay: expiresIn * 1000,             // 리프레시 반복 서버 시간
+        // loopTime: 15 * 1000,              // 리프레시 반복 고정 시간 
         correctTime: -(10 * 1000),           // 리프레시 보정 시간 (반복 - 보정)
         changeTime: _LEADER_CHANGE_TIME,     // 탭 변경 시 지연시간
     });
@@ -220,6 +238,12 @@ function startWorker(){
             // 워커 정지
             worker.stop();
             return true;
+        }
+
+        // 로그인 상태가 아니면 
+        if( !useUserStore.getState().isLogin() ){
+            // 현재 브라우저 탭 로그아웃 처리
+            useUserStore.getState().logout();
         }
 
         return false;
@@ -234,6 +258,8 @@ function startWorker(){
 
         // 현재 브라우저 탭 상태 업데이트
         useUserStore.getState().updateToken(token, expiresIn);
+
+        // console.log('신규 토큰', token);
 
         // 다른 브라우저 탭 업데이트 내용 전달
         _CHANNEL.postMessage({
@@ -324,8 +350,11 @@ export function initLeader(){
     // 로그인 여부
     const isLogin = useUserStore.getState().isLogin();
 
+    // 리더 권한이 있을 경우
+    const getAccess = leaderTab.getID().length === 0 || leaderTab.isLeader();
+
     // 로그인 && 리더 탭이 공석일 경우, 리더 재설정
-    if( isLogin && leaderTab.getID() === null ){
+    if( isLogin && getAccess ){
         // 내 탭이 리더 탭으로 인수 대상일 때
         leaderTab.takeOverLeader((delay) => {
             // 리더 교체에 들인 시간 가져오기
