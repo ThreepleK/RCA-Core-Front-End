@@ -22,6 +22,7 @@ interface UserState {
     expiresIn: number|null;             // 토큰 업데이트 시간
     
     // action
+    isAdmin: ()=>boolean;               // 사용자가 관리자인지 확인 여부
     login: (                            // 로그인 사용자 정보 설정
         user: User,
         token: string,
@@ -46,6 +47,17 @@ export const useUserStore = create<UserState>()(
         user: null,
         token: null,
         expiresIn: null,
+
+        // 관리자 여부 확인
+        isAdmin: () => {
+            const roles = get()?.user?.roles ?? [];
+
+            for( const r of roles ){
+                if( r?.name === 'ROLE_ADMIN'){ return true; }
+            }
+
+            return false;
+        },
 
         // 로그인 처리
         login: (user, token, expiresIn) => {

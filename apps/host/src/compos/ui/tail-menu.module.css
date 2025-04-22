@@ -14,8 +14,12 @@
         & {
             @apply flex justify-start items-center w-full px-4 hover:bg-gray-100;
         }
-        & > span > svg {
-            @apply mr-1;
+
+        /* 사용자 정보 */
+        &[class*=config] {
+            & {
+                @apply h-[40px] justify-start text-sm gap-3;
+            }
         }
 
         /* 사용자 정보 */

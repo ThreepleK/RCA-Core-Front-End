@@ -15,7 +15,7 @@ interface MainMenuState {
     menuHide: ()=>void;     // 메뉴 숨김
 }
 
-// 테마 Store
+// 메인 메뉴 Store
 export const useMainMenuStore = create<MainMenuState>((set, get) => ({
     state: 'open',
 
