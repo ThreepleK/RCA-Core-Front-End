@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { initLeader4Login, resignLeader } from './utils/refresh-token';
+import { initLeader4Login, resignLeader, loginSendMsg, logoutSendMsg } from './utils/refresh-token';
 
 //* 로그인 사용자 정보
 export interface User {
@@ -53,8 +53,9 @@ export const useUserStore = create<UserState>()(
             // 인증 토큰 기록
             setAccessData({token, expiresIn});
             
-            // 로그인 이후 리더 시작 (시작 전 인증 토큰이 있어야 함)
+            // 로그인 이후 리더 시작, 로그인 전달 (시작 전 인증 토큰이 있어야 함)
             initLeader4Login();
+            loginSendMsg();
 
             // 로그인 정보 설정
             set({ user, token });
@@ -68,8 +69,9 @@ export const useUserStore = create<UserState>()(
             // 로그아웃 처리
             set({ user: null, token: null, expiresIn: null });
 
-            // 리더 해제
+            // 리더 해제, 로그아웃 전달
             resignLeader();
+            logoutSendMsg();
         },
 
         // 로그인 여부

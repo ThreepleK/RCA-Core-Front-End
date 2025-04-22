@@ -10,6 +10,8 @@ const _CHANNEL = new BroadcastChannel('auth-refresh-token');
 let _LEADER_ID = uuidv4();      //* 리더 ID
 let _LEADER_CHANGE_TIME = 0;    //* 리더 교체에 들어간 시간
 
+// 디버깅 용
+// sessionStorage.setItem('tab-id', _LEADER_ID);
 // console.log('TAB-ID', _LEADER_ID);
 
 //* 리더 탭 관련
@@ -19,12 +21,38 @@ const leaderTab = new (class {
 
     // 현재 탭 리더 여부
     isLeader(){
-        const id = this.getID();
+        const leaderChk = (delay: number = 100) => {
+            return new Promise<boolean>((resolve) => {
+                setTimeout(() => {
 
-        if( id.length === 0 ){ return false; }
+                    const id = this.getID();
 
-        // 리더로 되어 있지만 우선순위 id에 지정되어 있는지 확인
-        return _LEADER_ID === id[0];
+                    if( id.length === 0 ){
+                        resolve(false);
+                    }
+
+                    // 리더로 되어 있지만 우선순위 id에 지정되어 있는지 확인
+                    resolve(_LEADER_ID === id[0]);
+                }, delay);
+            });
+        }
+
+        return new Promise<boolean>(async (resolve) => {
+            const loopLen = 3;
+            let chkCnt = 0;
+
+            for( let i = 0; i < loopLen; i++ ){
+                const delay = Math.random() * 1000;
+                const is = await leaderChk(delay);
+
+                if( !is ){ continue; }
+                chkCnt++;
+            }
+
+            // console.log('chkCnt', chkCnt);
+
+            resolve(loopLen === chkCnt);
+        });
     }
 
     // 현재 리더 탭 ID 설정
@@ -168,7 +196,7 @@ const worker = new (class{
         this.allRmReceiveCallback();
     }
     
-})()
+})();
 
 
 //* 채널 메시지
@@ -198,10 +226,23 @@ _CHANNEL.onmessage = (e: MessageEvent) => {
             accessData.setItem({token, expiresIn});
         }; break;
 
+        //* 로그인
+        case 'LOGIN': {
+            // 다른 탭에서 로그인 되었을 때
+            if( /^\/sign-in/gi.test(window.location.pathname) ){
+                // 로그인 상태 업데이트 시간 이후 -> 메인 페이지로 강제 이동
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1000);
+            }
+        }; break;
+
         //* 로그아웃
         case 'LOGOUT': {
-            useUserStore.getState().logout();
-            resignLeader();
+            // 혹시라도 동작하고 있을 워커 로그아웃 신호 전달
+            worker.sendMessage('logout', {});
+            // 로그인 페이지로 강제 이동
+            window.location.href = '/sign-in';
         }; break;
     }
 }
@@ -209,12 +250,12 @@ _CHANNEL.onmessage = (e: MessageEvent) => {
 /**
  * 리프레시 토큰 워커 실행
  */
-function startWorker(){
+async function startWorker(){
     // 이미 워커가 동작 중이면 처리 안함
     if( worker.isRunning() ){ return; }
 
     // 리더가 아니면 시작 안함
-    if( !leaderTab.isLeader() ){ return; }
+    if( !await leaderTab.isLeader() ){ return; }
 
     // 워커 만들기
     worker.createWorker();
@@ -225,16 +266,16 @@ function startWorker(){
     // [탭 → 워커] 리프레시 토큰 시작 전달
     worker.sendMessage('refresh-start', {
         token,
-        delay: expiresIn * 1000,             // 리프레시 반복 서버 시간
+        loopTime: expiresIn * 1000,          // 리프레시 반복 서버 시간
         // loopTime: 15 * 1000,              // 리프레시 반복 고정 시간 
         correctTime: -(10 * 1000),           // 리프레시 보정 시간 (반복 - 보정)
         changeTime: _LEADER_CHANGE_TIME,     // 탭 변경 시 지연시간
     });
 
     // [워커 → 탭] onmessage 훅
-    worker.setOnMessageHook(() => {
+    worker.setOnMessageHook(async () => {
         // 리더가 아닌데 동작 할 경우 처리 안함
-        if( !leaderTab.isLeader() ){
+        if( !await leaderTab.isLeader() ){
             // 워커 정지
             worker.stop();
             return true;
@@ -294,18 +335,16 @@ function stopWorker(){
     // 다른 탭에 신호 전달
     _CHANNEL.postMessage({
         type: 'LEADER_CLOSE',
-        data: {
-            leader_id: _LEADER_ID,
-        }
+        data: {}
     })
 }
 
 /**
  * 리더 - 시작
  */
-function becomeLeader(){
+async function becomeLeader(){
     // 리더면 건너 뜀
-    if( leaderTab.isLeader() ){ return; }
+    if( await leaderTab.isLeader() ){ return; }
 
     // 리더 탭 id 설정
     leaderTab.setID(_LEADER_ID)
@@ -315,11 +354,30 @@ function becomeLeader(){
 }
 
 /**
+ * 로그인
+ */
+export function loginSendMsg(){
+    // 다른 브라우저 탭 로그인 내용 전달
+    _CHANNEL.postMessage({
+        type: 'LOGIN',
+    });
+}
+
+/**
+ * 로그아웃
+ */
+export function logoutSendMsg(){
+    // 다른 브라우저 탭 로그아웃 내용 전달
+    _CHANNEL.postMessage({
+        type: 'LOGOUT',
+    });
+}
+
+/**
  * 리더 - 정지
  */
 export function resignLeader(){
-    // 리더가 아니면 건너 뜀
-    if( !leaderTab.isLeader() ){ return; }
+    leaderTab.rmID();
 
     // 리프레시 토큰 스케쥴 정지
     stopWorker();
@@ -343,9 +401,9 @@ export function initLeader4Login(){
 /**
  * 리더 init (초기 페이지 접근 용)
  */
-export function initLeader(){
+export async function initLeader(){
     // 현재 탭이 리더라면 건너 뜀
-    if( leaderTab.isLeader() ){ return; }
+    if( await leaderTab.isLeader() ){ return; }
 
     // 로그인 여부
     const isLogin = useUserStore.getState().isLogin();

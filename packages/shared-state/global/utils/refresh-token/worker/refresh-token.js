@@ -4,11 +4,12 @@
 
 //* 외부에서 접근 할 함수 설정
 const _CONNECT_FN = {
-    'refresh-start': refreshStart
+    'refresh-start': refreshStart,
+    'logout': logout
 };
 
-//* 스케쥴 용 interval
-let _SCHEDULE_INTERVAL;
+let _SCHEDULE_INTERVAL;     //* 스케쥴 용 interval
+let _IS_LOGOUT = false;     //* 로그아웃 여부
 
 /**
  * 외부에서 전달 온 메시지 이벤트
@@ -37,6 +38,17 @@ function sendResponse(key, data){
 }
 
 /**
+ * 로그아웃
+ */
+function logout(){
+    // 진행중인 스케쥴이 있으면 제거
+    clearTimeout(_SCHEDULE_INTERVAL);
+
+    // 로그아웃 상태 적용
+    _IS_LOGOUT = true;
+}
+
+/**
  * 토큰 업데이트
  * @param {string} token 인증 요청 토큰
  * @param {number} loopTime 리프레시 요청 반복 시간
@@ -53,6 +65,9 @@ function refreshStart({token, loopTime, correctTime, changeTime}){
         try {
             const { origin } = self.location;
 
+            // 로그아웃 상태 일 경우 요청 안함
+            if( _IS_LOGOUT ){ return; }
+
             // 리프레시 요청
             const res = await fetch(origin+'/auth/api/refresh-token', {
                 method: 'POST',
@@ -62,9 +77,14 @@ function refreshStart({token, loopTime, correctTime, changeTime}){
                 },
             });
 
+            // 요청 이후 로그아웃 상태일 경우 처리 안함
+            if( _IS_LOGOUT ){ return; }
+
             //* 토큰 리프레시에 실패 했을 경우
             if( res.status !== 200 ){
-                throw new Error('Refresh token update failed.');
+                sendResponse('LOGOUT');
+                console.log('Refresh token update failed.');
+                return;
             }
 
             //* 성공적으로 토큰을 받았을 경우
