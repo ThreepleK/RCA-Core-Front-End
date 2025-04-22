@@ -1,5 +1,5 @@
-import { NavLink, UnstyledButton, Menu } from '@mantine/core'
-import { IconArrowBarToLeft, IconArrowBarToRight, IconBox, IconCopyright, IconLicense, IconLogout, IconNotification, IconSettings, IconTournament, IconUser, IconUsersGroup } from '@tabler/icons-react'
+import { UnstyledButton, Menu, Text } from '@mantine/core'
+import { IconArrowBarToLeft, IconArrowBarToRight, IconBellRinging, IconBox, IconCopyright, IconHelp, IconLicense, IconLogout, IconNotification, IconSettings, IconTournament, IconUser, IconUsersGroup } from '@tabler/icons-react'
 import { useMainMenuStore, useUserStore } from '@repo/shared-state'
 import { useNavigate } from 'react-router-dom'
 import style from './tail-menu.module.css'
@@ -45,7 +45,7 @@ export const TailMenu = () => {
 
             {/* [관리자] 설정 */}
             {isAdmin && 
-                <Menu position='right-end' width={200} offset={isOpen ? -30 : 0} withArrow trigger="hover"  transitionProps={{transition: 'fade-right', duration: 250}}>
+                <Menu position='right-end' width={200} offset={isOpen ? -30 : 0} withArrow trigger="hover" transitionProps={{transition: 'fade-right', duration: 250}}>
                     <Menu.Target>
                         <UnstyledButton className='config'>
                             <span><IconSettings size={20} stroke={1.5} /></span>
@@ -59,7 +59,8 @@ export const TailMenu = () => {
                                     return <Menu.Label>{item.label}</Menu.Label>;
                                 };
                                 case 'menu': {
-                                    return <Menu.Item leftSection={item.icon} onClick={() => onMenuClick(item?.key)}>{item.label}</Menu.Item>;
+                                    const props = item?.props ?? {};
+                                    return <Menu.Item {...props} leftSection={item.icon} onClick={() => onMenuClick(item?.key)}>{item.label}</Menu.Item>;
                                 };
                                 case 'div': {
                                     return <Menu.Divider />;
@@ -85,7 +86,8 @@ export const TailMenu = () => {
                                 return <Menu.Label>{item.label}</Menu.Label>;
                             };
                             case 'menu': {
-                                return <Menu.Item leftSection={item.icon} onClick={() => onMenuClick(item?.key)}>{item.label}</Menu.Item>;
+                                const props = item?.props ?? {};
+                                return <Menu.Item {...props} leftSection={item.icon} onClick={() => onMenuClick(item?.key)}>{item.label}</Menu.Item>;
                             };
                             case 'div': {
                                 return <Menu.Divider />;
@@ -111,7 +113,8 @@ interface MenuItem {
     type: string,
     label?: string,
     icon?: any,
-    key?: string
+    key?: string,
+    props?: any,
 };
 
 //* 관리자 메뉴
@@ -151,8 +154,25 @@ const _ADM_CONFIG_LIST: MenuItem[] = [{
 
 //* 사용자 메뉴
 const _USER_PERSONAL_MENU: MenuItem[] = [{
+    type: 'label', label: 'Info',
+}, {
+    type: 'menu',
+    label: 'Help',
+    key: 'info-help',
+    icon: <IconHelp size={14} />,
+}, {
+    type: 'div',
+}, {
     type: 'label',
     label: 'User',
+}, {
+    type: 'menu',
+    label: 'Notification',
+    key: 'user-p-noti',
+    icon: <IconBellRinging size={14} />,
+    props: {
+        rightSection: <Text size="xs" c="dimmed">0</Text>
+    }
 }, {
     type: 'menu',
     label: 'Profile',
@@ -163,4 +183,5 @@ const _USER_PERSONAL_MENU: MenuItem[] = [{
     label: 'Logout',
     key: 'user-p-logout',
     icon: <IconLogout size={14} />,
+    props: {color: 'red'}
 }, ];

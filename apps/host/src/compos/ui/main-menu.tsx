@@ -18,6 +18,7 @@ export const MainMenu = () => {
                 return <NavLink
                     key={item.label}
                     label={isOpen ? item.label : ''}
+                    title={item.label}
                     leftSection={item.icon}
                     onClick={() => navigate(item.link)}
                 />
