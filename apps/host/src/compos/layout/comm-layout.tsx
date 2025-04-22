@@ -4,26 +4,31 @@ import { ReactNode, Suspense, useEffect, useMemo, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from '@/lib/utils'
 import { AppShell } from '@mantine/core';
+import { useMainMenuStore } from '@repo/shared-state'
 
 import AppSidebar from "./app-sidebar";
 import { MainMenu } from "../ui/main-menu";
+import { TailMenu } from "../ui/tail-menu";
 
 export default function() {
     const location = useLocation();
     const activePath = location.pathname + location.search;
     const aliveRef = useKeepAliveRef();
 
+    const isOpen = useMainMenuStore((state) => state.isOpen());
+
     return (
         <AppShell
             navbar={{
-                width: 250,
+                width: isOpen ? 250 : 50,
                 breakpoint: 'sm',
             }}
             padding="0"
         >
-            <AppShell.Navbar className="flex gap-y-3 p-3">
+            <AppShell.Navbar className="flex gap-y-3 relative">
                 <AppSidebar />
                 <MainMenu />
+                <TailMenu />
             </AppShell.Navbar>
             <AppShell.Main>
                 <CustomSuspense>

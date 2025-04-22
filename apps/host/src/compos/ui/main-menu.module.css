@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+.menu-area {
+    & {
+        @apply flex flex-col gap-0 items-center justify-center;
+    }
+
+    & > a {
+        @apply px-4;
+    }
+}

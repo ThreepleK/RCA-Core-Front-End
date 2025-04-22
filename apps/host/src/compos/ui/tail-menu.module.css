@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+.menu-area {
+    & {
+        @apply absolute bottom-0 left-0 right-0;
+    }
+
+    & > a {
+        @apply px-4;
+    }
+
+    & > button {
+        /* 일반 버튼 */
+        & {
+            @apply flex justify-start items-center w-full px-4 hover:bg-gray-100;
+        }
+        & > span > svg {
+            @apply mr-1;
+        }
+
+        /* 사용자 정보 */
+        &[class*=user-info] {
+            & {
+                @apply h-[40px] justify-start text-sm gap-3;
+            }
+
+            & > span {
+                @apply min-w-[20px] min-h-[20px] flex justify-center items-center rounded-full bg-black text-white font-bold;
+            }
+        }
+
+        /* 카피라이터 */
+        &[class*=copyright] {
+            & {
+                @apply h-[40px] justify-between text-xs border-solid border-t-1 border-gray-200;
+            }
+
+            & > span {
+                @apply flex justify-start items-center;
+            }
+        }
+    }
+}

@@ -19,29 +19,31 @@ export const TeamSwitcher = () => {
   ))
 
   return (
-    <Combobox
-      store={combobox}
-      onOptionSubmit={(val) => {
-        setValue(val);
-        combobox.closeDropdown();
-      }}
-    >
-      <Combobox.Target>
-        <InputBase
-          component="button"
-          type="button"
-          pointer
-          rightSection={<Combobox.Chevron />}
-          rightSectionPointerEvents="none"
-          onClick={() => combobox.toggleDropdown()}
-        >
-          {value || <Input.Placeholder>Pick Team</Input.Placeholder>}
-        </InputBase>
-      </Combobox.Target>
+    <div className='px-3'>
+      <Combobox
+        store={combobox}
+        onOptionSubmit={(val) => {
+          setValue(val);
+          combobox.closeDropdown();
+        }}
+      >
+        <Combobox.Target>
+          <InputBase
+            component="button"
+            type="button"
+            pointer
+            rightSection={<Combobox.Chevron />}
+            rightSectionPointerEvents="none"
+            onClick={() => combobox.toggleDropdown()}
+          >
+            {value || <Input.Placeholder>Pick Team</Input.Placeholder>}
+          </InputBase>
+        </Combobox.Target>
 
-      <Combobox.Dropdown>
-        <Combobox.Options>{options}</Combobox.Options>
-      </Combobox.Dropdown>
-    </Combobox>
+        <Combobox.Dropdown>
+          <Combobox.Options>{options}</Combobox.Options>
+        </Combobox.Dropdown>
+      </Combobox>
+    </div>
   )
 }
