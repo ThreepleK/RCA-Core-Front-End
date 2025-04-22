@@ -16,20 +16,24 @@ export default function() {
     const aliveRef = useKeepAliveRef();
 
     const isOpen = useMainMenuStore((state) => state.isOpen());
+    const isHide = useMainMenuStore((state) => state.isHide());
 
     return (
         <AppShell
             navbar={{
-                width: isOpen ? 250 : 50,
+                width: isHide ? 0 : (isOpen ? 250 : 50),
                 breakpoint: 'sm',
             }}
             padding="0"
+            transitionDuration={0}
         >
-            <AppShell.Navbar className="flex gap-y-3 relative">
-                <AppSidebar />
-                <MainMenu />
-                <TailMenu />
-            </AppShell.Navbar>
+            {!isHide && 
+                <AppShell.Navbar className="flex gap-y-3 relative">
+                    <AppSidebar />
+                    <MainMenu />
+                    <TailMenu />
+                </AppShell.Navbar>
+            }
             <AppShell.Main>
                 <CustomSuspense>
                     <KeepAliveRouteOutlet
