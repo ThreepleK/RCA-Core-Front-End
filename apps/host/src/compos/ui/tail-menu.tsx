@@ -1,15 +1,13 @@
 import { UnstyledButton, Menu, Text } from '@mantine/core'
 import { IconArrowBarToLeft, IconArrowBarToRight, IconBellRinging, IconBox, IconCopyright, IconHelp, IconLicense, IconLogout, IconNotification, IconSettings, IconTournament, IconUser, IconUsersGroup } from '@tabler/icons-react'
 import { useMainMenuStore, useUserStore } from '@repo/shared-state'
-import { useNavigate } from 'react-router-dom'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
 import style from './tail-menu.module.css'
 
 /**
  * 메인 하위 메뉴 표기 용
  */
-export const TailMenu = () => {
-    const navigate = useNavigate();
-    
+export const TailMenu = () => {    
     // 메뉴 관련
     const {menuOpen, menuClose} = useMainMenuStore((state) => state);
     const isOpen = useMainMenuStore((state) => state.isOpen());
@@ -24,13 +22,6 @@ export const TailMenu = () => {
             menuClose();
         } else {
             menuOpen();
-        }
-    }
-
-    //* 메뉴 클릭
-    const onMenuClick = (type: string|undefined) => {
-        switch(type){
-            case 'user-p-logout': navigate('/sign-out'); break;
         }
     }
 
@@ -53,20 +44,7 @@ export const TailMenu = () => {
                         </UnstyledButton>
                     </Menu.Target>
                     <Menu.Dropdown>
-                        {_ADM_CONFIG_LIST.map((item) => {
-                            switch(item.type){
-                                case 'label': {
-                                    return <Menu.Label>{item.label}</Menu.Label>;
-                                };
-                                case 'menu': {
-                                    const props = item?.props ?? {};
-                                    return <Menu.Item {...props} leftSection={item.icon} onClick={() => onMenuClick(item?.key)}>{item.label}</Menu.Item>;
-                                };
-                                case 'div': {
-                                    return <Menu.Divider />;
-                                };
-                            }
-                        })}
+                        <DropDownItems list={_ADM_CONFIG_LIST} />
                     </Menu.Dropdown>
                 </Menu>
             }
@@ -80,20 +58,7 @@ export const TailMenu = () => {
                     </UnstyledButton>
                 </Menu.Target>
                 <Menu.Dropdown>
-                    {_USER_PERSONAL_MENU.map((item) => {
-                        switch(item.type){
-                            case 'label': {
-                                return <Menu.Label>{item.label}</Menu.Label>;
-                            };
-                            case 'menu': {
-                                const props = item?.props ?? {};
-                                return <Menu.Item {...props} leftSection={item.icon} onClick={() => onMenuClick(item?.key)}>{item.label}</Menu.Item>;
-                            };
-                            case 'div': {
-                                return <Menu.Divider />;
-                            };
-                        }
-                    })}
+                    <DropDownItems list={_USER_PERSONAL_MENU} />
                 </Menu.Dropdown>
             </Menu>
 
@@ -109,12 +74,56 @@ export const TailMenu = () => {
     </>
 }
 
+//* 메뉴 클릭
+const onMenuClick = (
+    navigate: NavigateFunction,     // 메뉴 이동처리 함수
+    type: string|undefined          // 메뉴 타입
+) => {    
+    switch(type){
+        case 'user-p-logout': navigate('/sign-out'); break;
+    }
+}
+
+/**
+ * 드랍다운 메뉴 아이템 표기
+ */
+const DropDownItems = ({list} : {
+    list: MenuItem[]        // 메뉴 아이템 리스트
+}) => {
+    const navigate = useNavigate();
+
+    return <>{list.map((item) => {
+        const props = item?.props ?? {};
+
+        switch(item.type){
+            // 라벨
+            case 'label': {
+                return <Menu.Label key={item.label} {...props}>{item.label}</Menu.Label>;
+            };
+            // 메뉴
+            case 'menu': {
+                return <Menu.Item
+                    key={item.label}
+                    leftSection={item.icon}
+                    onClick={() => onMenuClick(navigate, item?.key)}
+                    {...props}
+                >{item.label}</Menu.Item>;
+            };
+            // 분리 선
+            case 'div': {
+                return <Menu.Divider key={`div-${Date.now()}-${Math.random()}`} {...props}/>;
+            };
+        }
+    })}</>;
+}
+
+//* 메뉴 설정에 필요한 타입
 interface MenuItem {
-    type: string,
-    label?: string,
-    icon?: any,
-    key?: string,
-    props?: any,
+    type: string,       // 메뉴 타입, label: 메뉴 라벨, menu: 메뉴 명, div: 구분 선
+    label?: string,     // 라벨
+    icon?: any,         // 아이콘
+    key?: string,       // 메뉴 클릭 키 갑
+    props?: any,        // 관련 컴포넌트 추가 속성
 };
 
 //* 관리자 메뉴

@@ -15,9 +15,9 @@ if (document.readyState === 'complete') {
 }
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+  // <StrictMode>
     <ThemeProvider>
       <RouterProvider router={router} />
     </ThemeProvider>
-  </StrictMode>,
+  // </StrictMode>,
 )
