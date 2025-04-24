@@ -16,6 +16,7 @@ export default {
     remoteAccessKey: {
         rca: 'rca',
         dashboard: 'dashboard',
+        admin: 'admin',
     },
 
     //* 원격 앱 개발/배포 주소
@@ -23,10 +24,12 @@ export default {
         development: {
             rca: `${_DEV_HOST}:5001`,
             dashboard: `${_DEV_HOST}:5002`,
+            admin: `${_DEV_HOST}:5009`,
         },
         production: {
             rca: `${_PROD_HOST_REMOTE}/rca`,
             dashboard: `${_PROD_HOST_REMOTE}/dashboard`,
+            admin: `${_PROD_HOST_REMOTE}/admin`,
         }
     },
 
@@ -41,5 +44,8 @@ export default {
         dashboard: {
             './main': './src/App.tsx'
         },
+        admin: {
+            './main': './src/App.tsx'
+        }
     }
 }
