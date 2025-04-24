@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import type { RouteObject } from 'react-router-dom';
 import { lazy } from 'react'
+import CommLayout from '@/compos/layout/comm-layout';
 
 // 메인 메뉴 모음
 const Main = {
@@ -12,6 +13,7 @@ const Main = {
 const routeList: RouteObject[] = [
     {
         path: '/',
+        element: <CommLayout />,
         children: [
             { path: '/', element: <Main.Root /> },
             { path: '/test', element: <Main.Test /> },
