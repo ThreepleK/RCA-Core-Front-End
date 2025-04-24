@@ -5,53 +5,34 @@ import tailwindcss from '@tailwindcss/vite'
 import { federation } from '@module-federation/vite';
 import envs from '../../packages/env/env-common';
 
-// https://vite.dev/config/
+/** @type {import('vite').UserConfig} */
 export default defineConfig((({ mode }: any) => {
   const remote = (envs.remoteAppHost as any)[mode];
-  const accKey = envs.remoteAccessKey;
+  const accKey = envs.remoteAccessKey.admin;
+  const exposes = envs.exposeSync.admin;
   const filename = envs.mf_fileName;
 
-  const remotes: any = {};
-  //* RCA
-  remotes[accKey.rca] = {
-    type: "module",
-    name: accKey.rca,
-    entry: `${remote.rca}/${filename}`,
-    shareScope: 'default'
-  };
-  //* RCA
-  remotes[accKey.admin] = {
-    type: "module",
-    name: accKey.admin,
-    entry: `${remote.admin}/${filename}`,
-    shareScope: 'default'
-  };
-  
   return {
     publicDir: path.resolve(__dirname, './public'),
+    define: { '$resourceUrl': JSON.stringify(remote.admin) },
     build: {
       target: 'chrome89',
-    },    
+    },
+    base: `${remote.admin}`,
     plugins: [
       federation({
-        name: 'vite_provider',
-        manifest: true,
-        remotes,
+        name: accKey,
+        filename,
+        exposes,
         shared: {
-          react: { singleton: true },
-        },
+          react: { singleton: true }
+        }
       }),
       react(),
       tailwindcss(),
     ],
     server: {
-      port: 5000,
-      proxy: {
-        '/auth': {
-          target: 'http://192.168.8.111:9081',
-          changeOrigin: true,
-        }
-      }
+      port: 5009,
     },
     resolve: {
       alias: {
@@ -59,6 +40,5 @@ export default defineConfig((({ mode }: any) => {
         '@tabler/icons-react': '@tabler/icons-react/dist/esm/icons/index.mjs'
       },
     },
-    
   };
 }))

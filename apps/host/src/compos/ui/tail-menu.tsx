@@ -81,6 +81,8 @@ const onMenuClick = (
 ) => {    
     switch(type){
         case 'user-p-logout': navigate('/sign-out'); break;
+        case 'label-userGroup': navigate('/admin/user-group'); break;
+        case 'label-permission': navigate('/admin/permission'); break;
     }
 }
 

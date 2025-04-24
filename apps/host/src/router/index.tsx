@@ -8,6 +8,8 @@ import { protectedLoader } from './protected'
 const Main = {
     // @ts-ignore
     Rca: lazy(() => import('rca/main')),
+    // @ts-ignore
+    Admin: lazy(() => import('admin/main')),
 };
 
 // // AG Grid관련
@@ -71,6 +73,7 @@ const routeList: RouteObject[] = [
             //     ]
             // },
             // { path: '/help-center', element: <Main.HelpCenter />},
+            { path: '/admin/*', element: <Main.Admin />},
         ]
     },
 
