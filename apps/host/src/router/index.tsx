@@ -1,16 +1,14 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Outlet } from 'react-router-dom';
 import type { RouteObject } from 'react-router-dom';
 import { lazy } from 'react'
 import Layout from '@/compos/layout/comm-layout'
 import { protectedLoader } from './protected'
 
-// 메인 메뉴 모음
-const Main = {
-    // @ts-ignore
-    Rca: lazy(() => import('rca/main')),
-    // @ts-ignore
-    Admin: lazy(() => import('admin/main')),
-};
+// @ts-ignore
+import Admin from 'admin/router';
+// @ts-ignore
+import Rca from 'rca/router';
+
 
 // // AG Grid관련
 // const AGGrid = {
@@ -53,7 +51,6 @@ const routeList: RouteObject[] = [
         loader: protectedLoader,
         children: [
             // { path: '/', element: <Main.Dashboard /> },
-            { path: '/rca/*', element: <Main.Rca /> },
             // { path: '/chats', element: <Main.Charts /> },
             // { path: '/apps', element: <Main.Apps /> },
             // { path: '/users', element: <Main.Users />},
@@ -73,7 +70,9 @@ const routeList: RouteObject[] = [
             //     ]
             // },
             // { path: '/help-center', element: <Main.HelpCenter />},
-            { path: '/admin/*', element: <Main.Admin />},
+            // { path: '/admin', element: <Main.HelpCenter />},
+            Rca,
+            Admin
         ]
     },
 

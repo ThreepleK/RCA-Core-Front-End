@@ -25,7 +25,8 @@ export default defineConfig((({ mode }: any) => {
         filename,
         exposes,
         shared: {
-          react: { singleton: true }
+          react: { singleton: true },
+          '@repo/shared-state': { singleton: true }
         }
       }),
       react(),

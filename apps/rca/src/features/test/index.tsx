@@ -6,6 +6,6 @@ export default function(){
     return <>
         <img src={`${$resourceUrl}/test.jpg`} />
         test
-        <button onClick={() => navigate('/')}>Back</button>
+        <button onClick={() => navigate('/rca')}>Back</button>
     </>
 }

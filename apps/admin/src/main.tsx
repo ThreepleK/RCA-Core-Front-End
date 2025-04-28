@@ -1,10 +1,12 @@
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
+import { RouterProvider } from 'react-router-dom'
+import { ThemeProvider } from '@repo/core-ui'
+import router from './router';
+
+import '@mantine/core/styles.css'
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
+  <ThemeProvider>
+    <RouterProvider router={router} />
+  </ThemeProvider>
 )

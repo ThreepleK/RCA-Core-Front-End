@@ -1,10 +1,14 @@
-import { useKeepAliveRef } from "keepalive-for-react";
-import { KeepAliveRouter } from '@repo/core-ui'
+// import { useKeepAliveRef } from "keepalive-for-react";
+import { Outlet } from "react-router-dom";
 
 export default function() {
-    const aliveRef = useKeepAliveRef();
+    // const aliveRef = useKeepAliveRef();
 
     return (
-        <KeepAliveRouter target='/rca' aliveRef={aliveRef} />
+        <div>
+            111
+            <Outlet />
+        </div>
+        // <KeepAliveRouter target='/rca' aliveRef={aliveRef} />
     )
 }

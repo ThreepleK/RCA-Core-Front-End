@@ -1,29 +1,41 @@
 import { ReactNode, Suspense, useEffect, useMemo, useRef, RefObject } from "react";
 import type { KeepAliveRef } from "keepalive-for-react";
 import KeepAliveRouteOutlet from "keepalive-for-react-router";
-import { useLocation } from "react-router-dom";
-
+import { useNavigate, useLocation, Outlet } from "react-router-dom";
+import { usePageMoveStore } from "@repo/shared-state";
 
 export function KeepAliveRouter({ target, aliveRef }: {
     target: string;
     aliveRef: RefObject<KeepAliveRef | undefined>;
 }){
+    // const {pathname, search} = useLocation();
+    const navigate = useNavigate();
+    const { setNavigate } = usePageMoveStore(s => s);
+
+    // 초기 설정
+    useEffect(() => {
+        // 페이지 이동 함수 설정
+        setNavigate(navigate);
+    }, []);
+
     // 활성화 키 설정
-    const { pathname, search } = useLocation();
-    const activeKey = useMemo(() => getActiveKey(target, pathname, search), [target, pathname, search]);
+    // const activeKey = useMemo(() => getActiveKey(target, pathname, search), [target, pathname, search]);
 
     // console.log( activeKeyParser(activeKey) )
 
+    // return <CustomSuspense>
+    //     <KeepAliveRouteOutlet
+    //         activeCacheKey={activeKey}
+    //         wrapperComponent={(props: any) => MemoScrollTopWrapper({target, aliveRef, ...props})}
+    //         duration={0}
+    //         transition={false}
+    //         exclude={['']}
+    //         aliveRef={aliveRef}
+    //         containerClassName='w-full h-full'
+    //     />
+    // </CustomSuspense>;
     return <CustomSuspense>
-        <KeepAliveRouteOutlet
-            activeCacheKey={activeKey}
-            wrapperComponent={(props: any) => MemoScrollTopWrapper({target, aliveRef, ...props})}
-            duration={0}
-            transition={false}
-            exclude={['']}
-            aliveRef={aliveRef}
-            containerClassName='w-full h-full'
-        />
+        <Outlet />
     </CustomSuspense>;
 }
 
@@ -57,7 +69,7 @@ function MemoScrollTopWrapper({ target, children, aliveRef }: {
     // const domRef = useRef<HTMLDivElement>(null);
     const { pathname, search } = useLocation();
     
-    const scrollHistoryMap = useRef<Map<string, number>>(new Map());
+    // const scrollHistoryMap = useRef<Map<string, number>>(new Map());
 
     // 활성화 키
     const activeKey = useMemo(() => getActiveKey(target, pathname, search), [target, pathname, search]);
