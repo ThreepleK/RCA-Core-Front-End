@@ -65,6 +65,12 @@ importers:
       '@types/node':
         specifier: ^22.14.0
         version: 22.14.0
+      keepalive-for-react:
+        specifier: ^4.0.2
+        version: 4.0.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      keepalive-for-react-router:
+        specifier: ^2.0.2
+        version: 2.0.2(keepalive-for-react@4.0.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react-router@7.5.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       react:
         specifier: ^19.0.0
         version: 19.1.0
@@ -379,6 +385,9 @@ importers:
       keepalive-for-react:
         specifier: ^4.0.2
         version: 4.0.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      keepalive-for-react-router:
+        specifier: ^2.0.2
+        version: 2.0.2(keepalive-for-react@4.0.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react-router@7.5.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       react:
         specifier: ^19.0.0
         version: 19.1.0

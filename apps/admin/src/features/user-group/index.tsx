@@ -1,10 +1,10 @@
-import { usePageMoveStore } from '@repo/shared-state';
+import { useNavigate } from 'react-router-dom';
 
 const UserGroup = () => {
-  const { pageMove } = usePageMoveStore(s => s);
+  const navigate = useNavigate();
 
   const onClick = () => {
-    pageMove('/admin/permission');
+    navigate('/admin/permission');
   }
 
   return <>

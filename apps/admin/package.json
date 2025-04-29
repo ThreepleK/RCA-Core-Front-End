@@ -28,6 +28,8 @@
     "@repo/core-ui": "workspace:*",
     "@repo/shared-state": "workspace:*",
     "@types/node": "^22.14.0",
+    "keepalive-for-react": "^4.0.2",
+    "keepalive-for-react-router": "^2.0.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

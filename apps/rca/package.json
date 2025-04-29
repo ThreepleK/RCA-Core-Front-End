@@ -36,6 +36,7 @@
     "dayjs": "^1.11.13",
     "embla-carousel-react": "^7.1.0",
     "keepalive-for-react": "^4.0.2",
+    "keepalive-for-react-router": "^2.0.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "recharts": "2"

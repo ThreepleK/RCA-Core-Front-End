@@ -39,6 +39,8 @@ export default defineConfig((({ mode }: any) => {
         remotes,
         shared: {
           react: { singleton: true },
+          'keepalive-for-react': { singleton: true },
+          'react-router-dom': { singleton: true },
           '@repo/shared-state': { singleton: true }
         },
       }),

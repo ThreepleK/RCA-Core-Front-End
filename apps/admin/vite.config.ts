@@ -26,6 +26,8 @@ export default defineConfig((({ mode }: any) => {
         exposes,
         shared: {
           react: { singleton: true },
+          'keepalive-for-react': { singleton: true },
+          'react-router-dom': { singleton: true },
           '@repo/shared-state': { singleton: true }
         }
       }),
