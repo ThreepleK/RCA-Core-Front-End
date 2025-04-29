@@ -1,8 +1,9 @@
 import { Title, NavLink, Input, Button } from '@mantine/core';
 import { IconFolderUp, IconFolderDown, IconSettings, IconUser, IconUsersGroup } from '@tabler/icons-react';
+import { useNavigate } from 'react-router-dom';
 import style from './comm-layout.module.css'
 import { useEffect, useState } from 'react';
-import { create } from 'zustand';
+import { useSideMenuStore } from '@/stores/';
 
 /**
  * 사이드 영역
@@ -10,8 +11,8 @@ import { create } from 'zustand';
 export function SideArea({className}: {
     className: string
 }){
-    const isFoled = useStore((s: any) => s.isFolded());
-    const {setAllFold, setAllUnFold, setMenuTotalCnt} = useStore((s: any) => s);
+    const isFoled = useSideMenuStore((s: any) => s.isFolded());
+    const {setAllFold, setAllUnFold, setMenuTotalCnt} = useSideMenuStore((s: any) => s);
 
     //* 초기 설정
     useEffect(() => {
@@ -46,15 +47,16 @@ export function SideArea({className}: {
 }
 
 function MenuItem({label, link, icon, childs, depth, isOpen}: {
-    label: string,
-    link: string,
-    icon?: any,
-    childs?: MenuItem[],
-    isOpen?: boolean,
+    label: string,          // 메뉴
+    link?: string,          // 이동할 링크
+    icon?: any,             // 표기될 아이콘
+    childs?: MenuItem[],    // 하위 항목이 있다면 관련 리스트
+    isOpen?: boolean,       // 메인 메뉴라면 펼침 여부 
     depth: number,
 }){
-    const {setFold, setUnFold, childSuccess} = useStore((s: any) => s);
-    const isFoledChild = useStore((s: any) => s.isFoledChild());
+    const navigate = useNavigate();
+    const {setFold, setUnFold, childSuccess} = useSideMenuStore((s: any) => s);
+    const isFoledChild = useSideMenuStore((s: any) => s.isFoledChild());
     const [isOepnState, setIsOpenState] = useState<boolean>(isOpen ?? true);
 
     // 전체 메뉴 토글 처리 할 경우 
@@ -65,7 +67,7 @@ function MenuItem({label, link, icon, childs, depth, isOpen}: {
         setIsOpenState(!isFoledChild);
     }, [isFoledChild])
 
-
+    //* 메뉴 접힘/펼침 상태 업데이트
     const onMenuChange = (opened: boolean) => {
         // 첫번째 메뉴가 아니면 건너 뜀
         if( depth !== 0 ){ return; }
@@ -79,11 +81,24 @@ function MenuItem({label, link, icon, childs, depth, isOpen}: {
         setIsOpenState(opened);
     }
 
+    //* 메뉴 클릭
+    const onMenuClick = (e: any, link?: string) => {
+        // NavLink의 기본 a href가 동작하지 않기 위함
+        e.preventDefault();
+
+        // 이동 할 링크 가 없으면 처리 안함
+        if( !link || link === '' || link === '#' ){ return; }
+
+        // react-router-dom을 이용한 페이지 이동
+        navigate(link);
+    }
+
     return <NavLink label={label}
         key={label}
-        href={link}
+        // href={link}
         leftSection={icon}
         onChange={onMenuChange}
+        onClick={(e: any) => { onMenuClick(e, link) }}
         opened={isOepnState}
     >
         {childs && childs.map(c => <MenuItem depth={depth+1} key={c.label} {...c} />)}
@@ -108,7 +123,7 @@ function MenuPrint({ menuList }: {
 
 interface MenuItem {
     label: string,
-    link: string,
+    link?: string,
     icon?: any,
     childs?: MenuItem[],
     isOpen?: boolean,
@@ -119,7 +134,6 @@ const _MENU_LIST: MenuItem[] = [
     {
         label: 'Team',
         icon: <IconUsersGroup size={16} stroke={1.5} />,
-        link: '/admin',
         isOpen: true,
         childs: [
             { label: 'Management', link: '/admin' },
@@ -129,7 +143,6 @@ const _MENU_LIST: MenuItem[] = [
     {
         label: 'User',
         icon: <IconUser size={16} stroke={1.5} />,
-        link: '/admin',
         isOpen: true,
         childs: [
             { label: 'Member', link: '/admin' },
@@ -139,7 +152,6 @@ const _MENU_LIST: MenuItem[] = [
     {
         label: 'System preferences',
         icon: <IconSettings size={16} stroke={1.5} />,
-        link: '/admin',
         isOpen: true,
         childs: [
             { label: 'Logo', link: '/admin' },
@@ -149,71 +161,3 @@ const _MENU_LIST: MenuItem[] = [
         ]
     },
 ];
-
-// 메뉴 접힘 여부를 제어 하기 위한 스토어 설정
-const useStore = create((set, get: any) => ({
-    max: 3,             // 메인 메뉴 갯수
-    cnt: 0,
-    childSuccessCnt: 0,
-    isParent: false,
-
-    //* 메뉴 갯수 설정
-    setMenuTotalCnt: (total: number) => {
-        set({max: total});
-    },
-
-    //* 메뉴 전체 접힘 상태
-    isFolded: () => {
-        return get().cnt === get().max;
-    },
-
-    //* setAllFold, setAllUnFold를 통해 하위 메뉴가 제어하기 위한 상태
-    isFoledChild: () => {
-        if( !get().isParent ){ return null; }
-        return get().cnt === get().max;
-    },
-    
-    //* 접힘 처리
-    setFold: () => {
-        const cnt = get().cnt;
-        set({cnt: cnt + 1});
-    },
-    //* 펼침 처리
-    setUnFold: () => {
-        const cnt = get().cnt;
-        set({cnt: cnt - 1});
-    },
-    //* 전체 접힘
-    setAllFold: () => {
-        const max = get().max;
-        set({
-            cnt: max,
-            isParent: true,
-            childSuccessCnt: 0,
-        });
-    },
-    //* 전체 펼침
-    setAllUnFold: () => {
-        set({
-            cnt: 0,
-            isParent: true,
-            childSuccessCnt: 0,
-        });
-    },
-    //* 하위 항목 처리
-    childSuccess: () => {
-        const max = get().max;
-        const cCount = get().childSuccessCnt + 1;
-
-        if( max <= cCount ){
-            set({
-                isParent: false,
-                childSuccessCnt: 0,
-            });
-        } else {
-            set({
-                childSuccessCnt: cCount,
-            });
-        }
-    },
-}));
