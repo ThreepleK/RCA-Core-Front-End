@@ -1,5 +1,5 @@
 import type { RouteObject } from 'react-router-dom'
-import CommLayout from '@/compos/layout/comm-layout'
+// import CommLayout from '@/compos/layout/comm-layout'
 
 // 메인 메뉴 모음
 import Root from '@/features/main'

@@ -19,7 +19,8 @@ export default defineConfig((({ mode }: any) => {
     entry: `${remote.rca}/${filename}`,
     shareScope: 'default'
   };
-  //* RCA
+  
+  //* Admin
   remotes[accKey.admin] = {
     type: "module",
     name: accKey.admin,
@@ -41,7 +42,8 @@ export default defineConfig((({ mode }: any) => {
           react: { singleton: true },
           'keepalive-for-react': { singleton: true },
           'react-router-dom': { singleton: true },
-          '@repo/shared-state': { singleton: true }
+          '@mantine/core': { singleton: true },
+          '@repo/shared-state': { singleton: true },
         },
       }),
       react(),

@@ -4,6 +4,7 @@ import { ThemeProvider } from '@repo/core-ui'
 import router from './router';
 
 import '@mantine/core/styles.css'
+import './index.css'
 
 createRoot(document.getElementById('root')!).render(
   <ThemeProvider>

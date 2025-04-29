@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+.layout {
+    /* 레이아웃 전체 영역 */
+    & { @apply relative w-full h-svh; }
+
+    /* 좌측 사이드 */
+    & .side-area {
+        & {
+            @apply absolute left-0 top-0 bottom-0 border-r-1 border-r-gray-300 bg-white;
+            width: var(--side-width);
+        }
+
+        & .title {
+            @apply px-4 py-3 bg-gray-700 text-white leading-none;
+        }
+
+        & .search {
+            & {
+                @apply grid gap-1 items-center px-2 pt-2;
+                grid-template-columns: 1fr 27px;
+            }
+            & input {
+                @apply w-full h-[30px] min-h-[30px];
+            }
+            & > button {
+                @apply p-1 h-[30px];
+            }
+        }
+    }
+
+    /* 컨텐츠 본문 */
+    & .cont-area {
+        @apply absolute right-0 top-0 bottom-0;
+        left: var(--side-width);
+    }
+}

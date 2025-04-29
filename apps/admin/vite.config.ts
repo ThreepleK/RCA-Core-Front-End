@@ -5,8 +5,9 @@ import tailwindcss from '@tailwindcss/vite'
 import { federation } from '@module-federation/vite';
 import envs from '../../packages/env/env-common';
 
-/** @type {import('vite').UserConfig} */
+// https://vite.dev/config/
 export default defineConfig((({ mode }: any) => {
+
   const remote = (envs.remoteAppHost as any)[mode];
   const accKey = envs.remoteAccessKey.admin;
   const exposes = envs.exposeSync.admin;
@@ -28,7 +29,8 @@ export default defineConfig((({ mode }: any) => {
           react: { singleton: true },
           'keepalive-for-react': { singleton: true },
           'react-router-dom': { singleton: true },
-          '@repo/shared-state': { singleton: true }
+          '@mantine/core': { singleton: true },
+          '@repo/shared-state': { singleton: true },
         }
       }),
       react(),
