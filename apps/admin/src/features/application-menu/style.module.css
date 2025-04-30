@@ -1,5 +1,39 @@
 @import "tailwindcss";
 
-.title {
-    @apply px-4 py-3 leading-none border-b-1 border-b-gray-200;
+.section {
+    /* 영역 */
+    & {
+        @apply relative h-full;
+    }
+
+    /* 제목 */
+    & > .title {
+        @apply relative z-50 px-4 py-3 leading-none shadow-sm;
+    }
+    
+    /* 메뉴 편집 */
+    & > .menu-editor {
+        & {
+            @apply absolute top-[51px] left-0 bottom-0 w-[var(--edit-width)] bg-gray-100 px-3 py-2;
+        }
+
+        & .tree {
+            @apply mt-2;
+        }
+
+        & .tree .tree-item {
+            & {
+                @apply flex items-center px-1 h-[25px] hover:bg-gray-200 rounded-md;
+            }
+            & > div {
+                @apply w-full;
+                background: transparent !important;
+            }
+        }
+    }
+
+    /* 본문 */
+    & > .cont-area {
+        @apply absolute top-[51px] left-[var(--edit-width)] bottom-0 right-0;
+    }
 }
