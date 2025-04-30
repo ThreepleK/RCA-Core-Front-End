@@ -1,8 +1,9 @@
 import { Title, NavLink, Input, Button } from '@mantine/core';
-import { IconFolderUp, IconFolderDown, IconSettings, IconUser, IconUsersGroup, IconSearch } from '@tabler/icons-react';
+import { IconFolderUp, IconFolderDown, IconSearch } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useSideMenuStore } from '@/stores';
+import { MenuItem as MenuItemType, MenuList } from './menu-list';
 
 import style from './comm-layout.module.css'
 
@@ -20,7 +21,7 @@ export function SideArea({className}: {
     //* 초기 설정
     useEffect(() => {
         // 최상단 메뉴 총 갯수 설정
-        setMenuTotalCnt(_MENU_LIST.length);
+        setMenuTotalCnt(MenuList.length);
     }, []);
 
     //* 메뉴 토글
@@ -60,7 +61,7 @@ export function SideArea({className}: {
                 </Button>
             </div>
             {/* 메뉴 */}
-            <MenuPrint menuList={_MENU_LIST} searchKeyword={searchKeyword} />
+            <MenuPrint menuList={MenuList} searchKeyword={searchKeyword} />
         </div>
     );
 }
@@ -69,7 +70,7 @@ function MenuItem({label, link, icon, childs, depth, isOpen, searchKeyword}: {
     label: string,          // 메뉴
     link?: string,          // 이동할 링크
     icon?: any,             // 표기될 아이콘
-    childs?: MenuItem[],    // 하위 항목이 있다면 관련 리스트
+    childs?: MenuItemType[],    // 하위 항목이 있다면 관련 리스트
     isOpen?: boolean,       // 메인 메뉴라면 펼침 여부 
     depth: number,          // 메뉴 깊이 번호
     searchKeyword: string, // 검색 키워드
@@ -173,55 +174,14 @@ function MenuItem({label, link, icon, childs, depth, isOpen, searchKeyword}: {
  * 메뉴 출력
  */
 function MenuPrint({ menuList, searchKeyword }: {
-    menuList: MenuItem[];       // 메뉴 리스트
+    menuList: MenuItemType[];       // 메뉴 리스트
     searchKeyword: string;      // 메뉴 검색
 }) {
     
     // 출력할 메뉴가 없을 경우
     if( !menuList || menuList.length === 0 ){ return <></>; }
 
-    return menuList.map((item: MenuItem) => {   
+    return menuList.map((item: MenuItemType) => {   
         return <MenuItem depth={0} searchKeyword={searchKeyword} {...item} />;
     })
 }
-
-interface MenuItem {
-    label: string,
-    link?: string,
-    icon?: any,
-    childs?: MenuItem[],
-    isOpen?: boolean,
-};
-
-//* 메뉴 리스트
-const _MENU_LIST: MenuItem[] = [
-    {
-        label: 'Team',
-        icon: <IconUsersGroup size={16} stroke={1.5} />,
-        isOpen: true,
-        childs: [
-            { label: 'Management', link: '/admin' },
-            { label: 'Permission', link: '/admin/permission' },
-        ]
-    },
-    {
-        label: 'User',
-        icon: <IconUser size={16} stroke={1.5} />,
-        isOpen: true,
-        childs: [
-            { label: 'Member', link: '/admin' },
-            { label: 'User group', link: '/admin/user-group' },
-        ]
-    },
-    {
-        label: 'System preferences',
-        icon: <IconSettings size={16} stroke={1.5} />,
-        isOpen: true,
-        childs: [
-            { label: 'Logo', link: '/admin' },
-            { label: 'Favicon', link: '/admin' },
-            { label: 'Sidebar menu', link: '/admin' },
-            { label: 'Application menu', link: '/admin' },
-        ]
-    },
-];
