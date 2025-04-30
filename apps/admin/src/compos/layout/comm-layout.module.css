@@ -21,11 +21,19 @@
                 grid-template-columns: 1fr 27px;
             }
             & input {
-                @apply w-full h-[30px] min-h-[30px];
+                @apply w-full;
+            }
+            & input + div {
+                cursor: pointer;
             }
             & > button {
-                @apply p-1 h-[30px];
+                @apply p-1;
             }
+        }
+
+        /* 메뉴 검색 키워드 표기기 */
+        & .search-keyword > b {
+            @apply px-1 bg-amber-100 rounded-md font-semibold leading-none;
         }
     }
 
