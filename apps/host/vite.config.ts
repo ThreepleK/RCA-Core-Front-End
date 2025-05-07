@@ -53,7 +53,7 @@ export default defineConfig((({ mode }: any) => {
       port: 5000,
       proxy: {
         '/auth': {
-          target: 'http://192.168.8.111:9081',
+          target: 'http://192.168.7.230:9081',
           changeOrigin: true,
         }
       }

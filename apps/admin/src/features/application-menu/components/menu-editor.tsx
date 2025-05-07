@@ -1,7 +1,9 @@
 import { Select, Menu } from '@mantine/core';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { TreeEditor, TREE_LIST } from './tree-editor';
+import { TreeEditor, EditBox } from './tree-editor';
 import { useCtxMenuStore, CtxMenuItem } from '../stores'
+import { useTreeStore, TREE_LIST } from '../stores'
+import { useCtxBoxStore } from '../stores'
 
 import style from "../style.module.css";
 import { IconPlus } from '@tabler/icons-react';
@@ -22,6 +24,17 @@ export function MenuEditor({ menu }: {
     const treeData = useMemo(() => getSelected_treeList(menuList, selectApp), [selectApp]);
 
     const {setOpen, setPosition, setMenuList} = useCtxMenuStore(s => s);
+    const {list, setTreeList} = useTreeStore(s => s);
+    const {
+        setOpen: setBoxOpen,
+        setPosition: setBoxPosition,
+        setContent: setBoxContent
+    } = useCtxBoxStore(s => s);
+
+    // 초기 설정
+    useEffect(() => {
+        setTreeList(treeData.list);
+    }, [treeData.label]);
 
     //* 마우스 우클릭 이벤트
     const onMenuClick = (e: any) => {
@@ -42,9 +55,15 @@ export function MenuEditor({ menu }: {
         // 메뉴 설정 및 선택 이벤트 처리
         setMenuList(menu, (selected) => {
             switch( selected ){
-                case 'root-add': break;
+                case 'root-add':
+                    setBoxContent(<EditBox title='Add submenu' mode='add' item={{
+                        id: '',
+                        label: '',
+                    }} isRoot={true} />);
+                    setBoxPosition(clientX, clientY);
+                    setBoxOpen(true);    
+                break;
             }
-            console.log('메뉴 선택', selected);
         });
 
         setPosition(clientX, clientY);
@@ -57,6 +76,7 @@ export function MenuEditor({ menu }: {
             ref={menuEditRef}
             onContextMenu={onMenuClick}
         >
+            {/* 앱 선택 */}
             <Select
                 size="xs"
                 label="Select an Application"
@@ -66,14 +86,14 @@ export function MenuEditor({ menu }: {
                 checkIconPosition="right"
                 searchable
             />
-            <TreeEditor
-                className={style.tree}
-                selectedLabel={treeData.label}
-                menuList={treeData.list}
-            />
+
+            {/* 트리 편집 */}
+            <TreeEditor className={style.tree} list={list} />
 
             {/* 우클릭 메뉴 */}
             <CtxMenu />
+            {/* 우클릭 기타 박스 */}
+            <CtxBox />
         </div>
     );
 }
@@ -108,11 +128,7 @@ function CtxMenu(){
 
     return <div ref={menuRef}>
         <Menu opened={isOpen}>
-            <Menu.Dropdown style={{
-                position: 'fixed',
-                left: clientX,
-                top: clientY,
-            }}>
+            <Menu.Dropdown style={{ position: 'fixed', left: clientX, top: clientY }}>
                 {menuList && menuList.map((item, idx) => {
                     if( item.type === 'label' ){
                         return <Menu.Label key={idx}>{item.label}</Menu.Label>
@@ -130,6 +146,48 @@ function CtxMenu(){
                 })}
             </Menu.Dropdown>
         </Menu>
+    </div>;
+}
+
+/**
+ * 우클릭 box
+ */
+function CtxBox(){
+    const boxRef = useRef<HTMLDivElement>(null);
+    const {clientX, clientY, isOpen, content} = useCtxBoxStore(s => s);
+    const {setOpen} = useCtxBoxStore(s => s);
+
+    //* 메뉴 바깥쪽 클릭 처리
+    const menuOutsideClick = (e: MouseEvent) => {
+        if( boxRef.current && !boxRef.current.contains(e.target as Node) ){
+            setOpen(false);
+        }
+    }
+
+    //* 초기 이벤트 등록
+    useEffect(() => {
+        setTimeout(() => {
+            if( isOpen ){
+                window.addEventListener('click', menuOutsideClick);
+            } else {
+                window.removeEventListener('click', menuOutsideClick);
+            }
+        }, 100);
+      
+        return () => window.removeEventListener('click', menuOutsideClick);
+    }, [isOpen]);
+
+
+    return <div ref={boxRef} style={{
+        display: (isOpen ? 'block' : 'none'),
+        position: 'fixed',
+        zIndex: 99999,
+        left: clientX,
+        top: clientY
+    }}>
+        <div className={style['ctx-box']}>
+            {content}
+        </div>
     </div>;
 }
 

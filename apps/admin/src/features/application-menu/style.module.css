@@ -50,4 +50,9 @@
     & > .cont-area {
         @apply absolute top-[51px] left-[var(--edit-width)] bottom-0 right-0;
     }
+
+    /* 우클릭 box */
+    & .ctx-box {
+        @apply w-max bg-white px-3 py-2 rounded-md shadow-xs;
+    }
 }
