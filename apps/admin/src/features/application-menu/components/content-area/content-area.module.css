@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+/* 탭 리스트 */
+.tab-list {
+    & {
+        @apply absolute left-0 top-0 right-0 h-[40px];
+    }
+
+    &::before {
+        @apply border-b-[1px];
+    }
+
+    & > button {
+        @apply h-[40px];
+    }
+}
+
+/* 탭 본문 */
+.tab-cont {
+    @apply absolute left-0 top-[40px] right-0 bottom-0 overflow-y-auto;
+}

@@ -1,5 +1,6 @@
 import { Title } from "@mantine/core";
 import { DB_MENU_ITEM, MenuEditor } from "./components/menu-editor";
+import { ContentArea } from "./components/content-area";
 
 import style from "./style.module.css";
 
@@ -8,7 +9,7 @@ const ApplicationMenu = () => {
         <section className={style.section} style={{'--edit-width': '300px'} as any}>
             <Title className={style.title} order={2}>Application Menu</Title>
             <MenuEditor menu={_DB_RAW_DATA} />
-            <div className={style['cont-area']}>---</div>
+            <ContentArea className={style['cont-area']} />
         </section>
     );
 }

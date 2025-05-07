@@ -25,11 +25,7 @@ export function MenuEditor({ menu }: {
 
     const {setOpen, setPosition, setMenuList} = useCtxMenuStore(s => s);
     const {list, setTreeList} = useTreeStore(s => s);
-    const {
-        setOpen: setBoxOpen,
-        setPosition: setBoxPosition,
-        setContent: setBoxContent
-    } = useCtxBoxStore(s => s);
+    const { setOpen: setBoxOpen, setPosition: setBoxPosition, setContent: setBoxContent } = useCtxBoxStore(s => s);
 
     // 초기 설정
     useEffect(() => {

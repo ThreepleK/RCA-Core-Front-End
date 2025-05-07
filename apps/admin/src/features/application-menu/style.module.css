@@ -48,7 +48,7 @@
 
     /* 본문 */
     & > .cont-area {
-        @apply absolute top-[51px] left-[var(--edit-width)] bottom-0 right-0;
+        @apply absolute top-[51px] left-[var(--edit-width)] bottom-0 right-0 overflow-y-auto;
     }
 
     /* 우클릭 box */
