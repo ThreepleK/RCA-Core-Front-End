@@ -17,5 +17,13 @@
 
 /* 탭 본문 */
 .tab-cont {
-    @apply absolute left-0 top-[40px] right-0 bottom-0 overflow-y-auto;
+    @apply absolute left-0 top-[40px] right-0 bottom-0 overflow-y-auto px-4 py-3;
+}
+
+
+/* 메뉴 정보 */
+.menu-info {
+    & {
+        @apply max-w-[400px];
+    }
 }

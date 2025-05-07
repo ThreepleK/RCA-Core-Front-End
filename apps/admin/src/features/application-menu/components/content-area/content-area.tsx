@@ -8,7 +8,7 @@ export function ContentArea({ className }: {
     className: string
 }){
     return <div className={className}>
-        <Tabs variant="default" defaultValue={_TAB_CONTS[0].key}>
+        <Tabs variant="default" defaultValue={_TAB_CONTS[1].key}>
             <Tabs.List className={style['tab-list']}>
                 {_TAB_CONTS && _TAB_CONTS.map((item, idx) => {
                     return <Tabs.Tab key={idx} value={item.key} leftSection={item.icon}>{item.label}</Tabs.Tab>
@@ -22,7 +22,15 @@ export function ContentArea({ className }: {
     </div>;
 }
 
-const _TAB_CONTS = [
+type TabItem = {
+    label: string;  // 탭 라벨
+    key: string;    // 탭 & 본문 연결 키 값
+    comp: any;      // 탭 본문 컴포넌트
+    icon: any;      // 탭 라벨 좌측에 들어갈 아이콘
+}
+
+// 탭 
+const _TAB_CONTS: TabItem[] = [
     {label: 'Menu info', key: 'menuInfo', comp: <MenuInfo />, icon: <IconInfoSquareRounded size={15} strokeWidth={1.25} /> },
     {label: 'Permission', key: 'permission', comp: <Permission />, icon: <IconLicense size={15} strokeWidth={1.25} /> },
 ];
