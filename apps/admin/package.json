@@ -32,6 +32,7 @@
     "@repo/shared-state": "workspace:*",
     "@tabler/icons-react": "^3.31.0",
     "@types/node": "^22.14.0",
+    "dnd-kit-sortable-tree": "^0.1.73",
     "keepalive-for-react": "^4.0.2",
     "keepalive-for-react-router": "^2.0.2",
     "react": "^19.0.0",
