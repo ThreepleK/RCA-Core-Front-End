@@ -1,13 +1,16 @@
 import { Select, Menu } from '@mantine/core';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { TreeEditor, TREE_LIST } from './tree-editor';
-import { useCtxMenuStore } from '../stores'
+import { useCtxMenuStore, CtxMenuItem } from '../stores'
 
 import style from "../style.module.css";
+import { IconPlus } from '@tabler/icons-react';
 
 export function MenuEditor({ menu }: {
     menu: DB_MENU_ITEM[]
 }){
+    const menuEditRef = useRef<HTMLDivElement>(null);
+
     // 메뉴, 앱 메뉴에 필요한 형태로 변환
     const menuList = useMemo(() => dbRaw2Data(menu), [menu]);
     const appList = useMemo(() => getAppList(menuList), [menuList]);
@@ -18,8 +21,42 @@ export function MenuEditor({ menu }: {
     //* App이 선택 되면 트리 메뉴 변경
     const treeData = useMemo(() => getSelected_treeList(menuList, selectApp), [selectApp]);
 
+    const {setOpen, setPosition, setMenuList} = useCtxMenuStore(s => s);
+
+    //* 마우스 우클릭 이벤트
+    const onMenuClick = (e: any) => {
+
+        // 하위 이벤트 대상일 때는 건너 뜀
+        if( e.target !== menuEditRef.current){ return; }
+        e.preventDefault();
+
+        // 출력 될 좌표 값 가져오기 
+        const { clientX, clientY } = e;
+
+        // 우클릭 메뉴 설정
+        const menu: CtxMenuItem[] = [
+            {type: 'label', label: treeData.label, value: ''},
+            {type: 'item', label: 'Add submenu', value: 'root-add', icon: <IconPlus size={16} />},
+        ];
+
+        // 메뉴 설정 및 선택 이벤트 처리
+        setMenuList(menu, (selected) => {
+            switch( selected ){
+                case 'root-add': break;
+            }
+            console.log('메뉴 선택', selected);
+        });
+
+        setPosition(clientX, clientY);
+        setOpen(true);
+    }
+
     return (
-        <div className={style['menu-editor']}>
+        <div
+            className={style['menu-editor']}
+            ref={menuEditRef}
+            onContextMenu={onMenuClick}
+        >
             <Select
                 size="xs"
                 label="Select an Application"

@@ -79,15 +79,15 @@ const TreeItem = forwardRef<
         // 우클릭 메뉴 설정
         const menu: CtxMenuItem[] = [
             {type: 'label', label: props.item.label, value: ''},
-            {type: 'item', label: 'Add submenu', value: 'add', icon: <IconPlus size={16} />},
-            {type: 'item', label: 'Remove', value: 'remove', icon: <IconTrash size={16} /> },
+            {type: 'item', label: 'Add submenu', value: 'item-add', icon: <IconPlus size={16} />},
+            {type: 'item', label: 'Remove', value: 'item-remove', icon: <IconTrash size={16} /> },
         ];
 
         // 메뉴 설정 및 선택 이벤트 처리
         setMenuList(menu, (selected) => {
             switch( selected ){
-                case 'add': break;
-                case 'remove': break;
+                case 'item-add': break;
+                case 'item-remove': break;
             }
             console.log('메뉴 선택', selected);
             console.log(props);
