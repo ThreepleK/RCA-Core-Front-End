@@ -38,6 +38,12 @@ export default defineConfig((({ mode }: any) => {
     ],
     server: {
       port: 5009,
+      proxy: {
+        '/admin/api': {
+          target: 'http://192.168.7.230:9081',
+          changeOrigin: true,
+        }
+      }
     },
     resolve: {
       alias: {

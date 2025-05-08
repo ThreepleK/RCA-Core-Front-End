@@ -55,7 +55,11 @@ export default defineConfig((({ mode }: any) => {
         '/auth': {
           target: 'http://192.168.7.230:9081',
           changeOrigin: true,
-        }
+        },
+        '/admin/api': {
+          target: 'http://192.168.7.230:9081',
+          changeOrigin: true,
+        },
       }
     },
     resolve: {
