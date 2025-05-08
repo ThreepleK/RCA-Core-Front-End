@@ -6,18 +6,24 @@
         @apply relative h-full;
     }
 
-    /* 제목 */
-    & > .title {
-        @apply relative z-50 px-4 py-3 leading-none shadow-sm;
+    /* 제목  */
+    & > .title-area {
+        & {
+            @apply relative z-50 flex items-center h-[50px] px-4 shadow-sm;
+        }
+
+        & > .title {
+            @apply leading-none p-0;
+        }
     }
     
     /* 메뉴 편집 */
     & > .menu-editor {
-        @apply absolute top-[51px] left-0 bottom-0 w-[var(--edit-width)] bg-gray-100 px-3 py-2;
+        @apply absolute top-[50px] left-0 bottom-0 w-[var(--edit-width)] bg-gray-100 px-3 py-2;
     }
 
     /* 본문 */
     & > .cont-area {
-        @apply absolute top-[51px] left-[var(--edit-width)] bottom-0 right-0 overflow-y-auto;
+        @apply absolute top-[50px] left-[var(--edit-width)] bottom-0 right-0 overflow-y-auto;
     }
 }

@@ -1,4 +1,4 @@
-import { Title } from "@mantine/core";
+import { Flex, Group, Title, Button } from "@mantine/core";
 import { DB_MENU_ITEM, MenuEditor } from "./components/menu-editor";
 import { ContentArea } from "./components/content-area";
 
@@ -7,7 +7,13 @@ import style from "./style.module.css";
 const ApplicationMenu = () => {
     return (
         <section className={style.section} style={{'--edit-width': '300px'} as any}>
-            <Title className={style.title} order={2}>Application Menu</Title>
+            <Flex justify='space-between' className={style['title-area']}>
+                <Title order={2} className={style.title}>Application Menu</Title>
+                <Group gap="xs">
+                    <Button size='xs' variant="default">Cancel</Button>
+                    <Button size='xs'>Apply</Button>
+                </Group>
+            </Flex>
             <MenuEditor menu={_DB_RAW_DATA} />
             <ContentArea className={style['cont-area']} />
         </section>
