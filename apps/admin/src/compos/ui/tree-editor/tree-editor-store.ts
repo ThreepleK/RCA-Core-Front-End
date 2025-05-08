@@ -1,9 +1,9 @@
 import { create } from 'zustand';
-import { TreeItems } from 'dnd-kit-sortable-tree';
+import { TreeItems, TreeItem } from 'dnd-kit-sortable-tree';
 import { v4 as uuidv4 } from 'uuid'
 
 //* 트리 아이템 추가 타입
-export type TREE_ITEM = {
+export type TREE_ITEM_TYPE = {
     label: string;                      // 메뉴 명
     nodeProps?: {                       // ---- DB 데이터 값 ----
         level: number;                  // 메뉴 Depth
@@ -19,7 +19,8 @@ export type TREE_ITEM = {
 };
 
 // 트리 목록
-export type TREE_LIST = TreeItems<TREE_ITEM>;
+export type TREE_LIST = TreeItems<TREE_ITEM_TYPE>;
+export type TREE_ITEM = TreeItem<TREE_ITEM_TYPE>;
 
 //* 트리 State
 interface TreeState {

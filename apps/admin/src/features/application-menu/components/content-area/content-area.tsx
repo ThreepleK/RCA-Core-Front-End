@@ -9,12 +9,14 @@ export function ContentArea({ className }: {
 }){
     return <div className={className}>
         <Tabs variant="default" defaultValue={_TAB_CONTS[1].key}>
+            {/* 탭 목록 */}
             <Tabs.List className={style['tab-list']}>
                 {_TAB_CONTS && _TAB_CONTS.map((item, idx) => {
                     return <Tabs.Tab key={idx} value={item.key} leftSection={item.icon}>{item.label}</Tabs.Tab>
                 })}
             </Tabs.List>
 
+            {/* 탭 본문 */}
             {_TAB_CONTS && _TAB_CONTS.map((item, idx) => {
                 return <Tabs.Panel className={style['tab-cont']} key={idx} value={item.key}>{item.comp}</Tabs.Panel>
             })}

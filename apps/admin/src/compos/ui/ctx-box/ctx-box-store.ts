@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 //* 우클릭 box State
-interface CtxBoxState {
+export interface CtxBoxState {
     // state ----
     clientX: number;                        // X 좌표
     clientY: number;                        // Y 좌표

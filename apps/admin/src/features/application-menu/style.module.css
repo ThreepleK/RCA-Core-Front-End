@@ -13,46 +13,11 @@
     
     /* 메뉴 편집 */
     & > .menu-editor {
-        & {
-            @apply absolute top-[51px] left-0 bottom-0 w-[var(--edit-width)] bg-gray-100 px-3 py-2;
-        }
-
-        & .no-tree-data {
-            @apply flex justify-center mt-2 text-sm;
-        }
-
-        & .tree {
-            @apply mt-2;
-        }
-
-        /* 트리 메뉴 */
-        & .tree .tree-item {
-            & {
-                @apply flex items-center px-1;
-            }
-            & > div {
-                @apply w-full p-0 h-[25px] text-sm border-none bg-gray-100 hover:bg-gray-200 rounded-md;
-            }
-
-            /* 접힘/펼침 아이콘 숨김 */
-            & > div > button {
-                @apply hidden;
-            }
-
-            /* 트리 메뉴 안 */
-            & .tree-item-in {
-                @apply flex gap-x-0.5 justify-center items-center;
-            }
-        }
+        @apply absolute top-[51px] left-0 bottom-0 w-[var(--edit-width)] bg-gray-100 px-3 py-2;
     }
 
     /* 본문 */
     & > .cont-area {
         @apply absolute top-[51px] left-[var(--edit-width)] bottom-0 right-0 overflow-y-auto;
-    }
-
-    /* 우클릭 box */
-    & .ctx-box {
-        @apply w-max bg-white px-3 py-2 rounded-md shadow-xs;
     }
 }

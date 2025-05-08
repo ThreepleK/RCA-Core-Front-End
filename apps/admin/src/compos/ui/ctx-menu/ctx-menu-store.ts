@@ -11,10 +11,10 @@ export type CtxMenuItem = {
 }
 
 // 선택된 메뉴 콜백 처리
-type MenuSelectedCallback = ((selected: string) => void) | null | undefined;
+export type MenuSelectedCallback = ((selected: string) => void) | null | undefined;
 
 //* 트리 우클릭 메뉴 State
-interface CtxMenuState {
+export interface CtxMenuState {
     // state ----
     clientX: number;                        // 메뉴 X 좌표
     clientY: number;                        // 메뉴 Y 좌표

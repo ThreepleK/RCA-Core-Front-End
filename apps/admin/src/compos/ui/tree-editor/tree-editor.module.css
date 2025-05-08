@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+.tree {
+    & { @apply mt-2; }
+
+    /* 트리 메뉴 */
+    & .tree-item {
+        & {
+            @apply flex items-center px-1;
+        }
+        & > div {
+            @apply w-full p-0 h-[25px] text-sm border-none bg-gray-100 hover:bg-gray-200 rounded-md;
+        }
+    
+        /* 접힘/펼침 아이콘 숨김 */
+        & > div > button {
+            @apply hidden;
+        }
+    
+        /* 트리 메뉴 안 */
+        & .tree-item-in {
+            @apply flex gap-x-0.5 justify-center items-center;
+        }
+    }
+}
+
+.no-tree-data {
+    @apply flex justify-center mt-2 text-sm;
+}
