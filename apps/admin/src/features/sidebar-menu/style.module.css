@@ -1,16 +1,24 @@
 @import "tailwindcss";
 
-.layout {
-    /* 레이아웃 전체 영역 */
-    & { @apply relative w-full h-svh; }
-
-     /* 제목 */
-     & > .title {
-        @apply relative z-50 px-4 py-3 leading-none shadow-sm;
+.section {
+    /* 영역 */
+    & {
+        @apply relative h-full;
     }
 
-     /* 본문 */
-     & > .cont-area {
-        @apply absolute top-[51px] left-[var(--edit-width)] bottom-0 right-0 overflow-y-auto;
+    /* 제목  */
+    & > .title-area {
+        & {
+            @apply relative z-50 flex items-center h-[50px] px-4 shadow-sm;
+        }
+
+        & > .title {
+            @apply leading-none p-0;
+        }
+    }
+
+    /* 본문 */
+    & > .cont-area {
+        @apply absolute top-[50px] left-0 bottom-0 right-0 overflow-y-auto;
     }
 }
