@@ -1,5 +1,5 @@
 import { Input, Switch, Table } from '@mantine/core';
-import { useState } from 'react';
+import { StrictMode, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -43,10 +43,10 @@ const coreData: RowData[] = [
 ];
 
 const initialHubData: RowData[] = [
-  { id: 1, name: 'Detector', displayName: 'Search', active: true },
-  { id: 2, name: 'RCA', displayName: 'Search', active: true },
-  { id: 3, name: 'RUL', displayName: 'Search', active: true },
-  { id: 4, name: 'Data Pipeline', displayName: 'Search', active: true },
+  { id: 123, name: 'Detector', displayName: 'Search', active: true },
+  { id: 241, name: 'RCA', displayName: 'Search', active: true },
+  { id: 3435, name: 'RUL', displayName: 'Search', active: true },
+  { id: 423, name: 'Data Pipeline', displayName: 'Search', active: true },
 ];
 
 const initialCunstomData: RowData[] = [
@@ -124,70 +124,63 @@ export function ContentArea({ className }: {
             striped
             withTableBorder
           >
-            <thead className={style.head}>
-              <tr>
-                <th className={style.row}>Name</th>
-                <th className={style.row}>Display Name</th>
-                <th className={style.row}>Display</th>
-              </tr>
-            </thead>
-            <tbody>
+            <Table.Thead className={style.head}>
+              <Table.Tr>
+                <Table.Th className={style.row}>Name</Table.Th>
+                <Table.Th className={style.row}>Display Name</Table.Th>
+                <Table.Th className={style.row}>Display</Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
               {coreData.map((row) => (
-                <tr key={row.id} className={style.body}>
-                  <td className={style['body-row']}>{row.name}</td>
-                  <td className={style['body-row']}>
+                <Table.Tr key={row.id} className={style.body}>
+                  <Table.Td className={style['body-row']}>{row.name}</Table.Td>
+                  <Table.Td className={style['body-row']}>
                     <Input
                       value={row.displayName}
                       onChange={(e) => handleInputChange(row.id, e.currentTarget.value)}
                       size="xs"
                       className={style.input}
                     />
-                  </td>
-                  <td className={style['body-row']}>
+                  </Table.Td>
+                  <Table.Td className={style['body-row']}>
                     <Switch
                       checked={row.active}
                       onChange={(e) => handleToggleChange(row.id, e.currentTarget.checked)}
                       size="sm"
                     />
-                  </td>
-                </tr>
+                  </Table.Td>
+                </Table.Tr>
               ))}
-            </tbody>
+            </Table.Tbody>
           </Table>
       </div>
       <div className={style['core-table']}>
-        <h1 className={style.title}>Application Hub</h1>
-          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-            <SortableContext items={data.map((d) => d.id)} strategy={verticalListSortingStrategy}>
-              <Table
-                highlightOnHover
-                withColumnBorders
-                striped
-                withTableBorder
-                className={style.table}
-              >
-                <thead className={style.head}>
-                <tr>
-                  <th className={style.drag}></th> {/* drag handle */}
-                  <th className={style.row}>Name</th>
-                  <th className={style.row}>Display Name</th>
-                  <th className={style.row}>Display</th>
-                </tr>
-                </thead>
-                <tbody>
-                  {hubData.map((row) => (
-                    <SortableRow
-                      key={row.id}
-                      row={row}
-                      onNameChange={handleNameChange}
-                      onToggleChange={handleToggleChange}
-                    />
-                  ))}
-                </tbody>
-              </Table>
-            </SortableContext>
-          </DndContext>
-      </div>
+      <h1 className={style.title}>Application Hub</h1>
+      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <SortableContext items={data.map((d) => d.id)} strategy={verticalListSortingStrategy}>
+          <Table
+            highlightOnHover
+            withColumnBorders
+            striped
+            withTableBorder
+            className={style.table}
+          >
+            <Table.Thead className={style.head}>
+              <Table.Tr>
+                <Table.Th className={style.drag}></Table.Th>
+                <Table.Th className={style.row}>Name</Table.Th>
+                <Table.Th className={style.row}>Display Name</Table.Th>
+                <Table.Th className={style.row}>Display</Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody> 
+              {hubData.map((row) => (<SortableRow key={row.id} row={row} onNameChange={handleNameChange} onToggleChange={handleToggleChange} />))}
+          </Table.Tbody>
+          </Table>
+        </SortableContext>
+      </DndContext>
+    </div>
       <div className={style['custom-table']}>
         <div className={style['title-div']}>
         <span className={style.title}>Custom Level 1</span>
@@ -209,15 +202,15 @@ export function ContentArea({ className }: {
                 withTableBorder
                 className={style.table}
               >
-                <thead className={style.head}>
+                <Table.Thead className={style.head}>
                 <tr style={{ borderBottom: '1px solid #ddd' }}>
-                  <th className={style.drag}></th> {/* drag handle */}
-                  <th className={style.row}>Name</th>
-                  <th className={style.row}>Display Name</th>
-                  <th className={style.row}>Action</th>
+                  <Table.Th className={style.drag}></Table.Th>
+                  <Table.Th className={style.row}>Name</Table.Th>
+                  <Table.Th className={style.row}>Display Name</Table.Th>
+                  <Table.Th className={style.row}>Action</Table.Th>
                 </tr>
-                </thead>
-                <tbody>
+                </Table.Thead>
+                <Table.Tbody>
                   {customData.map((row) => (
                     <ActionTableRow
                       key={row.id}
@@ -227,12 +220,12 @@ export function ContentArea({ className }: {
                       onDelete={handleDelete}
                     />
                   ))}
-                </tbody>
+                </Table.Tbody>
               </Table>
             </SortableContext>
           </DndContext>
       </div>
-    </div>;
+    </div> ;
   }
 
 

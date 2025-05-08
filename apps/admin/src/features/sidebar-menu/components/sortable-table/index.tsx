@@ -1,4 +1,4 @@
-import { Input, Switch } from '@mantine/core';
+import { Input, Switch, Table } from '@mantine/core';
 import { GripVertical } from 'lucide-react';
 import {
   useSortable,
@@ -31,44 +31,40 @@ export default function SortableRow({
     transition,
     setActivatorNodeRef
   } = useSortable({ id: row.id });
-
+  
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
   };
 
   return (
-    <tr
-      ref={setNodeRef}
-      style={style}
-      className={Style.column}
-    >
-      <td className={Style.body}>
-        <button
-          ref={setActivatorNodeRef}
-          {...listeners}
-          {...attributes}
-          className={Style.button}
-        >
-          <GripVertical size={16} />
-        </button>
-      </td>
-      <td className={Style['body-row']}>{row.name}</td>
-      <td className={Style['body-row']}>
-        <Input
-          value={row.displayName}
-          onChange={(e) => onNameChange(row.id, e.currentTarget.value)}
-          size="xs"
-          className={Style.input}
-        />
-      </td>
-      <td className={Style['body-row']}>
-        <Switch
-          checked={row.active}
-          onChange={(e) => onToggleChange(row.id, e.currentTarget.checked)}
-          size="sm"
-        />
-      </td>
-    </tr>
-  );
+  <Table.Tr ref={setNodeRef} key={row.id} className={Style.column}>
+    <Table.Td className={Style.body}>
+      <button
+        ref={setActivatorNodeRef}  // Drag handle을 설정
+        {...listeners}
+        {...attributes}
+        className={Style.button}
+      >
+        <GripVertical size={16} />
+      </button>
+    </Table.Td>
+    <Table.Td className={Style['body-row']}>{row.name}</Table.Td>
+    <Table.Td className={Style['body-row']}>
+      <Input
+        value={row.displayName}
+        onChange={(e) => onNameChange(row.id, e.currentTarget.value)}
+        size="xs"
+        className={Style.input}
+      />
+    </Table.Td>
+    <Table.Td className={Style['body-row']}>
+      <Switch
+        checked={row.active}
+        onChange={(e) => onToggleChange(row.id, e.currentTarget.checked)}
+        size="sm"
+      />
+    </Table.Td>
+  </Table.Tr>
+  )
 }

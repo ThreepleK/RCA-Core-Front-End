@@ -1,4 +1,4 @@
-import { ActionIcon, Input, Switch } from '@mantine/core';
+import { ActionIcon, Input, Switch, Table } from '@mantine/core';
 import { GripVertical, Pencil, Trash2 } from 'lucide-react';
 import {
   useSortable,
@@ -39,12 +39,8 @@ export default function ActionTableRow({
   };
 
   return (
-    <tr
-      ref={setNodeRef}
-      style={style}
-      className={Style.column}
-    >
-      <td className={Style.body}> 
+    <Table.Tr ref={setNodeRef} style={style} className={Style.column}>
+      <Table.Td className={Style.body}> 
         <button
           ref={setActivatorNodeRef}
           {...listeners}
@@ -53,17 +49,17 @@ export default function ActionTableRow({
         >
           <GripVertical size={16} />
         </button>
-      </td>
-      <td className={Style['body-row']}>{row.name}</td>
-      <td className={Style['body-row']}>
+      </Table.Td>
+      <Table.Td className={Style['body-row']}>{row.name}</Table.Td>
+      <Table.Td className={Style['body-row']}>
         <Input
           value={row.displayName}
           onChange={(e) => onNameChange(row.id, e.currentTarget.value)}
           size="xs"
           className={Style.input}
         />
-      </td>
-      <td className={Style['body-row']}>
+      </Table.Td>
+      <Table.Td className={Style['body-row']}>
         <div className="flex space-x-2">
           <ActionIcon variant="light" color="blue" onClick={() => onEdit(row.id)}>
             <Pencil size={16} />
@@ -72,7 +68,7 @@ export default function ActionTableRow({
             <Trash2 size={16} />
           </ActionIcon>
         </div>
-      </td>
-    </tr>
+      </Table.Td>
+    </Table.Tr>
   );
 }
