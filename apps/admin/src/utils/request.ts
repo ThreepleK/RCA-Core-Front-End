@@ -7,7 +7,7 @@ export async function request(
     params: any = {}        // 요청 데이터
 ) {
     try {
-        const { token } = useUserStore();
+        const { token } = useUserStore.getState();
         const res = await axios({
             method: type,
             url,
@@ -18,8 +18,6 @@ export async function request(
             }
         });
 
-        console.log('res', res);
-    
         // 성공
         if( res.status === 200 ){
             return {isErr: false, msg: '', res: res.data};
