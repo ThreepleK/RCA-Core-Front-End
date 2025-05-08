@@ -35,7 +35,7 @@ export const MenuList: MenuItem[] = [
         childs: [
             { label: 'Logo', link: '/admin' },
             { label: 'Favicon', link: '/admin' },
-            { label: 'Sidebar menu', link: '/admin' },
+            { label: 'Sidebar menu', link: '/admin/sidebar-menu' },
             { label: 'Application menu', link: '/admin/application-menu' },
         ]
     },

@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+.layout {
+    /* 레이아웃 전체 영역 */
+    & { @apply relative w-full h-svh; }
+
+}

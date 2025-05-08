@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+
+.column {
+    @apply hover:bg-gray-50 border-b border-gray-200;
+}
+
+.body {
+    @apply px-2 py-2 w-10 text-gray-400
+}
+
+.button {
+    @apply cursor-grab active:cursor-grabbing
+}
+
+.body-row {
+    @apply px-4 py-2 border-r border-gray-200;
+}
+
+.input {
+    @apply w-48
+}
