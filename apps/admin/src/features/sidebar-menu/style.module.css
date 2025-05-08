@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+.layout {
+    /* 레이아웃 전체 영역 */
+    & { @apply relative w-full h-svh; }
+
+     /* 제목 */
+     & > .title {
+        @apply relative z-50 px-4 py-3 leading-none shadow-sm;
+    }
+
+     /* 본문 */
+     & > .cont-area {
+        @apply absolute top-[51px] left-[var(--edit-width)] bottom-0 right-0 overflow-y-auto;
+    }
+}
