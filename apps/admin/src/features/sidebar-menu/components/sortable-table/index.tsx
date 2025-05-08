@@ -14,12 +14,25 @@ interface RowData {
   active: boolean;
 }
 
+export interface IFetchSidebarMenuItem {
+  name: string;
+  id: string;
+  displayName: string;
+  level: number;
+  url: string;
+  applicationId: string;
+  menuGroupId: string;
+  sortOrder: number;
+  isVisible: boolean;
+  openInNewTab: boolean;
+}
+
 export default function SortableRow({
   row,
   onNameChange,
   onToggleChange,
 }: {
-  row: RowData;
+  row: IFetchSidebarMenuItem;
   onNameChange: (id: number, value: string) => void;
   onToggleChange: (id: number, checked: boolean) => void;
 }) {
@@ -53,15 +66,15 @@ export default function SortableRow({
     <Table.Td className={Style['body-row']}>
       <Input
         value={row.displayName}
-        onChange={(e) => onNameChange(row.id, e.currentTarget.value)}
+        onChange={(e) => onNameChange(Number(row.id), e.currentTarget.value)}
         size="xs"
         className={Style.input}
       />
     </Table.Td>
     <Table.Td className={Style['body-row']}>
       <Switch
-        checked={row.active}
-        onChange={(e) => onToggleChange(row.id, e.currentTarget.checked)}
+        checked={row.isVisible}
+        onChange={(e) => onToggleChange(Number(row.id), e.currentTarget.checked)}
         size="sm"
       />
     </Table.Td>

@@ -1,7 +1,6 @@
 import { Input, Switch, Table } from '@mantine/core';
-import { StrictMode, useState } from 'react';
+import { StrictMode, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import {
   DndContext,
   closestCenter,
@@ -16,66 +15,71 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 
+import { request } from '@/utils/request';
 import SortableRow from '@/features/sidebar-menu/components/sortable-table';
 import ActionTableRow from '@/features/sidebar-menu/components/action-table';
-
 import style from './content-area.module.css'
 
-interface RowData {
-  id: number;
+export interface IFetchSidebarMenu {
+  id: string;
   name: string;
-  displayName:  string;
-  active: boolean;
+  displayName: string;
+  menus: IFetchSidebarMenuItem[];
 }
 
-const initialData: RowData[] = [
-  { id: 1, name: 'Search', displayName: 'Search', active: true },
-  { id: 2, name: 'My Work', displayName: 'My Work', active: true },
-  { id: 3, name: 'Notifications', displayName: 'Notifications', active: true },
-  { id: 4, name: 'Dashboards', displayName: 'Dashboards', active: true },
-];
-
-const coreData: RowData[] = [
-  { id: 1, name: 'Search', displayName: 'Search', active: true },
-  { id: 2, name: 'My Work', displayName: 'My Work', active: true },
-  { id: 3, name: 'Notifications', displayName: 'Notifications', active: true },
-  { id: 4, name: 'Dashboards', displayName: 'Dashboards', active: true },
-];
-
-const initialHubData: RowData[] = [
-  { id: 123, name: 'Detector', displayName: 'Search', active: true },
-  { id: 241, name: 'RCA', displayName: 'Search', active: true },
-  { id: 3435, name: 'RUL', displayName: 'Search', active: true },
-  { id: 423, name: 'Data Pipeline', displayName: 'Search', active: true },
-];
-
-const initialCunstomData: RowData[] = [
-  { id: 1, name: 'custom-app', displayName: 'Search', active: true },
-  { id: 2, name: 'custom-app2', displayName: 'Search', active: true },
-  { id: 3, name: 'Google', displayName: 'Search', active: true },
-];
+export interface IFetchSidebarMenuItem {
+  name: string;
+  id: string;
+  displayName: string;
+  level: number;
+  url: string;
+  applicationId: string;
+  menuGroupId: string;
+  sortOrder: number;
+  isVisible: boolean;
+  openInNewTab: boolean;
+}
 
 export function ContentArea({ className }: {
     className: string
 }){
     const navigate = useNavigate();
-    const [data, setData] = useState<RowData[]>(initialData);
-    const [hubData, setHubData] = useState<RowData[]>(initialHubData);
-    const [customData, setCustomData] = useState<RowData[]>(initialCunstomData);
+    const [data, setData] = useState<IFetchSidebarMenu[]>([]);
+    const [coreData, setCoreData] = useState<IFetchSidebarMenuItem[]>([]);
+    const [appData, setAppData] = useState<IFetchSidebarMenuItem[]>([]);
+    const [customData, setCustomData] = useState<IFetchSidebarMenuItem[]>([]);
     const sensors = useSensors(useSensor(PointerSensor));
-    const handleInputChange = (id: number, value: string) => {
-      setData(prev =>
-        prev.map(row => (row.id === id ? { ...row, name: value } : row))
+
+    /*
+    * 사이드바 메뉴 API 호출
+    */
+    useEffect(() => {
+      request('get','/admin/api/menu/sidebar').then((res) => {
+        setData(res.res)
+      });
+    }, []);
+
+    useEffect(() => {
+      if(!data) return;
+      
+      setCoreData(data[0]?.menus);
+      setAppData(data[1]?.menus);
+      setCustomData(data[2]?.menus);
+    }, [data]);
+    
+    const handleInputChange = (id: string, value: string) => {
+      setCoreData(prev =>
+        prev.map(row => (row.id === id ? { ...row, displayName: value } : row))
       );
     };
   
     const handleDragEnd = (event: any) => {
       const { active, over } = event;
-  
       if (active.id !== over?.id) {
-        const oldIndex = data.findIndex((item) => item.id === active.id);
-        const newIndex = data.findIndex((item) => item.id === over.id);
-        setHubData((items) => arrayMove(items, oldIndex, newIndex));
+        const oldIndex = appData.findIndex((item) => item.id === active.id);
+        const newIndex = appData.findIndex((item) => item.id === over?.id);
+
+        setAppData((items) => arrayMove(items, oldIndex, newIndex));  
       }
     };
   
@@ -83,25 +87,39 @@ export function ContentArea({ className }: {
       const { active, over } = event;
   
       if (active.id !== over?.id) {
-        const oldIndex = data.findIndex((item) => item.id === active.id);
-        const newIndex = data.findIndex((item) => item.id === over.id);
-        setCustomData((items) => arrayMove(items, oldIndex, newIndex));
+
+        const oldIndex = customData.findIndex((item) => item.id === active.id);
+        const newIndex = customData.findIndex((item) => item.id === over?.id);
+
+        setCustomData((items) => arrayMove(items, oldIndex, newIndex));  
       }
     };
   
     const handleToggleChange = (id: number, checked: boolean) => {
-      setData(prev =>
-        prev.map(row => (row.id === id ? { ...row, active: checked } : row))
+      const stringId = id.toString();
+      setCoreData(prev =>
+        prev.map(row => (row.id === stringId ? { ...row, isVisible: checked } : row))
       );
     };
-  
-    const onClick = () => {
-      navigate('/admin/permission');
-    }
-  
-    const handleNameChange = (id: number, value: string) => {
-      setData((prev) =>
-        prev.map((row) => (row.id === id ? { ...row, name: value } : row))
+
+    const handleAppToggleChange = (id: number, checked: boolean) => {
+      const stringId = id.toString();
+      setAppData(prev =>
+        prev.map(row => (row.id === stringId ? { ...row, isVisible: checked } : row))
+      );
+    };
+
+    const handleAppNameChange = (id: number, value: string) => {
+      const stringId = id.toString();
+      setAppData((prev) =>
+        prev.map((row) => (row.id === stringId ? { ...row, name: value } : row))
+      );
+    };
+
+    const handleCustomNameChange = (id: number, value: string) => {
+      const stringId = id.toString();
+      setCustomData((prev) =>
+        prev.map((row) => (row.id === stringId ? { ...row, name: value } : row))
       );
     };
   
@@ -110,7 +128,8 @@ export function ContentArea({ className }: {
     };
   
     const handleDelete = (id: number) => {
-      setData((prev) => prev.filter((row) => row.id !== id));
+      const stringId = id.toString();
+      setCustomData((prev) => prev.filter((row) => row.id !== stringId));
     };
   
   
@@ -132,7 +151,7 @@ export function ContentArea({ className }: {
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {coreData.map((row) => (
+              {coreData?.map((row) => (
                 <Table.Tr key={row.id} className={style.body}>
                   <Table.Td className={style['body-row']}>{row.name}</Table.Td>
                   <Table.Td className={style['body-row']}>
@@ -145,8 +164,8 @@ export function ContentArea({ className }: {
                   </Table.Td>
                   <Table.Td className={style['body-row']}>
                     <Switch
-                      checked={row.active}
-                      onChange={(e) => handleToggleChange(row.id, e.currentTarget.checked)}
+                      checked={row.isVisible}
+                      onChange={(e) => handleToggleChange(Number(row.id), e.currentTarget.checked)}
                       size="sm"
                     />
                   </Table.Td>
@@ -158,7 +177,7 @@ export function ContentArea({ className }: {
       <div className={style['core-table']}>
       <h1 className={style.title}>Application Hub</h1>
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-        <SortableContext items={data.map((d) => d.id)} strategy={verticalListSortingStrategy}>
+        <SortableContext items={data.map((d: any) => d.id)} strategy={verticalListSortingStrategy}>
           <Table
             highlightOnHover
             withColumnBorders
@@ -175,7 +194,7 @@ export function ContentArea({ className }: {
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody> 
-              {hubData.map((row) => (<SortableRow key={row.id} row={row} onNameChange={handleNameChange} onToggleChange={handleToggleChange} />))}
+              {appData?.map((row) => (<SortableRow key={row.id} row={row} onNameChange={handleAppNameChange} onToggleChange={handleAppToggleChange} />))}
           </Table.Tbody>
           </Table>
         </SortableContext>
@@ -194,7 +213,7 @@ export function ContentArea({ className }: {
         </div>
         </div>  
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleCustomDragEnd}>
-            <SortableContext items={data.map((d) => d.id)} strategy={verticalListSortingStrategy}>
+            <SortableContext items={data.map((d: any) => d.id)} strategy={verticalListSortingStrategy}>
               <Table
                 highlightOnHover
                 withColumnBorders
@@ -211,11 +230,11 @@ export function ContentArea({ className }: {
                 </tr>
                 </Table.Thead>
                 <Table.Tbody>
-                  {customData.map((row) => (
+                  {customData?.map((row) => (
                     <ActionTableRow
                       key={row.id}
                       row={row}
-                      onNameChange={handleNameChange}
+                      onNameChange={handleCustomNameChange}
                       onEdit={handleEdit}
                       onDelete={handleDelete}
                     />
