@@ -36,7 +36,7 @@
 }
 
 .input {
-    @apply w-100
+    @apply w-60
 }
 
 /* 테이블 */

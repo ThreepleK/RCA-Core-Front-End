@@ -31,12 +31,14 @@ export default function ActionTableRow({
   row,
   onNameChange,
   onUrlChange,
+  onToggleChange,
   onEdit,
   onDelete,
 }: {
   row: IFetchSidebarMenuItem;
   onNameChange: (id: string, value: string, row: any) => void;
   onUrlChange: (id: string, value: string) => void;
+  onToggleChange: (id: string, checked: boolean, row: any) => void;
   onEdit: (id: string) => void;
   onDelete: (id: string, row: any) => void;
 }) {
@@ -81,6 +83,13 @@ export default function ActionTableRow({
           onChange={(e) => onUrlChange(row.id, e.currentTarget.value)}
           size="xs"
           className={Style.input}
+        />
+      </Table.Td>
+      <Table.Td className={Style['body-row']}>
+        <Switch
+          checked={row.isVisible}
+          onChange={(e) => onToggleChange(row.id, e.currentTarget.checked, row)}
+          size="sm"
         />
       </Table.Td>
       <Table.Td className={Style['body-row']}>

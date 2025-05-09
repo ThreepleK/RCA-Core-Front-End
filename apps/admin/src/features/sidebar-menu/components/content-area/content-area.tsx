@@ -149,6 +149,18 @@ export function ContentArea({ className, isApply, onChangeApply, isCancel, onCha
       );
     };
 
+    const handleCustomToggleChange = (id: string, checked: boolean, rowData: any) => {
+      if(rowData.itemType === 'new') {
+        setCustomData(prev =>
+          prev.map(row => (row.id === id ? { ...row, isVisible: checked, itemType: 'new' } : row))
+        );
+      } else {
+        setCustomData(prev =>
+          prev.map(row => (row.id === id ? { ...row, isVisible: checked, itemType: 'update' } : row))
+        );
+      }
+    };
+
     const handleAppNameChange = (id: string, value: string) => {
       // const stringId = id.toString();
       setAppData((prev) =>
@@ -292,6 +304,7 @@ export function ContentArea({ className, isApply, onChangeApply, isCancel, onCha
                   <Table.Th className={style.drag}></Table.Th>
                   <Table.Th className={style.row}>Display Name</Table.Th>
                   <Table.Th className={style.row}>URL</Table.Th>
+                  <Table.Th className={style.row}>Display</Table.Th>
                   <Table.Th className={style.row}>Action</Table.Th>
                 </tr>
                 </Table.Thead>
@@ -302,6 +315,7 @@ export function ContentArea({ className, isApply, onChangeApply, isCancel, onCha
                       row={row}
                       onNameChange={handleCustomNameChange}
                       onUrlChange={handleCustomUrlChange}
+                      onToggleChange={handleCustomToggleChange} 
                       onEdit={handleEdit}
                       onDelete={handleDelete}
                     />

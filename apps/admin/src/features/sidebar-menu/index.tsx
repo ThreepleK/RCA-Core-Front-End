@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Button, Flex, Group, Title } from "@mantine/core";
 import { ContentArea } from "./components/content-area/content-area";
 import { notifications } from '@mantine/notifications';
+import { Notifications } from '@mantine/notifications';
 import style from "./style.module.css";
 import { request } from '@/utils/request';
 
@@ -35,6 +36,12 @@ const ApplicationMenu = () => {
     const [coreData, setCoreData] = useState<IFetchSidebarMenuItem[]>([]);
     const [appData, setAppData] = useState<IFetchSidebarMenuItem[]>([]);
     const [customData, setCustomData] = useState<IFetchSidebarMenuItem[]>([]);
+    const [visible, setVisible] = useState(false);
+
+    const showToast = () => {
+        setVisible(true);
+        setTimeout(() => setVisible(false), 2000); // 2초 후 자동 사라짐
+    };
 
     const handleReceiveData = (origin: IFetchSidebarMenu[], core: IFetchSidebarMenuItem[], app: IFetchSidebarMenuItem[], custom: IFetchSidebarMenuItem[]) => {
         setData(origin);
@@ -55,26 +62,17 @@ const ApplicationMenu = () => {
             return item;
         });
         
-        console.log('payload', payload)
         /*
         * Apply API 호출
         */
         request({type: 'post', url: '/admin/api/menu/sidebar', datas: payload } ).then((res) => {
 
             if(!res.isErr){
-                notifications.show({
-                    title: 'Success',
-                    message: 'Apply completed successfully',
-                    color: 'teal',
-                    autoClose: 2000,
-                    position: 'top-center', // ⬅️ 중앙에 위치
-                  });
+                showToast();
                 setIsApply(true);
             }
             // setData(res.res)
         });
-
-        
     };
 
     const handleCancelButton = () => {
@@ -92,6 +90,25 @@ const ApplicationMenu = () => {
             </Group>
         </Flex>
         <ContentArea className={style['cont-area']} isApply={isApply} onChangeApply={setIsApply} isCancel={isCancel} onChangeCancel={setIsCancel} onSendData={handleReceiveData} />
+
+        {visible && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 20,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: '#38a169', // green.500
+            color: 'white',
+            padding: '10px 20px',
+            borderRadius: 8,
+            boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+            zIndex: 9999,
+          }}
+        >
+          Apply completed successfully !
+        </div>
+      )}
     </section>
 );
 }
