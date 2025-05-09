@@ -42,9 +42,11 @@ export interface IFetchSidebarMenuItem {
   itemType?: string;
 }
 
-export function ContentArea({ className, isCancel, onChangeCancel, onSendData }: {
+export function ContentArea({ className, isApply, onChangeApply, isCancel, onChangeCancel, onSendData }: {
     className: string,
+    isApply: boolean,
     isCancel: boolean,
+    onChangeApply: (isCancel: boolean) => void, 
     onChangeCancel: (isCancel: boolean) => void,
     onSendData: (data: IFetchSidebarMenu[], coreData: IFetchSidebarMenuItem[], appData: IFetchSidebarMenuItem[], customData: IFetchSidebarMenuItem[] ) => void;
 }){
@@ -59,10 +61,21 @@ export function ContentArea({ className, isCancel, onChangeCancel, onSendData }:
     * 사이드바 메뉴 API 호출
     */
     useEffect(() => {
-      request('get','/admin/api/menu/sidebar').then((res) => {
+      request({ type: 'get', url: '/admin/api/menu/sidebar' }).then((res) => {
         setData(res.res)
       });
     }, []);
+
+    useEffect(() => {
+      if(isApply) {
+        request({ type: 'get', url: '/admin/api/menu/sidebar' }).then((res) => {
+          setData(res.res)
+        });
+
+        onChangeApply(false);
+      }
+      
+    }, [isApply]);
 
     useEffect(() => {
       if(!data) return;
@@ -168,13 +181,14 @@ export function ContentArea({ className, isCancel, onChangeCancel, onSendData }:
     };
 
     const handleAddLevel = () => {
+      const newSortOrder = customData?.length ;
       const newRow = {
         id: uuidv4(), // 고유 id (간단한 예시)
         name: '',
         displayName: '',
         url: '',
         level: 1,
-        sortOrder: 0,
+        sortOrder: newSortOrder + 1,
         isVisible: true,
         licenseId: '2',
         openInNewTab: false,

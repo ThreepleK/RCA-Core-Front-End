@@ -79,6 +79,9 @@ function dataEncode(data: any) {
         else if( t === 'string' ){
             result = encodeString(items);
         }
+        else if( t === 'boolean' ){
+            result = items;
+        }
         
         return result;
     }
@@ -126,6 +129,9 @@ function dataDecode(data: any) {
         }
         else if( t === 'string' ){
             result = decodeString(items);
+        }
+        else if( t === 'boolean' ){
+            result = items;
         }
         
         return result;

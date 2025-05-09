@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Flex, Group, Title } from "@mantine/core";
 import { ContentArea } from "./components/content-area/content-area";
-
+import { notifications } from '@mantine/notifications';
 import style from "./style.module.css";
 import { request } from '@/utils/request';
 
@@ -29,22 +29,12 @@ export interface IFetchSidebarMenu {
 
 const ApplicationMenu = () => {
     const [isCancel, setIsCancel] = useState<boolean>(false);
+    const [isApply, setIsApply] = useState<boolean>(false);
 
     const [data, setData] = useState<IFetchSidebarMenu[]>([]);
     const [coreData, setCoreData] = useState<IFetchSidebarMenuItem[]>([]);
     const [appData, setAppData] = useState<IFetchSidebarMenuItem[]>([]);
     const [customData, setCustomData] = useState<IFetchSidebarMenuItem[]>([]);
-    // const [payload, setPayload] = useState<IFetchSidebarMenu[]>([]);
-
-    // /*
-    // * Apply API 호출
-    // */
-    // useEffect(() => {
-    //   request('post','/admin/api/menu/sidebar', payload).then((res) => {
-    //     console.log('res', res)
-    //     // setData(res.res)
-    //   });
-    // }, []);
 
     const handleReceiveData = (origin: IFetchSidebarMenu[], core: IFetchSidebarMenuItem[], app: IFetchSidebarMenuItem[], custom: IFetchSidebarMenuItem[]) => {
         setData(origin);
@@ -65,13 +55,26 @@ const ApplicationMenu = () => {
             return item;
         });
         
+        console.log('payload', payload)
         /*
         * Apply API 호출
         */
-        request('post','/admin/api/menu/sidebar', payload ).then((res) => {
-            console.log('res', res)
+        request({type: 'post', url: '/admin/api/menu/sidebar', datas: payload } ).then((res) => {
+
+            if(!res.isErr){
+                notifications.show({
+                    title: 'Success',
+                    message: 'Apply completed successfully',
+                    color: 'teal',
+                    autoClose: 2000,
+                    position: 'top-center', // ⬅️ 중앙에 위치
+                  });
+                setIsApply(true);
+            }
             // setData(res.res)
         });
+
+        
     };
 
     const handleCancelButton = () => {
@@ -88,7 +91,7 @@ const ApplicationMenu = () => {
                 <Button size='xs' onClick={() => handleApplyButton()}>Apply</Button>
             </Group>
         </Flex>
-        <ContentArea className={style['cont-area']} isCancel={isCancel} onChangeCancel={setIsCancel} onSendData={handleReceiveData} />
+        <ContentArea className={style['cont-area']} isApply={isApply} onChangeApply={setIsApply} isCancel={isCancel} onChangeCancel={setIsCancel} onSendData={handleReceiveData} />
     </section>
 );
 }
