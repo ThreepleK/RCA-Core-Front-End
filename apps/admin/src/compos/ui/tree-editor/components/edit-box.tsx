@@ -10,9 +10,9 @@ import { useCtxBoxStore } from '@/compos/ui/ctx-box'
  */
 export function EditBox({title, item, mode, isRoot=false}: {
     title: string;          // 제목
-    item: TREE_ITEM;        // 
-    mode: 'add' | 'mod';
-    isRoot?: boolean;
+    item: TREE_ITEM;        // 트리 아이템
+    mode: 'add' | 'mod';    // 편집 모드 (add: 추가, mod: 수정)
+    isRoot?: boolean;       // 루트 여부
 }){
     const [value, setValue] = useState('');
     const { addTreeItem, modTreeItem } = useTreeStore(s => s);

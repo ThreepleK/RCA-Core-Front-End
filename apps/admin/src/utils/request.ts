@@ -61,7 +61,10 @@ function dataEncode(data: any) {
         let result: any;
         const t = typeChk(items);
 
-        if( t === 'array' ){
+        if( items === null || items === undefined ){
+            result = null;
+        }
+        else if( t === 'array' ){
             result = items.map((item: any) => {
                 return loop(item);
             });
@@ -112,7 +115,10 @@ function dataDecode(data: any) {
         let result: any;
         const t = typeChk(items);
 
-        if( t === 'array' ){
+        if( items === null || items === undefined ){
+            result = null;
+        }
+        else if( t === 'array' ){
             result = items.map((item: any) => {
                 return loop(item);
             });

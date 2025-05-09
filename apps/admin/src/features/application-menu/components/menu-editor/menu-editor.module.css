@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+/* 메뉴 편집 */
+.menu-editor {
+    & {
+        @apply absolute top-[50px] left-0 bottom-0 w-[var(--edit-width)] bg-gray-100 px-3 pt-2 pb-[45px];
+    }
+
+    & > .me-bottom {
+        @apply absolute left-0 right-0 bottom-0 h-[45px] bg-gray-200 flex gap-1.5 justify-end items-center px-3;
+    }
+}

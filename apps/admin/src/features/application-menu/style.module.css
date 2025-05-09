@@ -16,11 +16,6 @@
             @apply leading-none p-0;
         }
     }
-    
-    /* 메뉴 편집 */
-    & > .menu-editor {
-        @apply absolute top-[50px] left-0 bottom-0 w-[var(--edit-width)] bg-gray-100 px-3 py-2;
-    }
 
     /* 본문 */
     & > .cont-area {

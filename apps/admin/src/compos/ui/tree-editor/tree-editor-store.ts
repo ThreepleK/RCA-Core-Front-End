@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 //* 트리 아이템 추가 타입
 export type TREE_ITEM_TYPE = {
     label: string;                      // 메뉴 명
+    itemType?: 'new'|'update'|'';       // 아이템 타입
     nodeProps?: {                       // ---- DB 데이터 값 ----
         level: number;                  // 메뉴 Depth
         sortOrder: number;              // 메뉴 Depth 별 순서
@@ -18,6 +19,7 @@ export type TREE_ITEM_TYPE = {
     };
 };
 
+
 // 트리 목록
 export type TREE_LIST = TreeItems<TREE_ITEM_TYPE>;
 export type TREE_ITEM = TreeItem<TREE_ITEM_TYPE>;
@@ -26,7 +28,7 @@ export type TREE_ITEM = TreeItem<TREE_ITEM_TYPE>;
 interface TreeState {
     // state ----
     list: TREE_LIST;                        // Tree 목록
-    flag: boolean;                          // 강제 렌더링 플래그
+    flag: boolean;                          // 강제 렌더링 플래그    
 
     // action ----
     setTreeList: (list: TREE_LIST) => void; // tree 목록 설정
@@ -55,7 +57,8 @@ export const useTreeStore = create<TreeState>((set, get) => ({
         if( isRoot ){
             list.push({
                 id: uuidv4(),
-                label: label
+                label: label,
+                itemType: 'new',
             });
         }
         //* 그 아래 메뉴일 경우
@@ -68,14 +71,14 @@ export const useTreeStore = create<TreeState>((set, get) => ({
     
                 items[idx].children.push({
                     id: uuidv4(),
-                    label: label
+                    label: label,
+                    itemType: 'new',
                 });
             });
     
             // 추가 한적이 없다면
             if( !isSearch ){ return; }
         }
-
 
         set({
             list: [...list],
@@ -88,6 +91,7 @@ export const useTreeStore = create<TreeState>((set, get) => ({
         // 아이템 찾아서 이름 변경
         const {isSearch} = listSearch(list, modId, (items, idx) => {
             items[idx].label = label;
+            items[idx].itemType = items[idx]?.itemType !== 'new' ? 'update' : 'new';
         });
 
         // 변경 한적이 없다면
