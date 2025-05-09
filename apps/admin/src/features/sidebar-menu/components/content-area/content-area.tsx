@@ -1,7 +1,6 @@
 import { Input, Switch, Table } from '@mantine/core';
-import { StrictMode, useState } from 'react';
+import { StrictMode, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import {
   DndContext,
   closestCenter,
@@ -15,102 +14,174 @@ import {
   useSortable,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-
+import { v4 as uuidv4 } from 'uuid'
+import { request } from '@/utils/request';
 import SortableRow from '@/features/sidebar-menu/components/sortable-table';
 import ActionTableRow from '@/features/sidebar-menu/components/action-table';
-
 import style from './content-area.module.css'
 
-interface RowData {
-  id: number;
+export interface IFetchSidebarMenu {
+  id: string;
   name: string;
-  displayName:  string;
-  active: boolean;
+  displayName: string;
+  menus: IFetchSidebarMenuItem[];
 }
 
-const initialData: RowData[] = [
-  { id: 1, name: 'Search', displayName: 'Search', active: true },
-  { id: 2, name: 'My Work', displayName: 'My Work', active: true },
-  { id: 3, name: 'Notifications', displayName: 'Notifications', active: true },
-  { id: 4, name: 'Dashboards', displayName: 'Dashboards', active: true },
-];
+export interface IFetchSidebarMenuItem {
+  name: string;
+  id: string;
+  displayName: string;
+  level: number;
+  url: string;
+  sortOrder: number;
+  isVisible: boolean;
+  openInNewTab: boolean;
+  applicationId?: string;
+  licenseId?: string;
+  menuGroupId?: string;
+  itemType?: string;
+}
 
-const coreData: RowData[] = [
-  { id: 1, name: 'Search', displayName: 'Search', active: true },
-  { id: 2, name: 'My Work', displayName: 'My Work', active: true },
-  { id: 3, name: 'Notifications', displayName: 'Notifications', active: true },
-  { id: 4, name: 'Dashboards', displayName: 'Dashboards', active: true },
-];
-
-const initialHubData: RowData[] = [
-  { id: 123, name: 'Detector', displayName: 'Search', active: true },
-  { id: 241, name: 'RCA', displayName: 'Search', active: true },
-  { id: 3435, name: 'RUL', displayName: 'Search', active: true },
-  { id: 423, name: 'Data Pipeline', displayName: 'Search', active: true },
-];
-
-const initialCunstomData: RowData[] = [
-  { id: 1, name: 'custom-app', displayName: 'Search', active: true },
-  { id: 2, name: 'custom-app2', displayName: 'Search', active: true },
-  { id: 3, name: 'Google', displayName: 'Search', active: true },
-];
-
-export function ContentArea({ className }: {
-    className: string
+export function ContentArea({ className, isCancel, onChangeCancel, onSendData }: {
+    className: string,
+    isCancel: boolean,
+    onChangeCancel: (isCancel: boolean) => void,
+    onSendData: (data: IFetchSidebarMenu[], coreData: IFetchSidebarMenuItem[], appData: IFetchSidebarMenuItem[], customData: IFetchSidebarMenuItem[] ) => void;
 }){
     const navigate = useNavigate();
-    const [data, setData] = useState<RowData[]>(initialData);
-    const [hubData, setHubData] = useState<RowData[]>(initialHubData);
-    const [customData, setCustomData] = useState<RowData[]>(initialCunstomData);
+    const [data, setData] = useState<IFetchSidebarMenu[]>([]);
+    const [coreData, setCoreData] = useState<IFetchSidebarMenuItem[]>([]);
+    const [appData, setAppData] = useState<IFetchSidebarMenuItem[]>([]);
+    const [customData, setCustomData] = useState<IFetchSidebarMenuItem[]>([]);
     const sensors = useSensors(useSensor(PointerSensor));
-    const handleInputChange = (id: number, value: string) => {
-      setData(prev =>
-        prev.map(row => (row.id === id ? { ...row, name: value } : row))
+
+    /*
+    * 사이드바 메뉴 API 호출
+    */
+    useEffect(() => {
+      request('get','/admin/api/menu/sidebar').then((res) => {
+        setData(res.res)
+      });
+    }, []);
+
+    useEffect(() => {
+      if(!data) return;
+      
+      setCoreData(data[0]?.menus);
+      setAppData(data[1]?.menus);
+      setCustomData(data[2]?.menus);
+    }, [data]);
+
+    useEffect(() => {
+      if(isCancel) {
+        setCoreData(data[0]?.menus);
+        setAppData(data[1]?.menus);
+        setCustomData(data[2]?.menus);
+
+        onChangeCancel(false);
+      }
+    }, [isCancel]);
+    
+    useEffect(() => {
+      onSendData(data, coreData, appData, customData);
+    }, [coreData, appData, customData]);
+
+    const handleInputChange = (id: string, value: string) => {
+      setCoreData(prev =>
+        prev.map(row => (row.id === id ? { ...row, displayName: value } : row))
       );
     };
   
     const handleDragEnd = (event: any) => {
       const { active, over } = event;
-  
       if (active.id !== over?.id) {
-        const oldIndex = data.findIndex((item) => item.id === active.id);
-        const newIndex = data.findIndex((item) => item.id === over.id);
-        setHubData((items) => arrayMove(items, oldIndex, newIndex));
+        const oldIndex = appData.findIndex((item) => item.id === active.id);
+        const newIndex = appData.findIndex((item) => item.id === over?.id);
+        // setAppData((items) => arrayMove(items, oldIndex, newIndex));  
+        const newData = arrayMove(appData, oldIndex, newIndex);
+        const updatedData = newData.map((item, index) => ({
+          ...item,
+          sortOrder: index + 1, // 1부터 시작
+        }));
+        setAppData(updatedData);
       }
     };
   
     const handleCustomDragEnd = (event: any) => {
       const { active, over } = event;
-  
       if (active.id !== over?.id) {
-        const oldIndex = data.findIndex((item) => item.id === active.id);
-        const newIndex = data.findIndex((item) => item.id === over.id);
-        setCustomData((items) => arrayMove(items, oldIndex, newIndex));
+        const oldIndex = customData.findIndex((item) => item.id === active.id);
+        const newIndex = customData.findIndex((item) => item.id === over?.id);
+        const newData = arrayMove(customData, oldIndex, newIndex);
+        // setCustomData((items) => arrayMove(items, oldIndex, newIndex));
+        const updatedData = newData.map((item, index) => ({
+          ...item,
+          sortOrder: index + 1, // 1부터 시작
+        }));
+        setCustomData(updatedData);
       }
     };
   
-    const handleToggleChange = (id: number, checked: boolean) => {
-      setData(prev =>
-        prev.map(row => (row.id === id ? { ...row, active: checked } : row))
+    const handleToggleChange = (id: string, checked: boolean) => {
+      // const stringId = id.toString();
+      setCoreData(prev =>
+        prev.map(row => (row.id === id ? { ...row, isVisible: checked, itemType: 'update' } : row))
       );
     };
-  
-    const onClick = () => {
-      navigate('/admin/permission');
+
+    const handleAppToggleChange = (id: string, checked: boolean) => {
+      // const stringId = id.toString();
+      setAppData(prev =>
+        prev.map(row => (row.id === id ? { ...row, isVisible: checked, itemType: 'update' } : row))
+      );
+    };
+
+    const handleAppNameChange = (id: string, value: string) => {
+      // const stringId = id.toString();
+      setAppData((prev) =>
+        prev.map((row) => (row.id === id ? { ...row, displayName: value, itemType: 'update' } : row))
+      );
+    };
+
+    const handleCustomNameChange = (id: string, value: string, rowData: any) => {
+      if(rowData.itemType === 'new') {
+        const name = value.replace(/\s+/g, '_').toLowerCase(); // 공백을 '-'로 변환
+        setCustomData((prev) =>
+          prev.map((row) => (row.id === id ? { ...row, name: name, displayName: value, itemType: 'new' } : row))); 
+      } else {
+        setCustomData((prev) =>
+        prev.map((row) => (row.id === id ? { ...row, displayName: value, itemType: 'update' } : row))); 
+      }
     }
-  
-    const handleNameChange = (id: number, value: string) => {
-      setData((prev) =>
-        prev.map((row) => (row.id === id ? { ...row, name: value } : row))
-      );
+
+    const handleCustomUrlChange = (id: string, value: string) => {
+      setCustomData((prev) =>
+        prev.map((row) => (row.id === id ? { ...row, url: value, itemType: 'update' } : row))); 
     };
   
-    const handleEdit = (id: number) => {
+    const handleEdit = (id: string) => {
       alert(`Edit row ${id}`);
     };
   
-    const handleDelete = (id: number) => {
-      setData((prev) => prev.filter((row) => row.id !== id));
+    const handleDelete = (id: string) => {
+      setCustomData((prev) => prev.filter((row) => row.id !== id)); 
+    };
+
+    const handleAddLevel = () => {
+      const newRow = {
+        id: uuidv4(), // 고유 id (간단한 예시)
+        name: '',
+        displayName: '',
+        url: '',
+        level: 1,
+        sortOrder: 0,
+        isVisible: true,
+        licenseId: '2',
+        openInNewTab: false,
+        menuGroupId: '3', // 메뉴 그룹 ID (나중에 빠질 내용)
+        itemType: 'new'
+      };
+      setCustomData((prev) => [...prev, newRow]);
     };
   
   
@@ -132,7 +203,7 @@ export function ContentArea({ className }: {
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {coreData.map((row) => (
+              {coreData?.map((row) => (
                 <Table.Tr key={row.id} className={style.body}>
                   <Table.Td className={style['body-row']}>{row.name}</Table.Td>
                   <Table.Td className={style['body-row']}>
@@ -145,7 +216,7 @@ export function ContentArea({ className }: {
                   </Table.Td>
                   <Table.Td className={style['body-row']}>
                     <Switch
-                      checked={row.active}
+                      checked={row.isVisible}
                       onChange={(e) => handleToggleChange(row.id, e.currentTarget.checked)}
                       size="sm"
                     />
@@ -158,7 +229,7 @@ export function ContentArea({ className }: {
       <div className={style['core-table']}>
       <h1 className={style.title}>Application Hub</h1>
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-        <SortableContext items={data.map((d) => d.id)} strategy={verticalListSortingStrategy}>
+        <SortableContext items={data.map((d: any) => d.id)} strategy={verticalListSortingStrategy}>
           <Table
             highlightOnHover
             withColumnBorders
@@ -175,7 +246,7 @@ export function ContentArea({ className }: {
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody> 
-              {hubData.map((row) => (<SortableRow key={row.id} row={row} onNameChange={handleNameChange} onToggleChange={handleToggleChange} />))}
+              {appData?.map((row) => (<SortableRow key={row.id} row={row} onNameChange={handleAppNameChange} onToggleChange={handleAppToggleChange} />))}
           </Table.Tbody>
           </Table>
         </SortableContext>
@@ -185,16 +256,16 @@ export function ContentArea({ className }: {
         <div className={style['title-div']}>
         <span className={style.title}>Custom Level 1</span>
         <div className={style['button-div']}>
-          <button className={style.button}>
+          <button className={style['add-button']} onClick={() => handleAddLevel()}>
             Add level 1 menu
           </button>
-          <button className={style['add-button']}>
+          {/* <button className={style['add-button']}>
             Add custom link
-          </button>
+          </button> */}
         </div>
         </div>  
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleCustomDragEnd}>
-            <SortableContext items={data.map((d) => d.id)} strategy={verticalListSortingStrategy}>
+            <SortableContext items={data.map((d: any) => d.id)} strategy={verticalListSortingStrategy}>
               <Table
                 highlightOnHover
                 withColumnBorders
@@ -205,17 +276,18 @@ export function ContentArea({ className }: {
                 <Table.Thead className={style.head}>
                 <tr style={{ borderBottom: '1px solid #ddd' }}>
                   <Table.Th className={style.drag}></Table.Th>
-                  <Table.Th className={style.row}>Name</Table.Th>
                   <Table.Th className={style.row}>Display Name</Table.Th>
+                  <Table.Th className={style.row}>URL</Table.Th>
                   <Table.Th className={style.row}>Action</Table.Th>
                 </tr>
                 </Table.Thead>
                 <Table.Tbody>
-                  {customData.map((row) => (
+                  {customData?.map((row) => (
                     <ActionTableRow
                       key={row.id}
                       row={row}
-                      onNameChange={handleNameChange}
+                      onNameChange={handleCustomNameChange}
+                      onUrlChange={handleCustomUrlChange}
                       onEdit={handleEdit}
                       onDelete={handleDelete}
                     />

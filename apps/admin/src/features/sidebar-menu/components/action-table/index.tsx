@@ -7,22 +7,38 @@ import { CSS } from '@dnd-kit/utilities';
 import Style from './style.module.css'
 
 interface RowData {
-  id: number;
+  id: string;
   name: string;
   displayName: string;
   active: boolean;
 }
 
+export interface IFetchSidebarMenuItem {
+  name: string;
+  id: string;
+  displayName: string;
+  level: number;
+  url: string;
+  sortOrder: number;
+  isVisible: boolean;
+  openInNewTab: boolean;
+  applicationId?: string;
+  menuGroupId?: string;
+  itemType?: string;
+}
+
 export default function ActionTableRow({
   row,
   onNameChange,
+  onUrlChange,
   onEdit,
   onDelete,
 }: {
-  row: RowData;
-  onNameChange: (id: number, value: string) => void;
-  onEdit: (id: number) => void;
-  onDelete: (id: number) => void;
+  row: IFetchSidebarMenuItem;
+  onNameChange: (id: string, value: string, row: any) => void;
+  onUrlChange: (id: string, value: string) => void;
+  onEdit: (id: string) => void;
+  onDelete: (id: string, row: any) => void;
 }) {
   const {
     attributes,
@@ -50,21 +66,29 @@ export default function ActionTableRow({
           <GripVertical size={16} />
         </button>
       </Table.Td>
-      <Table.Td className={Style['body-row']}>{row.name}</Table.Td>
+      {/* <Table.Td className={Style['body-row']}>{row.name}</Table.Td> */}
       <Table.Td className={Style['body-row']}>
         <Input
           value={row.displayName}
-          onChange={(e) => onNameChange(row.id, e.currentTarget.value)}
+          onChange={(e) => onNameChange(row.id,  e.currentTarget.value, row)}
+          size="xs"
+          className={Style.input}
+        />
+      </Table.Td>
+      <Table.Td className={Style['body-row']}>
+        <Input
+          value={row.url}
+          onChange={(e) => onUrlChange(row.id, e.currentTarget.value)}
           size="xs"
           className={Style.input}
         />
       </Table.Td>
       <Table.Td className={Style['body-row']}>
         <div className="flex space-x-2">
-          <ActionIcon variant="light" color="blue" onClick={() => onEdit(row.id)}>
+          {/* <ActionIcon variant="light" color="blue" onClick={() => onEdit(Number(row.id))}>
             <Pencil size={16} />
-          </ActionIcon>
-          <ActionIcon variant="light" color="red" onClick={() => onDelete(row.id)}>
+          </ActionIcon> */}
+          <ActionIcon variant="light" color="red" onClick={() => onDelete(row.id, row)}>
             <Trash2 size={16} />
           </ActionIcon>
         </div>

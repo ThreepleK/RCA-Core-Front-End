@@ -8,10 +8,24 @@ import { CSS } from '@dnd-kit/utilities';
 import Style from './style.module.css'
 
 interface RowData {
-  id: number;
+  id: string;
   name: string;
   displayName: string;
   active: boolean;
+}
+
+export interface IFetchSidebarMenuItem {
+  name: string;
+  id: string;
+  displayName: string;
+  level: number;
+  url: string;
+  sortOrder: number;
+  isVisible: boolean;
+  openInNewTab: boolean;
+  applicationId?: string;
+  menuGroupId?: string;
+  itemType?: string;
 }
 
 export default function SortableRow({
@@ -19,9 +33,9 @@ export default function SortableRow({
   onNameChange,
   onToggleChange,
 }: {
-  row: RowData;
-  onNameChange: (id: number, value: string) => void;
-  onToggleChange: (id: number, checked: boolean) => void;
+  row: IFetchSidebarMenuItem;
+  onNameChange: (id: string, value: string, rowData: any) => void;
+  onToggleChange: (id: string, checked: boolean, rowData: any) => void;
 }) {
   const {
     attributes,
@@ -53,15 +67,15 @@ export default function SortableRow({
     <Table.Td className={Style['body-row']}>
       <Input
         value={row.displayName}
-        onChange={(e) => onNameChange(row.id, e.currentTarget.value)}
+        onChange={(e) => onNameChange(row.id, e.currentTarget.value, row)}
         size="xs"
         className={Style.input}
       />
     </Table.Td>
     <Table.Td className={Style['body-row']}>
       <Switch
-        checked={row.active}
-        onChange={(e) => onToggleChange(row.id, e.currentTarget.checked)}
+        checked={row.isVisible}
+        onChange={(e) => onToggleChange(row.id, e.currentTarget.checked, row)}
         size="sm"
       />
     </Table.Td>
