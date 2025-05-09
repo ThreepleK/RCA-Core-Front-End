@@ -4,8 +4,8 @@ import { useUserStore } from '@repo/shared-state'
 export async function request({ type, url, params={}, datas={} }: {
     type: 'get'|'post';     // 요청 타입
     url: string;            // 요청 주소
-    params: any;            // 요청 데이터 (url)
-    datas: any;             // 요청 데이터 (body)
+    params?: any;           // 요청 데이터 (url)
+    datas?: any;            // 요청 데이터 (body)
 }) {
     try {
         // 인증토큰 가져오기
@@ -25,7 +25,7 @@ export async function request({ type, url, params={}, datas={} }: {
 
         // 성공
         if( res.status === 200 ){
-            return {isErr: false, msg: '', res: res.data};
+            return {isErr: false, msg: '', res: dataDecode(res.data)};
         } else {
             return {isErr: true, msg: 'request failed', res: null};
         }
@@ -78,6 +78,54 @@ function dataEncode(data: any) {
         }
         else if( t === 'string' ){
             result = encodeString(items);
+        }
+        
+        return result;
+    }
+
+    return loop(data);
+}
+
+/**
+ * 데이터 디코드 처리
+ */
+function dataDecode(data: any) {
+    // 데이터가 없을 경우
+    if( !data ){ return {}; }
+
+    // 데이터 타입 체크 (number, string, array, object)
+    const typeChk = (item: any) => {
+        if( Array.isArray(item) ){ return 'array'; }
+        return typeof item;
+    }
+
+    // 숫자 디코딩
+    const decodeNumber = (data: number) => data;
+    // 문자열 디코딩
+    const decodeString = (data: string) => decodeURIComponent(data);
+
+    // 반복
+    const loop = (items: any) => {
+        let result: any;
+        const t = typeChk(items);
+
+        if( t === 'array' ){
+            result = items.map((item: any) => {
+                return loop(item);
+            });
+        }
+        else if( t === 'object' ){
+            result = {};
+            for( const key in items ){
+                const item = items[key];
+                result[key] = loop(item);
+            }
+        }
+        else if( t === 'number' ){
+            result = decodeNumber(items);
+        }
+        else if( t === 'string' ){
+            result = decodeString(items);
         }
         
         return result;
