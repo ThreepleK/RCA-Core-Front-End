@@ -1,41 +1,20 @@
-import { Flex, Text } from '@mantine/core';
-import { IconDatabaseOff } from '@tabler/icons-react';
-import { DataTable } from 'mantine-datatable';
-import { useMemo } from 'react';
+import { DataGrid } from '@/compos/ui/data-grid';
+import { useTreeStore } from '@/compos/ui/tree-editor';
 
 export function Permission(){
+    const { selectedItem } = useTreeStore(s => s);
 
-    //* 데이터 없음 아이콘 설정
-    const noDataIco = useMemo(() => {
-        return <NoDataIcon dataLen={_TMP_DATA.length} />
-    }, [_TMP_DATA.length]);
+    //* 선택된 메뉴가 없을 때
+    if( selectedItem === null ){
+        return <>Please select the menu on the left.</>;
+    }
 
     return (
-        <DataTable
-            highlightOnHover
+        <DataGrid
             columns={_COLUMNS as any}
-            records={_TMP_DATA}
-            // idAccessor='id'
-            noRecordsIcon={noDataIco}
-            noRecordsText=''
+            data={_TMP_DATA}
         />
     );
-}
-
-/**
- * 그리드 데이터 없음 표기
- */
-function NoDataIcon({ dataLen }: {
-    dataLen: number;
-}){
-    if( dataLen === 0 ){
-        return <Flex justify='center' align='center' direction='column' gap='xs'>
-            <IconDatabaseOff size={30} strokeWidth={1.5} />
-            <Text size='md'>No Datas</Text>
-        </Flex>;
-    } else {
-        return <></>;
-    }
 }
 
 // 컬럼 정보

@@ -3,7 +3,6 @@ import { TREE_ITEM_TYPE, useTreeStore } from '@/compos/ui/tree-editor';
 
 import { useEffect, useState } from 'react';
 import { useConfirmModalStore } from '@/compos/ui/modal';
-import { data2DbRaw } from '../index'
 import style from './content-area.module.css'
 
 export function MenuInfo(){
