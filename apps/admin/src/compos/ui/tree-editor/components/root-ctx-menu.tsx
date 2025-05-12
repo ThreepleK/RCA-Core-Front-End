@@ -35,6 +35,7 @@ export function RootCtxMenu(){
                             item={{
                                 id: '',
                                 label: '',
+                                selected: false,
                             }}
                         />
                     );

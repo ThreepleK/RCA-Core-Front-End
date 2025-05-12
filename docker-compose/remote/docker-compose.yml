@@ -9,14 +9,14 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - rca
+      - admin
 
-  rca:
+  admin:
     build:
       context: .
       dockerfile: ./dockerfile-remote
       args:
-        DIST_PATH: ./dist/r/rca
-    container_name: rca
+        DIST_PATH: ./dist/r/admin
+    container_name: admin
     ports:
-      - "5001:80"
+      - "5009:80"
