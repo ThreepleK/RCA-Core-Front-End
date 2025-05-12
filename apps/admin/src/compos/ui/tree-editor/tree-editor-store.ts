@@ -31,6 +31,7 @@ interface TreeState {
     list: TREE_LIST;                        // Tree 목록
     flag: boolean;                          // 강제 렌더링 플래그
     selectedItem: TREE_ITEM|null;           // Tree 목록 중 선택된 아이템
+    isItemUpdate: boolean;                  // Tree 아이템 업데이트 신호
 
     // action ----
     setTreeList: (list: TREE_LIST) => void; // tree 목록 설정
@@ -45,6 +46,12 @@ interface TreeState {
         label: string
     ) => void;
     rmTreeItem: (rmId: string) => void;     // tree 아이템 제거
+    updateTreeItem: (                       // tree 아이템 통 업데이트
+        updateId: string,
+        label: string,
+        item: TREE_ITEM_TYPE['nodeProps']
+    ) => void;
+    setIsUpdate: (is: boolean) => void;     // 아이템 업데이트 신호 처리
 }
 
 // 트리 store
@@ -52,6 +59,7 @@ export const useTreeStore = create<TreeState>((set, get) => ({
     list: [],
     flag: false,
     selectedItem: null,
+    isItemUpdate: false,
     
     setTreeList: (list) => set({ list, flag: !get().flag, }),
     setSelectedItem: (id) => {
@@ -146,6 +154,31 @@ export const useTreeStore = create<TreeState>((set, get) => ({
             flag: !get().flag,
         });
     },
+
+    updateTreeItem: (updateId, label, item) => {
+        const list = get().list;
+
+        // 아이템 찾아서 교체
+        const {isSearch} = listSearch(list, updateId, (items, idx) => {
+            items[idx].label = label;
+            items[idx].itemType = items[idx]?.itemType !== 'new' ? 'update' : 'new';
+            items[idx].nodeProps = item;
+        });
+
+        // 교체 한적이 없다면
+        if( !isSearch ){ return; }
+
+        set({
+            list: [...list],
+            flag: !get().flag,
+        });
+    },
+
+    setIsUpdate: (is: boolean) => {
+        set({
+            isItemUpdate: is
+        });
+    }
 }));
 
 /**

@@ -26,7 +26,7 @@ export function MenuEditor({ menu, onMenuChange }: {
     const treeData = useMemo(() => getSelected_treeList(menuList, selectApp), [selectApp]);
 
     //* 트리 리스트
-    const {list, setTreeList} = useTreeStore(s => s);
+    const {list, setTreeList, isItemUpdate, setIsUpdate} = useTreeStore(s => s);
 
     //* 트리 root 메뉴
     const rootMenuOpen = useRootCtxMenuStore(s => s.open);
@@ -79,6 +79,18 @@ export function MenuEditor({ menu, onMenuChange }: {
         });
         modalOepn(true);
     }
+
+    // 컨텐츠 등에서 아이템 업데이트 요청
+    useEffect(() => {
+        if( !isItemUpdate ){ return; }
+
+        // 트리 목록 → raw 데이터로 가져오기
+        const applyData = data2DbRaw(list, treeData.rootItem);
+        // 변경 메뉴 전달
+        onMenuChange(applyData);
+        // 업데이트 신호 취소
+        setIsUpdate(false);
+    }, [isItemUpdate])
 
     return (
         <div

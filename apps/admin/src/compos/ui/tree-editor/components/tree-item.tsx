@@ -1,5 +1,5 @@
 import { SimpleTreeItemWrapper, TreeItemComponentProps } from 'dnd-kit-sortable-tree';
-import { forwardRef, useMemo, useState } from 'react';
+import { forwardRef, useMemo } from 'react';
 
 import { useCtxMenuStore, CtxMenuItem, CtxMenuState } from '@/compos/ui/ctx-menu'
 import { useCtxBoxStore, CtxBoxState } from '@/compos/ui/ctx-box'

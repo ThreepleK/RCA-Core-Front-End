@@ -8,7 +8,7 @@ export function ContentArea({ className }: {
     className: string
 }){
     return <div className={className}>
-        <Tabs variant="default" defaultValue={_TAB_CONTS[1].key}>
+        <Tabs variant="default" defaultValue={_TAB_CONTS[0].key}>
             {/* 탭 목록 */}
             <Tabs.List className={style['tab-list']}>
                 {_TAB_CONTS && _TAB_CONTS.map((item, idx) => {
