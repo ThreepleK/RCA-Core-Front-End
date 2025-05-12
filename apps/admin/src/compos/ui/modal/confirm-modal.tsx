@@ -9,7 +9,7 @@ export function ConfirmModal(){
 
     //* 관련 이벤트 처리
     const onModal = (type: 'close'|'confirm') => {
-        if( type === 'confirm' || typeof feedback === 'function' ){ feedback(); }
+        if( type === 'confirm' && typeof feedback === 'function' ){ feedback(); }
         setOpen(false);
     }
 
