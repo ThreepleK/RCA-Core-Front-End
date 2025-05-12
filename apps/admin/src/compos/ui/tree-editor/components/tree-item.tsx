@@ -1,11 +1,11 @@
 import { SimpleTreeItemWrapper, TreeItemComponentProps } from 'dnd-kit-sortable-tree';
-import { forwardRef, useMemo } from 'react';
+import { forwardRef, useMemo, useState } from 'react';
 
 import { useCtxMenuStore, CtxMenuItem, CtxMenuState } from '@/compos/ui/ctx-menu'
 import { useCtxBoxStore, CtxBoxState } from '@/compos/ui/ctx-box'
 
 import { RmConfirmBox, EditBox, TreeItemIcon } from './'
-import { TREE_ITEM, TREE_ITEM_TYPE } from '../'
+import { TREE_ITEM, TREE_ITEM_TYPE, useTreeStore } from '../'
 
 import style from "../tree-editor.module.css";
 import { IconEdit, IconPlus, IconTrash } from '@tabler/icons-react';
@@ -19,6 +19,7 @@ export const TreeItem = forwardRef<
 >((props, ref) => {
     const { setOpen: setMenuOpen, setPosition: setMenuPt, setMenuList } = useCtxMenuStore(s => s);
     const { setOpen, setPosition, setContent } = useCtxBoxStore(s => s);
+    const { setSelectedItem } = useTreeStore(s => s);
 
     //* 아이템 폴더(접힘 여부), 추가 스타일 적용 값 가져오기
     const {isFolder, collapsed, addStyle} = useMemo(() => {
@@ -64,9 +65,19 @@ export const TreeItem = forwardRef<
         setMenuOpen(true);
     }
 
+    //* 마우스 클릭
+    const onClick = () => {
+        // 아이템 선택 처리
+        const targetId = String(props.item.id);
+        setSelectedItem(targetId);
+    }
+
+    //* 아이템 선택 여부
+    const selected = useMemo(() => props.item.selected, [props.item.selected])
+
     return (
-        <div key={props.item.id} onContextMenu={onMenuClick}>
-            <SimpleTreeItemWrapper className={style['tree-item']} {...props} ref={ref}>
+        <div key={props.item.id} onClick={onClick} onContextMenu={onMenuClick}>
+            <SimpleTreeItemWrapper className={`${style['tree-item']} ${selected ? 'on': ''}`} {...props} ref={ref}>
                 <div className={style['tree-item-in']} style={addStyle}>
                     <TreeItemIcon isFolder={isFolder} collapsed={collapsed} />
                     {props.item.label}

@@ -17,7 +17,7 @@ export function TreeEditor({list}: {
     list: TREE_LIST;
 }){
     const {flag, setTreeList} = useTreeStore(s => s);
-    const items = useMemo(() => list, [flag]);
+    const items = useMemo(() => list, [list, flag]);
 
     return <>
         {list.length === 0

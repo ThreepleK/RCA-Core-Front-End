@@ -39,14 +39,12 @@ export default {
     //* 연결 시 사용 될 항목 (각 앱 경로 기준)
     exposeSync: {
         rca: {
-            // './router': './src/router/index.tsx'
             './router': './src/router/host.tsx'
         },
         dashboard: {
             // './main': './src/App.tsx'
         },
         admin: {
-            // './router': './src/router/index.tsx'
             './router': './src/router/host.tsx'
         }
     }

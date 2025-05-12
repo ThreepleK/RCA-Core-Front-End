@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid'
 export type TREE_ITEM_TYPE = {
     label: string;                      // 메뉴 명
     itemType?: 'new'|'update'|'';       // 아이템 타입
+    selected: boolean;                  // 선택 여부
     nodeProps?: {                       // ---- DB 데이터 값 ----
         level: number;                  // 메뉴 Depth
         sortOrder: number;              // 메뉴 Depth 별 순서
@@ -28,10 +29,12 @@ export type TREE_ITEM = TreeItem<TREE_ITEM_TYPE>;
 interface TreeState {
     // state ----
     list: TREE_LIST;                        // Tree 목록
-    flag: boolean;                          // 강제 렌더링 플래그    
+    flag: boolean;                          // 강제 렌더링 플래그
+    selectedItem: TREE_ITEM|null;           // Tree 목록 중 선택된 아이템
 
     // action ----
     setTreeList: (list: TREE_LIST) => void; // tree 목록 설정
+    setSelectedItem: (id: string) => void;  // tree 목록 선택
     addTreeItem: (                          // tree 아이템 추가
         addId: string,
         label: string,
@@ -48,8 +51,30 @@ interface TreeState {
 export const useTreeStore = create<TreeState>((set, get) => ({
     list: [],
     flag: false,
+    selectedItem: null,
     
     setTreeList: (list) => set({ list, flag: !get().flag, }),
+    setSelectedItem: (id) => {
+        const { list } = get();
+
+        let selected: TREE_ITEM|null = null;
+
+        // 선택 처리
+        listAllLoop(list, (item) => {
+            if( item.id === id ){
+                selected = item;
+                item.selected = true;
+            } else {
+                item.selected = false;
+            }
+        });
+
+        // 변경 값 재설정
+        set({
+            list: [...list],
+            selectedItem: selected,
+        });
+    },
     addTreeItem: (addId, label, isRoot=false) => {
         const list = get().list;
 
@@ -59,6 +84,7 @@ export const useTreeStore = create<TreeState>((set, get) => ({
                 id: uuidv4(),
                 label: label,
                 itemType: 'new',
+                selected: false,
             });
         }
         //* 그 아래 메뉴일 경우
@@ -73,6 +99,7 @@ export const useTreeStore = create<TreeState>((set, get) => ({
                     id: uuidv4(),
                     label: label,
                     itemType: 'new',
+                    selected: false,
                 });
             });
     
@@ -120,6 +147,26 @@ export const useTreeStore = create<TreeState>((set, get) => ({
         });
     },
 }));
+
+/**
+ * 트리 내역 중에 관련 id 찾기
+ */
+function listAllLoop(
+    list: TREE_LIST,
+    callback: (items: TREE_ITEM) => void,
+){
+    const loop = (items: TREE_LIST) => {
+        for( const item of items ){
+            callback(item);
+
+            // 하위 항목 반복
+            if( item.children && item.children.length > 0 ){
+                loop(item.children);
+            }
+        }
+    }
+    loop(list);
+}
 
 /**
  * 트리 내역 중에 관련 id 찾기

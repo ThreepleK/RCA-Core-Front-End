@@ -103,6 +103,7 @@ export function MenuEditor({ menu, onMenuChange }: {
             {/* 트리 편집 */}
             <TreeEditor list={list} />
 
+            {/* 하단 버튼 */}
             <div className={style['me-bottom']}>
                 <Button size='xs' variant='default' onClick={onCancel}>Cancel</Button>
                 <Button size='xs' color='indigo' onClick={onApply}>Apply</Button>

@@ -65,6 +65,7 @@ export function dbRaw2Data(raw: DB_MENU_ITEM[]){
                 id: item.id,
                 label: item.displayName,
                 nodeProps: item,
+                selected: false,
                 children: lv < 4 ? loop(items, lv+1, item.id) : [],
             });
         }
@@ -218,9 +219,6 @@ export function dbRawContainData(editRaw: DB_MENU_ITEM[], srcRaw: DB_MENU_ITEM[]
 
         // 제외 할 대상이면 건너 뜀
         if( searchIds.includes(pId) ){ continue; }
-
-        // 잘못된 데이터 제외
-        if( rawItem.id === 'a2977485-fa2e-4df9-a191-f365d0565ed3' ){ continue; }
 
         // 살려야 할 대상일 경우 추가
         filterData.push(rawItem);
