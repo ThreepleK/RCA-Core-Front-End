@@ -77,6 +77,7 @@ export default function SortableRow({
         checked={row.isVisible}
         onChange={(e) => onToggleChange(row.id, e.currentTarget.checked, row)}
         size="sm"
+        color="teal"
       />
     </Table.Td>
   </Table.Tr>

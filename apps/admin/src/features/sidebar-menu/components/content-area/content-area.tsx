@@ -1,5 +1,5 @@
-import { Input, Switch, Table } from '@mantine/core';
-import { StrictMode, useEffect, useState } from 'react';
+import { Button, Input, Switch, Table } from '@mantine/core';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   DndContext,
@@ -245,6 +245,7 @@ export function ContentArea({ className, isApply, onChangeApply, isCancel, onCha
                       checked={row.isVisible}
                       onChange={(e) => handleToggleChange(row.id, e.currentTarget.checked)}
                       size="sm"
+                      color="teal"
                     />
                   </Table.Td>
                 </Table.Tr>
@@ -282,9 +283,7 @@ export function ContentArea({ className, isApply, onChangeApply, isCancel, onCha
         <div className={style['title-div']}>
         <span className={style.title}>Custom Level 1</span>
         <div className={style['button-div']}>
-          <button className={style['add-button']} onClick={() => handleAddLevel()}>
-            Add level 1 menu
-          </button>
+          <Button size='xs' onClick={handleAddLevel}>Add level 1 menu</Button>
           {/* <button className={style['add-button']}>
             Add custom link
           </button> */}

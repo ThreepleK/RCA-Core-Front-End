@@ -90,6 +90,7 @@ export default function ActionTableRow({
           checked={row.isVisible}
           onChange={(e) => onToggleChange(row.id, e.currentTarget.checked, row)}
           size="sm"
+          color="teal"
         />
       </Table.Td>
       <Table.Td className={Style['body-row']}>

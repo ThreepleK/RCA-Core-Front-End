@@ -3,7 +3,7 @@
 /* 테이블 */
 .core-table {
     & {
-        @apply text-2xl px-2 mb-5;
+        @apply text-2xl mb-5;
     }
 
     & > .title {
@@ -11,7 +11,9 @@
     }
 
     & > .table {
-        @apply min-w-full text-sm text-gray-700;
+        & {
+            @apply min-w-full text-sm text-gray-700;
+        }
 
         & > .head {
             @apply bg-gray-100 px-4 py-2 text-left;
@@ -42,7 +44,7 @@
 /* 테이블 */
 .custom-table {
     & {
-        @apply text-2xl px-2 mb-5;
+        @apply text-2xl mb-5;
     }
 
     & > .title-div {
