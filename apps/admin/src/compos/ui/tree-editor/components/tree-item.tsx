@@ -77,7 +77,7 @@ export const TreeItem = forwardRef<
 
     return (
         <div key={props.item.id} onClick={onClick} onContextMenu={onMenuClick}>
-            <SimpleTreeItemWrapper className={`${style['tree-item']} ${selected ? 'on': ''}`} {...props} ref={ref}>
+            <SimpleTreeItemWrapper className={`${style['tree-item']} ${selected ? 'on-active': ''}`} {...props} ref={ref}>
                 <div className={style['tree-item-in']} style={addStyle}>
                     <TreeItemIcon isFolder={isFolder} collapsed={collapsed} />
                     {props.item.label}

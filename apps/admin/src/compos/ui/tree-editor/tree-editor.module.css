@@ -13,7 +13,7 @@
         }
 
         /* 아이템 선택 */
-        &[class*=on] > div {
+        &[class*=on-active] > div {
             @apply bg-white;
         }
     
