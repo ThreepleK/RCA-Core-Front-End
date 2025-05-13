@@ -3,12 +3,20 @@ import { useMainMenuStore } from '@repo/shared-state'
 import { KeepAliveRouter } from '@repo/core-ui'
 
 import AppSidebar from "./app-sidebar";
-import { MainMenu } from "../ui/main-menu";
-import { TailMenu } from "../ui/tail-menu";
+import { MainMenu, TailMenu, api_getMenuData, MENU_DATAS } from "../ui/menus";
+import { useEffect, useState } from 'react';
 
 export default function() {
     const isOpen = useMainMenuStore((state) => state.isOpen());
     const isHide = useMainMenuStore((state) => state.isHide());
+    const [menus, setMenus] = useState<MENU_DATAS|null>(null);
+
+    useEffect(() => {
+        api_getMenuData().then(({isErr, res}) => {
+            if( isErr ){ return; }
+            setMenus(res);
+        });
+    }, []);
 
     return (
         <AppShell
@@ -22,7 +30,10 @@ export default function() {
             {!isHide && 
                 <AppShell.Navbar className="flex gap-y-3 relative">
                     <AppSidebar />
-                    <MainMenu />
+                    <MainMenu
+                        apps={menus?.app_hub ?? []}
+                        customList={menus?.custom_links ?? []}
+                    />
                     <TailMenu />
                 </AppShell.Navbar>
             }

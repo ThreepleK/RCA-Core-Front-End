@@ -11,6 +11,7 @@ export async function request({ type, url, params={}, datas={} }: {
         // 인증토큰 가져오기
         const { token } = useUserStore.getState();
 
+
         // 요청
         const res = await axios({
             method: type,
