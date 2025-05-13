@@ -78,7 +78,8 @@ function EditForm({ label, data, onSave }: {
     // Update 확인
     const onConfirm = () => {
         // 확인 모달
-        modalCont(<Text size='md' fw={500} c='blue'>Apply menu edit</Text>,
+        modalCont(
+            <Text size='md' fw={500} c='blue'>Apply menu edit</Text>,
             <Text size='sm'>
                 Would you like to edit this content?
             </Text>
@@ -93,10 +94,17 @@ function EditForm({ label, data, onSave }: {
             <TextInput label="Menu ID" disabled value={item?.id} />
             <TextInput label="Parent menu ID" disabled value={item?.parentMenuId ?? ''}/>
             <TextInput label="Menu name" onChange={onChangeName} value={name} />
-            <TextInput label="Menu path" onChange={e => onChangeData(e, 'url')} value={item?.url} />
+            <TextInput label="Menu path" onChange={e => onChangeData(e, 'url')} value={item?.url ?? ''} />
 
             <Flex direction='column'>
-                <Text size='sm' fw='500'>Status</Text>
+                <Text size='sm' fw='500'>Active</Text>
+                <Switch size='sm' color="teal"
+                    onChange={e => onChangeSwitch(e, 'isActive')} checked={item?.isActive}
+                />
+            </Flex>
+
+            <Flex direction='column'>
+                <Text size='sm' fw='500'>Display</Text>
                 <Switch size='sm' color="teal"
                     onChange={e => onChangeSwitch(e, 'isVisible')} checked={item?.isVisible}
                 />
