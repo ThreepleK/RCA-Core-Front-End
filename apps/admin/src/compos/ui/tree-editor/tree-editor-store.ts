@@ -17,6 +17,7 @@ export type TREE_ITEM_TYPE = {
         url: string;                    // 이동 경로
         openNewTab: boolean;            // 신규 탭 열림 여부
         isVisible: boolean;             // 메뉴 보임 여부
+        isActive: boolean;              // 메뉴 기능 여부
     };
 };
 

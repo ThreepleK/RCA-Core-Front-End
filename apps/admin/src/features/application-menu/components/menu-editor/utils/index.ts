@@ -132,6 +132,7 @@ export function data2DbRaw(data: TREE_LIST, rootItem: TREE_ITEM|null){
             url: props?.url ?? '',                      // 링크
             openNewTab: props?.openNewTab ?? false,     // 신규 탭 여부
             isVisible: props?.isVisible ?? false,       // 메뉴 활성화 여부
+            isActive: props?.isActive ?? false,         // 메뉴 기능 여부
             itemType: 'new',                            // 신규 메뉴
         } as DB_MENU_ITEM;
     }
@@ -241,6 +242,7 @@ export interface DB_MENU_ITEM {
     url: string;                    // 이동 경로
     openNewTab: boolean;            // 신규 탭 열림 여부
     isVisible: boolean;             // 메뉴 보임 여부
+    isActive: boolean;              // 메뉴 기능 여부
                                     // ----- 추후 아이템 등록 시 사용 될 항목
     itemType?: 'new'|'update'|'';   // 아이템 타입 new: 신규 / update: 수정
 }
