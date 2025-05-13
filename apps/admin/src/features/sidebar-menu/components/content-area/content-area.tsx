@@ -19,28 +19,8 @@ import { request } from '@/utils/request';
 import SortableRow from '@/features/sidebar-menu/components/sortable-table';
 import ActionTableRow from '@/features/sidebar-menu/components/action-table';
 import style from './content-area.module.css'
-
-export interface IFetchSidebarMenu {
-  id: string;
-  name: string;
-  displayName: string;
-  menus: IFetchSidebarMenuItem[];
-}
-
-export interface IFetchSidebarMenuItem {
-  name: string;
-  id: string;
-  displayName: string;
-  level: number;
-  url: string;
-  sortOrder: number;
-  isVisible: boolean;
-  openInNewTab: boolean;
-  applicationId?: string;
-  licenseId?: string;
-  menuGroupId?: string;
-  itemType?: string;
-}
+import { api_getSidebarMenuData } from '../../apis';
+import { IFetchSidebarMenu, IFetchSidebarMenuItem } from '../../models';
 
 export function ContentArea({ className, isApply, onChangeApply, isCancel, onChangeCancel, onSendData }: {
     className: string,
@@ -51,6 +31,7 @@ export function ContentArea({ className, isApply, onChangeApply, isCancel, onCha
     onSendData: (data: IFetchSidebarMenu[], coreData: IFetchSidebarMenuItem[], appData: IFetchSidebarMenuItem[], customData: IFetchSidebarMenuItem[] ) => void;
 }){
     const navigate = useNavigate();
+    const [reloadFlag, setReloadFlag] = useState(false);
     const [data, setData] = useState<IFetchSidebarMenu[]>([]);
     const [coreData, setCoreData] = useState<IFetchSidebarMenuItem[]>([]);
     const [appData, setAppData] = useState<IFetchSidebarMenuItem[]>([]);
@@ -60,18 +41,17 @@ export function ContentArea({ className, isApply, onChangeApply, isCancel, onCha
     /*
     * 사이드바 메뉴 API 호출
     */
-    useEffect(() => {
-      request({ type: 'get', url: '/admin/api/menu/sidebar' }).then((res) => {
-        setData(res.res)
-      });
-    }, []);
+     useEffect(() => {
+      api_getSidebarMenuData().then(({ isErr, res }) => {
+            if( isErr ){ return; }
+            setData(res);
+        });
+      }, [reloadFlag]);
+        
 
     useEffect(() => {
       if(isApply) {
-        request({ type: 'get', url: '/admin/api/menu/sidebar' }).then((res) => {
-          setData(res.res)
-        });
-
+        setReloadFlag(!reloadFlag);
         onChangeApply(false);
       }
       
@@ -149,6 +129,13 @@ export function ContentArea({ className, isApply, onChangeApply, isCancel, onCha
       );
     };
 
+    const handleStatusToggleChange = (id: string, checked: boolean) => {
+      // const stringId = id.toString();
+      setAppData(prev =>
+        prev.map(row => (row.id === id ? { ...row, isActive: checked, itemType: 'update' } : row))
+      );
+    };
+
     const handleCustomToggleChange = (id: string, checked: boolean, rowData: any) => {
       if(rowData.itemType === 'new') {
         setCustomData(prev =>
@@ -202,6 +189,7 @@ export function ContentArea({ className, isApply, onChangeApply, isCancel, onCha
         level: 1,
         sortOrder: newSortOrder + 1,
         isVisible: true,
+        isActive: true,
         licenseId: '2',
         openInNewTab: false,
         menuGroupId: '3', // 메뉴 그룹 ID (나중에 빠질 내용)
@@ -269,11 +257,12 @@ export function ContentArea({ className, isApply, onChangeApply, isCancel, onCha
                 <Table.Th className={style.drag}></Table.Th>
                 <Table.Th className={style.row}>Name</Table.Th>
                 <Table.Th className={style.row}>Display Name</Table.Th>
+                <Table.Th className={style.row}>Status</Table.Th>
                 <Table.Th className={style.row}>Display</Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody> 
-              {appData?.map((row) => (<SortableRow key={row.id} row={row} onNameChange={handleAppNameChange} onToggleChange={handleAppToggleChange} />))}
+              {appData?.map((row) => (<SortableRow key={row.id} row={row} onNameChange={handleAppNameChange} onToggleChange={handleAppToggleChange} onStatusToggleChange={handleStatusToggleChange} />))}
           </Table.Tbody>
           </Table>
         </SortableContext>

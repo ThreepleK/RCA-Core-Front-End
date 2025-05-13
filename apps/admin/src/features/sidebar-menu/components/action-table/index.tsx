@@ -5,27 +5,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import Style from './style.module.css'
-
-interface RowData {
-  id: string;
-  name: string;
-  displayName: string;
-  active: boolean;
-}
-
-export interface IFetchSidebarMenuItem {
-  name: string;
-  id: string;
-  displayName: string;
-  level: number;
-  url: string;
-  sortOrder: number;
-  isVisible: boolean;
-  openInNewTab: boolean;
-  applicationId?: string;
-  menuGroupId?: string;
-  itemType?: string;
-}
+import { IFetchSidebarMenuItem } from '../../models';
 
 export default function ActionTableRow({
   row,

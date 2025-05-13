@@ -5,6 +5,7 @@ import { notifications } from '@mantine/notifications';
 import { Notifications } from '@mantine/notifications';
 import style from "./style.module.css";
 import { request } from '@/utils/request';
+import { api_setSidebarMenuData } from "./apis";
 
 export interface IFetchSidebarMenu {
     id: string;
@@ -51,7 +52,7 @@ const ApplicationMenu = () => {
     };
     
     const handleApplyButton = () => {
-        const payload = data?.map((item) => {
+        const payload: any = data?.map((item) => {
             if(item.name === 'core_features'){
                 item.menus = coreData;
             } else if(item.name === 'app_hub'){
@@ -65,14 +66,13 @@ const ApplicationMenu = () => {
         /*
         * Apply API 호출
         */
-        request({type: 'post', url: '/admin/api/menu/sidebar', datas: payload } ).then((res) => {
-
-            if(!res.isErr){
-                showToast();
-                setIsApply(true);
-            }
-            // setData(res.res)
+        api_setSidebarMenuData(payload).then(({isErr}) => {
+          if( isErr ){ return; }
+          // 저장 성공 팝업
+          showToast();
+          setIsApply(true);
         });
+
     };
 
     const handleCancelButton = () => {
