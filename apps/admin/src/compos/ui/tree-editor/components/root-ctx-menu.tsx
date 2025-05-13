@@ -9,8 +9,8 @@ import { useEffect } from 'react';
  * Root 메뉴
  */
 export function RootCtxMenu(){
-    const { clientX, clientY, label, isOpen } = useRootCtxMenuStore(s => s);
-    const { setOpen, setPosition, setMenuList } = useCtxMenuStore(s => s);
+    const { clientX, clientY, label, isOpen, close } = useRootCtxMenuStore(s => s);
+    const { isOpen: ctxIsOpen, setOpen, setPosition, setMenuList } = useCtxMenuStore(s => s);
     const { setOpen: setBoxOpen, setPosition: setBoxPosition, setContent: setBoxContent } = useCtxBoxStore(s => s);
 
     //* 메뉴 오픈
@@ -22,7 +22,7 @@ export function RootCtxMenu(){
         const boxOpen = (content: any) => {
             setBoxContent(content);
             setBoxPosition(clientX, clientY);
-            setBoxOpen(true);    
+            setBoxOpen(true);
         };
 
         // 메뉴 설정 및 선택 이벤트 처리
@@ -31,7 +31,10 @@ export function RootCtxMenu(){
                 //* 루트 아이템 추가
                 case 'root-add':
                     boxOpen(
-                        <EditBox title='Add submenu' mode='add' isRoot={true}
+                        <EditBox
+                            title='Add submenu'
+                            mode='add'
+                            isRoot={true}
                             item={{
                                 id: '',
                                 label: '',
@@ -47,6 +50,12 @@ export function RootCtxMenu(){
         setPosition(clientX, clientY);
         setOpen(isOpen);
     }, [clientX, clientY, isOpen]);
+
+    // 메뉴 on/off 제어
+    useEffect(() => {
+        // 닫기 처리
+        if( !ctxIsOpen ){ close(); }
+    }, [ctxIsOpen]);
 
     return <></>
 }

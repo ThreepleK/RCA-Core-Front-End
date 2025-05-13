@@ -13,7 +13,8 @@ export interface RootCtxMenuState {
         x: number,                          // - x 축
         y: number,                          // - y 축
         label: string                       // - 라벨명
-    ) => void;         
+    ) => void;
+    close: () => void;                      // 닫기
 }
 
 // Root 우클릭 메뉴 store
@@ -27,4 +28,7 @@ export const useRootCtxMenuStore = create<RootCtxMenuState>((set, _) => ({
     open: ( x, y, label ) => {
         set({ isOpen: true, clientX: x, clientY: y, label });
     },
+    close: () => {
+        set({ isOpen: false });
+    }
 }));

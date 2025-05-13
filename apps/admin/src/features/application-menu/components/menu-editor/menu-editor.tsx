@@ -1,5 +1,5 @@
-import { memo, useEffect, useMemo, useRef, useState } from 'react';
-import { Select, Button, Modal, Text } from '@mantine/core';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Select, Button, Text } from '@mantine/core';
 import { TreeEditor, useTreeStore, useRootCtxMenuStore } from '@/compos/ui/tree-editor'
 import { DB_MENU_ITEM, getSelected_treeList, getAppList, dbRaw2Data, data2DbRaw, getDeepCp } from './utils'
 
@@ -11,9 +11,6 @@ export function MenuEditor({ menu, onMenuChange }: {
     onMenuChange: (changeMenu: DB_MENU_ITEM[]) => void;
 }){
     const menuEditRef = useRef<HTMLDivElement>(null);
-
-    //* 모달
-    const { setOpen: modalOepn, setContent: modalCont } = useConfirmModalStore(s => s);
 
     // 메뉴, 앱 메뉴에 필요한 형태로 변환
     const menuList = useMemo(() => dbRaw2Data(menu), [menu]);
@@ -37,6 +34,18 @@ export function MenuEditor({ menu, onMenuChange }: {
         setTreeList( getDeepCp(treeData.list) );
     }, [treeData.label]);
 
+    // 컨텐츠 등에서 아이템 업데이트 요청
+    useEffect(() => {
+        if( !isItemUpdate ){ return; }
+
+        // 트리 목록 → raw 데이터로 가져오기
+        const applyData = data2DbRaw(list, treeData.rootItem);
+        // 변경 메뉴 전달
+        onMenuChange(applyData);
+        // 업데이트 신호 취소
+        setIsUpdate(false);
+    }, [isItemUpdate]);
+
     //* 마우스 우클릭 이벤트
     const onMenuClick = (e: any) => {
         // 하위 이벤트 대상일 때는 건너 뜀
@@ -49,48 +58,6 @@ export function MenuEditor({ menu, onMenuChange }: {
         // 트리 root 메뉴 열기
         rootMenuOpen(clientX, clientY, treeData.label);
     }
-
-    //* 취소
-    const onCancel = () => {
-        // 확인 모달
-        modalCont(<Text size='md' fw={500} c='red'>Cancel menu edit</Text>,
-            <Text size='sm'>
-                Do you want to cancel the <b>{treeData.label}</b> menu you are editing?
-            </Text>
-        , 'Cancel', () => {
-            // 트리 목록 초기화
-            setTreeList( getDeepCp(treeData.list) );
-        });
-        modalOepn(true);
-    }
-
-    //* 저장
-    const onApply = () => {
-        // 확인 모달
-        modalCont(<Text size='md' fw={500} c='blue'>Apply menu edit</Text>,
-            <Text size='sm'>
-                Would you like to save the '<b>{treeData.label}</b>' menu with the above edited content?
-            </Text>
-        , 'Apply', () => {
-            // 트리 목록 → raw 데이터로 가져오기
-            const applyData = data2DbRaw(list, treeData.rootItem);
-            // 변경 메뉴 전달
-            onMenuChange(applyData);
-        });
-        modalOepn(true);
-    }
-
-    // 컨텐츠 등에서 아이템 업데이트 요청
-    useEffect(() => {
-        if( !isItemUpdate ){ return; }
-
-        // 트리 목록 → raw 데이터로 가져오기
-        const applyData = data2DbRaw(list, treeData.rootItem);
-        // 변경 메뉴 전달
-        onMenuChange(applyData);
-        // 업데이트 신호 취소
-        setIsUpdate(false);
-    }, [isItemUpdate])
 
     return (
         <div
@@ -116,10 +83,84 @@ export function MenuEditor({ menu, onMenuChange }: {
             <TreeEditor list={list} />
 
             {/* 하단 버튼 */}
-            <div className={style['me-bottom']}>
-                <Button size='xs' variant='default' onClick={onCancel}>Cancel</Button>
-                <Button size='xs' color='indigo' onClick={onApply}>Apply</Button>
-            </div>
+            <BottomArea treeData={treeData} onMenuChange={onMenuChange} />
         </div>
     );
+}
+
+/**
+ * 하단 버튼 처리
+ */
+function BottomArea({ treeData, onMenuChange }: {
+    treeData: any;
+    onMenuChange: (changeMenu: DB_MENU_ITEM[]) => void;
+}) {
+    //* 트리 리스트
+    const {list, setTreeList} = useTreeStore(s => s);
+
+    //* 취소
+    const onCancel = () => {
+        CancelModal(treeData.label, () => {
+            // 트리 목록 초기화
+            setTreeList( getDeepCp(treeData.list) );
+        });
+    }
+
+    //* 저장
+    const onApply = () => {
+        // 확인 모달
+        ApplyModal(treeData.label, () => {
+            // 트리 목록 → raw 데이터로 가져오기
+            const applyData = data2DbRaw(list, treeData.rootItem);
+            // 변경 메뉴 전달
+            onMenuChange(applyData);
+        });
+    }
+
+    return (
+        <div className={style['me-bottom']}>
+            <Button size='xs' variant='default' onClick={onCancel}>Cancel</Button>
+            <Button size='xs' color='indigo' onClick={onApply}>Apply</Button>
+        </div>
+    )
+}
+
+/**
+ * 취소 모달
+ */
+function CancelModal(
+    label: string,          // 관련 라벨
+    callback: ()=>void      // 취소 콜백
+){
+    //* 모달
+    const { setOpen, setContent } = useConfirmModalStore.getState();
+
+    // 취소 모달
+    setContent(
+        <Text size='md' fw={500} c='red'>Cancel menu edit</Text>,
+        <Text size='sm'>
+            Do you want to cancel the <b>{label}</b> menu you are editing?
+        </Text>
+    , 'Cancel', callback);
+    setOpen(true);
+}
+
+/**
+ * 확인 모달
+ */
+function ApplyModal(
+    label: string,          // 관련 라벨
+    callback: ()=>void      // 확인 콜백
+){
+    //* 모달
+    const { setOpen, setContent } = useConfirmModalStore.getState();
+
+    // 취소 모달
+    setContent(
+        <Text size='md' fw={500} c='blue'>Apply menu edit</Text>,
+        <Text size='sm'>
+            Would you like to save the '<b>{label}</b>' menu with the above edited content?
+        </Text>
+    , 'Apply', callback);
+    setOpen(true);
 }

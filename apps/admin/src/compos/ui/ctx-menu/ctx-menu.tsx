@@ -31,6 +31,7 @@ export function CtxMenu(){
         return () => window.removeEventListener('click', menuOutsideClick);
     }, [isOpen]);
 
+
     return <div ref={menuRef}>
         <Menu opened={isOpen}>
             <Menu.Dropdown style={{ position: 'fixed', left: clientX, top: clientY }}>
