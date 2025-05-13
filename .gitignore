@@ -13,3 +13,4 @@ packages/*/node_modules
 
 # 배포 빌드 제외
 docker-compose/*/dist
+docker-compose/*/prod-img

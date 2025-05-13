@@ -1,0 +1,19 @@
+# version: '3.9'
+
+services:
+  host:
+    image: host:latest
+    container_name: host
+    ports:
+      - "80:80"
+    depends_on:
+      - admin
+      - rca
+
+  admin:
+    image: admin:latest
+    container_name: admin
+
+  rca:
+    image: rca:latest
+    container_name: rca

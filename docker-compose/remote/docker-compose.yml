@@ -20,3 +20,13 @@ services:
     container_name: admin
     ports:
       - "5009:80"
+
+  rca:
+    build:
+      context: .
+      dockerfile: ./dockerfile-remote
+      args:
+        DIST_PATH: ./dist/r/rca
+    container_name: rca
+    ports:
+      - "5001:80"

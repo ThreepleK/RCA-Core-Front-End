@@ -6,6 +6,8 @@ buildPath="./docker-compose/single"
 
 rm -rf ./$buildPath/dist
 mkdir ./$buildPath/dist
+rm -rf ./$buildPath/prod-img
+mkdir ./$buildPath/prod-img
 
 # 배포 경로 설정
 for dir in ./apps/*/dist; do
@@ -23,3 +25,8 @@ done
 # docker compose 구동
 cd "$buildPath"
 docker compose up --build
+
+# 컨테이너 이미지 생성
+cd "./prod-img"
+docker commit host host:latest
+docker save -o web-host.tar host:latest
