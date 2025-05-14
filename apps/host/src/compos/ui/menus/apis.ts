@@ -22,7 +22,7 @@ export type MENU_DATAS = {
 export function api_getMenuData(){
     return request({
         type: 'get',
-        url: '/admin/api/menu/sidebar'
+        url: '/core/api/menu/sidebar'
     }).then(({isErr, msg, res}) => {
         const data: MENU_DATAS = {
             app_hub: [],
