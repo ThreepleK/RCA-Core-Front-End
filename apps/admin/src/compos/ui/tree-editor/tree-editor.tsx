@@ -1,31 +1,46 @@
 import { useMemo } from 'react';
-import { Text } from '@mantine/core';
+import { Box, Divider, Text } from '@mantine/core';
 import { SortableTree } from 'dnd-kit-sortable-tree';
 
-import { useTreeStore, TREE_LIST } from './'
+import { useTreeStore, TREE_LIST, TREE_ITEM } from './'
 import { RootCtxMenu, TreeItem } from './components'
 
 import { CtxMenu } from '@/compos/ui/ctx-menu'
 import { CtxBox } from '@/compos/ui/ctx-box'
 
 import style from "./tree-editor.module.css";
+import { IconCloudNetwork, IconMenu4 } from '@tabler/icons-react';
 
 /**
  * 트리 에디터
  */
-export function TreeEditor({list}: {
+export function TreeEditor({rootItem, list}: {
+    rootItem: TREE_ITEM;
     list: TREE_LIST;
 }){
-    const {flag, setTreeList} = useTreeStore(s => s);
+    const {flag, setTreeChildList} = useTreeStore(s => s);
     const items = useMemo(() => list, [list, flag]);
 
+    // 선택된 데이터가 없을 경우
+    if( !rootItem ){ return <></> }
+
     return <>
-        {list.length === 0
+        {/* 메인 최상위 메뉴 */}
+        <RootItem item={rootItem} />
+
+        {/* 구분 선 */}
+        <Divider variant='dashed' label={<>
+            <IconMenu4 size={12} strokeWidth={1} />
+            <Box ml={5}>Application Menus</Box>
+        </>} />
+
+        {/* 트리 메뉴 */}
+        {items.length === 0
             ? <Text className={style['no-tree-data']}>Please add a menu item.</Text>
             : <div className={style.tree}>
                 <SortableTree
                     items={items}
-                    onItemsChanged={setTreeList}
+                    onItemsChanged={setTreeChildList}
                     TreeItemComponent={TreeItem}
                 />
             </div>
@@ -38,4 +53,26 @@ export function TreeEditor({list}: {
         {/* 우클릭 기타 박스 */}
         <CtxBox />
     </>;
+}
+
+function RootItem({ item }: {
+    item: TREE_ITEM;
+}){
+    const {flag, setSelectedItem} = useTreeStore(s => s);
+    const root = useMemo(() => item, [item, flag]);
+
+    //* 아이템 선택 여부
+    const selected = useMemo(() => root.selected, [root.selected]);
+
+    // 하위 항목 변경 건
+    const onRootItemClick = () => {
+        setSelectedItem( String(root.id) );
+    };
+
+    return (
+        <div className={`${style['root-item']} ${selected ? 'on-active': ''}`} onClick={onRootItemClick}>
+            <IconCloudNetwork size={16} stroke={1.25} />
+            <Text size='sm'>{root.label}</Text>
+        </div>
+    )
 }

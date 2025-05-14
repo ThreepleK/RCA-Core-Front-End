@@ -1,12 +1,22 @@
 @import "tailwindcss";
 
+.root-item {
+    & {
+        @apply flex gap-1.5 justify-start items-center px-1.5 mt-2 w-full h-[25px] bg-gray-100 cursor-pointer hover:bg-gray-200 rounded-md;
+    }
+
+    &[class*=on-active] {
+        @apply bg-white;
+    }
+}
+
 .tree {
-    & { @apply mt-2; }
+    & { @apply mt-1; }
 
     /* 트리 메뉴 */
     & .tree-item {
         & {
-            @apply flex items-center px-1;
+            @apply flex items-center px-1 cursor-pointer;
         }
         & > div {
             @apply w-full p-0 h-[25px] text-sm border-none bg-gray-100 hover:bg-gray-200 rounded-md;

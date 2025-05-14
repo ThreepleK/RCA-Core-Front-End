@@ -60,6 +60,10 @@ export default defineConfig((({ mode }: any) => {
           target: 'http://192.168.7.230:9081',
           changeOrigin: true,
         },
+        '/core/api': {
+          target: 'http://192.168.7.230:9081',
+          changeOrigin: true,
+        },
       }
     },
     resolve: {
