@@ -23,15 +23,15 @@ export function MenuEditor({ menu, onMenuChange }: {
     const treeData = useMemo(() => getSelected_treeList(menuList, selectApp), [selectApp]);
 
     //* 트리 리스트
-    const {list, setTreeList, isItemUpdate, setIsUpdate} = useTreeStore(s => s);
+    const {rootItem, list, setTreeList, isItemUpdate, setIsUpdate} = useTreeStore(s => s);
 
-    //* 트리 root 메뉴
+    //* 트리 root Context 메뉴
     const rootMenuOpen = useRootCtxMenuStore(s => s.open);
 
     //* 앱 변경
     useEffect(() => {
         // 트리 목록 업데이트
-        setTreeList( getDeepCp(treeData.list) );
+        setTreeList( getDeepCp(treeData.allList) );
     }, [treeData.label]);
 
     // 컨텐츠 등에서 아이템 업데이트 요청
@@ -39,7 +39,7 @@ export function MenuEditor({ menu, onMenuChange }: {
         if( !isItemUpdate ){ return; }
 
         // 트리 목록 → raw 데이터로 가져오기
-        const applyData = data2DbRaw(list, treeData.rootItem);
+        const applyData = data2DbRaw(list, rootItem);
         // 변경 메뉴 전달
         onMenuChange(applyData);
         // 업데이트 신호 취소
@@ -80,10 +80,10 @@ export function MenuEditor({ menu, onMenuChange }: {
             />
 
             {/* 트리 편집 */}
-            <TreeEditor list={list} />
+            <TreeEditor rootItem={rootItem} list={list} />
 
             {/* 하단 버튼 */}
-            <BottomArea treeData={treeData} onMenuChange={onMenuChange} />
+            <BottomArea treeData={treeData.label} onMenuChange={onMenuChange} />
         </div>
     );
 }
@@ -96,13 +96,13 @@ function BottomArea({ treeData, onMenuChange }: {
     onMenuChange: (changeMenu: DB_MENU_ITEM[]) => void;
 }) {
     //* 트리 리스트
-    const {list, setTreeList} = useTreeStore(s => s);
+    const {rootItem, list, setTreeList} = useTreeStore(s => s);
 
     //* 취소
     const onCancel = () => {
         CancelModal(treeData.label, () => {
             // 트리 목록 초기화
-            setTreeList( getDeepCp(treeData.list) );
+            setTreeList( getDeepCp(treeData.allList) );
         });
     }
 
@@ -111,7 +111,7 @@ function BottomArea({ treeData, onMenuChange }: {
         // 확인 모달
         ApplyModal(treeData.label, () => {
             // 트리 목록 → raw 데이터로 가져오기
-            const applyData = data2DbRaw(list, treeData.rootItem);
+            const applyData = data2DbRaw(list, rootItem);
             // 변경 메뉴 전달
             onMenuChange(applyData);
         });
@@ -126,7 +126,7 @@ function BottomArea({ treeData, onMenuChange }: {
 }
 
 /**
- * 취소 모달
+ * [모달] 취소
  */
 function CancelModal(
     label: string,          // 관련 라벨
@@ -146,7 +146,7 @@ function CancelModal(
 }
 
 /**
- * 확인 모달
+ * [모달] 확인
  */
 function ApplyModal(
     label: string,          // 관련 라벨

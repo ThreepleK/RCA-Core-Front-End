@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Flex, Title, LoadingOverlay } from "@mantine/core";
 import { DB_MENU_ITEM, MenuEditor, dbRawContainData } from "./components";
 import { ContentArea } from "./components/content-area";
@@ -11,6 +11,10 @@ const ApplicationMenu = () => {
     const [reloadFlag, setReloadFlag] = useState(false);
     const [menuData, setMenuData] = useState<DB_MENU_ITEM[]|null>(null);
 
+    //* 로딩 여부
+    const isLoading = useMemo(() => (menuData === null), [menuData]);
+
+    //* 메뉴 데이터 가져오기
     useEffect(() => {
         api_getMenuData().then(({ isErr, res }) => {
             if( isErr ){ return; }
@@ -31,18 +35,9 @@ const ApplicationMenu = () => {
         });
     };
 
-    // 메뉴 데이터 로딩 시
-    if( menuData === null ){
-        return <LoadingOverlay
-            visible={true}
-            zIndex={1000}
-            overlayProps={{ radius: 'sm', blur: 2 }}
-            loaderProps={{ color: 'blue', type: 'bar' }}
-        />;
-    }
-
     // 보여줄 화면
-    return (
+    return <>
+        {/* 컨텐츠 */}
         <section className={style.section} style={{'--edit-width': '300px'} as any}>
             {/* 상단 타이틀 */}
             <Flex justify='space-between' className={style['title-area']}>
@@ -54,12 +49,22 @@ const ApplicationMenu = () => {
             </Flex>
 
             {/* 좌측 메뉴 에디터 */}
-            <MenuEditor menu={menuData} onMenuChange={onMenuChange} />
+            {!isLoading &&
+                <MenuEditor menu={menuData} onMenuChange={onMenuChange} />
+            }
 
             {/* 본문 영역 */}
             <ContentArea className={style['cont-area']} />
         </section>
-    );
+
+        {/* 메뉴 데이터 로딩 시 */}
+        <LoadingOverlay
+            visible={isLoading}
+            zIndex={1000}
+            overlayProps={{ radius: 'sm', blur: 1 }}
+            loaderProps={{ color: 'blue', type: 'bar' }}
+        />
+    </>;
 }
 
 export default ApplicationMenu;
