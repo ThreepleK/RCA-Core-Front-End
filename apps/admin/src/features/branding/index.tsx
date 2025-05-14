@@ -6,14 +6,15 @@ import style from "./style.module.css";
 import { request } from '@/utils/request'
 import ContentArea from "./components/content-area/content-area";
 
-const ApplicationMenu = () => {
+const Branding = () => {
+  const [isCancel, setIsCancel] = useState(false);
 
     const handleApplyButton = () => {
       console.log('apply button clicked');
     };
 
     const handleCancelButton = () => {
-      console.log('cancel button clicked');
+      setIsCancel(true);
     };
 
   return (
@@ -25,9 +26,9 @@ const ApplicationMenu = () => {
                 <Button size='xs' onClick={() => handleApplyButton()}>Apply</Button>
             </Group>
         </Flex>
-        <ContentArea className={style['cont-area']}/>
+        <ContentArea className={style['cont-area']} isCancel={isCancel} onChangeCancel={setIsCancel}/>
     </section>
 );
 }
 
-export default ApplicationMenu;
+export default Branding;
