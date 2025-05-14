@@ -110,21 +110,13 @@ export const useTreeStore = create<TreeState>((set, get) => ({
         });
 
         // 변경 값 재설정
-        if( isSelectedRoot ){
-            set({
-                rootItem: {...rootItem},
-                selectedItem: selected,
-                isSelectedRoot,
-                flag: !flag,
-            });
-        } else {
-            set({
-                list: [...list],
-                selectedItem: selected,
-                isSelectedRoot,
-                flag: !flag,
-            });
-        }
+        set({
+            rootItem: {...rootItem},
+            list: [...list],
+            selectedItem: selected,
+            isSelectedRoot,
+            flag: !flag,
+        });
     },
     addTreeItem: (addId, label, isRoot=false) => {
         const {list} = get();
@@ -259,8 +251,8 @@ function listAllLoop(
             callback(item, isRoot);
 
             // 하위 항목 반복
-            if( item.children && item.children.length > 0 ){
-                loop(item.children, isRoot);
+            if( !isRoot && (item.children && item.children.length > 0) ){
+                loop(item.children, false);
             }
         }
     }
@@ -291,8 +283,8 @@ function listSearch(
                 break;
             }
             // 하위 항목 반복
-            if( item.children && item.children.length > 0 ){
-                loop(item.children, isRoot);
+            if( !isRoot && (item.children && item.children.length > 0) ){
+                loop(item.children, false);
             }
         }
     }
