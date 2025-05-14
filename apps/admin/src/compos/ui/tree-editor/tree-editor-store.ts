@@ -21,7 +21,6 @@ export type TREE_ITEM_TYPE = {
     };
 };
 
-
 // 트리 목록
 export type TREE_LIST = TreeItems<TREE_ITEM_TYPE>;
 export type TREE_ITEM = TreeItem<TREE_ITEM_TYPE>;
@@ -36,9 +35,10 @@ interface TreeState {
     isSelectedRoot: boolean;                // 선택된 아이템이 root 아이템인지 여부
     isItemUpdate: boolean;                  // Tree 아이템 업데이트 신호
 
+    isEditing: boolean;                     // 메뉴 편집 여부 설정
+
     // action ----
     setTreeList: (list: TREE_LIST) => void;         // tree 목록 설정
-    setTreeRootItem: (item: TREE_ITEM) => void;     // tree root 아이템 설정
     setTreeChildList: (list: TREE_LIST) => void;    // tree 하위 목록 설정
     setSelectedItem: (id: string) => void;          // tree 목록 선택
     addTreeItem: (                                  // tree 아이템 추가
@@ -67,6 +67,7 @@ export const useTreeStore = create<TreeState>((set, get) => ({
     selectedItem: null,
     isSelectedRoot: false,
     isItemUpdate: false,
+    isEditing: false,
     
     setTreeList: (list) => {
         // 등록 값이 없을경우
@@ -84,13 +85,15 @@ export const useTreeStore = create<TreeState>((set, get) => ({
             rootItem,
             list: children,
             flag: !get().flag,
+            isEditing: false,
         });
     },
-    setTreeRootItem: (item) => {
-        set({ rootItem: item, flag: !get().flag });
-    },
     setTreeChildList: (cList) => {
-        set({ list: cList, flag: !get().flag });
+        set({
+            list: cList,
+            flag: !get().flag,
+            isEditing: true,
+        });
     },
     setSelectedItem: (id) => {
         const { rootItem, list, flag } = get();
@@ -153,6 +156,7 @@ export const useTreeStore = create<TreeState>((set, get) => ({
         set({
             list: [...list],
             flag: !get().flag,
+            isEditing: true,
         });
     },
     modTreeItem: (modId, label) => {
@@ -181,6 +185,7 @@ export const useTreeStore = create<TreeState>((set, get) => ({
         set({
             ...setData,
             flag: !get().flag,
+            isEditing: true,
         });
     },
     rmTreeItem: (rmId) => {
@@ -198,6 +203,7 @@ export const useTreeStore = create<TreeState>((set, get) => ({
         set({
             list: [...list],
             flag: !get().flag,
+            isEditing: true,
         });
     },
 
@@ -222,11 +228,13 @@ export const useTreeStore = create<TreeState>((set, get) => ({
             set({
                 rootItem: {...rootItem},
                 flag: !flag,
+                isEditing: true,
             });
         } else {
             set({
                 list: [...list],
                 flag: !flag,
+                isEditing: true,
             });
         }
     },

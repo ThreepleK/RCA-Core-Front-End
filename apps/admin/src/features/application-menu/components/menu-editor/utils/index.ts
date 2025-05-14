@@ -14,16 +14,12 @@ export function getDeepCp(data: any) {
  */
 export function getSelected_treeList(menuTree: TREE_LIST, selected: string|null): {
     label: string;
-    rootItem: TREE_ITEM|null;
-    list: TREE_LIST;
     allList: TREE_LIST;
 }{
     // 트리 데이터 or 선택 된 항목이 없을 경우
     if( !menuTree || !selected ){
         return {
             label: '',
-            rootItem: null,
-            list: [],
             allList: [],
         };
     }
@@ -31,14 +27,12 @@ export function getSelected_treeList(menuTree: TREE_LIST, selected: string|null)
     // Select된 리스트만 가져오기
     const treeList = menuTree.filter(item => item.id === selected);
 
-    // 선택된 최상위 라벨과, 하위 내역 가져오기
-    const {label, children} = treeList[0];
+    // 선택된 최상위 라벨 가져오기
+    const { label } = treeList[0];
 
     // 결과 값 전달
     return {
         label,
-        rootItem: treeList[0],
-        list: children ?? [],
         allList: treeList,
     };
 }

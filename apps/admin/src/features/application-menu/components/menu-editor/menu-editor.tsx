@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Select, Button, Text } from '@mantine/core';
-import { TreeEditor, useTreeStore, useRootCtxMenuStore } from '@/compos/ui/tree-editor'
+import { TreeEditor, useTreeStore, useRootCtxMenuStore, TREE_LIST } from '@/compos/ui/tree-editor'
 import { DB_MENU_ITEM, getSelected_treeList, getAppList, dbRaw2Data, data2DbRaw, getDeepCp } from './utils'
 
 import style from './menu-editor.module.css';
@@ -22,30 +22,6 @@ export function MenuEditor({ menu, onMenuChange }: {
     //* App이 선택 되면 트리 메뉴 변경
     const treeData = useMemo(() => getSelected_treeList(menuList, selectApp), [selectApp]);
 
-    //* 트리 리스트
-    const {rootItem, list, setTreeList, isItemUpdate, setIsUpdate} = useTreeStore(s => s);
-
-    //* 트리 root Context 메뉴
-    const rootMenuOpen = useRootCtxMenuStore(s => s.open);
-
-    //* 앱 변경
-    useEffect(() => {
-        // 트리 목록 업데이트
-        setTreeList( getDeepCp(treeData.allList) );
-    }, [treeData.label]);
-
-    // 컨텐츠 등에서 아이템 업데이트 요청
-    useEffect(() => {
-        if( !isItemUpdate ){ return; }
-
-        // 트리 목록 → raw 데이터로 가져오기
-        const applyData = data2DbRaw(list, rootItem);
-        // 변경 메뉴 전달
-        onMenuChange(applyData);
-        // 업데이트 신호 취소
-        setIsUpdate(false);
-    }, [isItemUpdate]);
-
     //* 마우스 우클릭 이벤트
     const onMenuClick = (e: any) => {
         // 하위 이벤트 대상일 때는 건너 뜀
@@ -54,6 +30,9 @@ export function MenuEditor({ menu, onMenuChange }: {
 
         // 출력 될 좌표 값 가져오기 
         const { clientX, clientY } = e;
+
+        // 트리 root Context 메뉴 열기 함수 가져오기
+        const rootMenuOpen = useRootCtxMenuStore.getState().open;
 
         // 트리 root 메뉴 열기
         rootMenuOpen(clientX, clientY, treeData.label);
@@ -79,13 +58,51 @@ export function MenuEditor({ menu, onMenuChange }: {
                 searchable
             />
 
-            {/* 트리 편집 */}
-            <TreeEditor rootItem={rootItem} list={list} />
+            {/* 트리 편집 Process */}
+            <TreeEditorProcess
+                rootLabel={treeData.label}
+                treeList={treeData.allList}
+                onMenuChange={onMenuChange}
+            />
+            {/* 트리 편집 UI */}
+            <TreeEditor />
 
             {/* 하단 버튼 */}
-            <BottomArea treeData={treeData.label} onMenuChange={onMenuChange} />
+            <BottomArea treeData={treeData} onMenuChange={onMenuChange} />
         </div>
     );
+}
+
+/**
+ * 트리 편집 관련 프로세스
+ */
+function TreeEditorProcess({rootLabel, treeList, onMenuChange}: {
+    rootLabel: string;
+    treeList: TREE_LIST;
+    onMenuChange: (changeMenu: DB_MENU_ITEM[]) => void;
+}){
+    //* 트리 리스트
+    const {rootItem, list, setTreeList, isItemUpdate, setIsUpdate} = useTreeStore(s => s);
+
+    //* 앱 변경
+    useEffect(() => {
+        // 트리 목록 업데이트
+        setTreeList( getDeepCp(treeList) );
+    }, [rootLabel]);
+
+    //* 컨텐츠 등에서 아이템 업데이트 요청
+    useEffect(() => {
+        if( !isItemUpdate ){ return; }
+
+        // 트리 목록 → raw 데이터로 가져오기
+        const applyData = data2DbRaw(list, rootItem);
+        // 변경 메뉴 전달
+        onMenuChange(applyData);
+        // 업데이트 신호 취소
+        setIsUpdate(false);
+    }, [isItemUpdate]);
+
+    return <></>;
 }
 
 /**
@@ -96,7 +113,7 @@ function BottomArea({ treeData, onMenuChange }: {
     onMenuChange: (changeMenu: DB_MENU_ITEM[]) => void;
 }) {
     //* 트리 리스트
-    const {rootItem, list, setTreeList} = useTreeStore(s => s);
+    const {isEditing, rootItem, list, setTreeList} = useTreeStore(s => s);
 
     //* 취소
     const onCancel = () => {
@@ -119,8 +136,8 @@ function BottomArea({ treeData, onMenuChange }: {
 
     return (
         <div className={style['me-bottom']}>
-            <Button size='xs' variant='default' onClick={onCancel}>Cancel</Button>
-            <Button size='xs' color='indigo' onClick={onApply}>Apply</Button>
+            <Button size='xs' variant='default' onClick={onCancel} disabled={!isEditing}>Cancel</Button>
+            <Button size='xs' color='indigo' onClick={onApply} disabled={!isEditing}>Apply</Button>
         </div>
     )
 }
@@ -141,7 +158,7 @@ function CancelModal(
         <Text size='sm'>
             Do you want to cancel the <b>{label}</b> menu you are editing?
         </Text>
-    , 'Cancel', callback);
+    , 'Confirm', callback);
     setOpen(true);
 }
 

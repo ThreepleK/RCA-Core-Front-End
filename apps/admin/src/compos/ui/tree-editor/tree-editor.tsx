@@ -14,19 +14,16 @@ import { IconCloudNetwork, IconMenu4 } from '@tabler/icons-react';
 /**
  * 트리 에디터
  */
-export function TreeEditor({rootItem, list}: {
-    rootItem: TREE_ITEM;
-    list: TREE_LIST;
-}){
-    const {flag, setTreeChildList} = useTreeStore(s => s);
+export function TreeEditor(){
+    const {flag, rootItem, list, setTreeChildList} = useTreeStore(s => s);
     const items = useMemo(() => list, [list, flag]);
 
     // 선택된 데이터가 없을 경우
-    if( !rootItem ){ return <></> }
+    if( !rootItem ){ return <>No Tree Data</> }
 
     return <>
         {/* 메인 최상위 메뉴 */}
-        <RootItem item={rootItem} />
+        <RootItem />
 
         {/* 구분 선 */}
         <Divider variant='dashed' label={<>
@@ -55,11 +52,12 @@ export function TreeEditor({rootItem, list}: {
     </>;
 }
 
-function RootItem({ item }: {
-    item: TREE_ITEM;
-}){
-    const {flag, setSelectedItem} = useTreeStore(s => s);
-    const root = useMemo(() => item, [item, flag]);
+/**
+ * 루트 아이템
+ */
+function RootItem(){
+    const {flag, rootItem, setSelectedItem} = useTreeStore(s => s);
+    const root = useMemo(() => rootItem, [rootItem, flag]);
 
     //* 아이템 선택 여부
     const selected = useMemo(() => root.selected, [root.selected]);
