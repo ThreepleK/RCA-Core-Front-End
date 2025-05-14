@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { Button, Flex, Group, Title } from "@mantine/core";
-import { notifications } from '@mantine/notifications';
-import { Notifications } from '@mantine/notifications';
 import style from "./style.module.css";
 import { request } from '@/utils/request'
 import ContentArea from "./components/content-area/content-area";
