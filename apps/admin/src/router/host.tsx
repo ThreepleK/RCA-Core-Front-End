@@ -5,6 +5,7 @@ import Layout from '@/compos/layout/comm-layout'
 const Main = lazy(() => import('@/features/main'))
 const UserGroup = lazy(() => import('@/features/user-group'))
 const Permission = lazy(() => import('@/features/permission'))
+const Branding = lazy(() => import('@/features/branding'))
 const SidebarMenu = lazy(() => import('@/features/sidebar-menu'))
 const ApplicationMenu = lazy(() => import('@/features/application-menu'))
 
@@ -16,6 +17,7 @@ export default {
         { path: '', element: <Main /> },
         { path: 'user-group', element: <UserGroup /> },
         { path: 'permission', element: <Permission /> },
+        { path: 'branding', element: <Branding /> },
         { path: 'application-menu', element: <ApplicationMenu /> },
         { path: 'sidebar-menu', element: <SidebarMenu /> },
     ]

@@ -33,8 +33,7 @@ export const MenuList: MenuItem[] = [
         icon: <IconSettings size={16} stroke={1.5} />,
         isOpen: true,
         childs: [
-            { label: 'Logo', link: '/admin' },
-            { label: 'Favicon', link: '/admin' },
+            { label: 'Branding', link: '/admin/branding' },
             { label: 'Sidebar menu', link: '/admin/sidebar-menu' },
             { label: 'Application menu', link: '/admin/application-menu' },
         ]

@@ -29,7 +29,7 @@ export interface IFetchSidebarMenu {
     itemType?: string;
   }
 
-const ApplicationMenu = () => {
+const SideBarMenu = () => {
     const [isCancel, setIsCancel] = useState<boolean>(false);
     const [isApply, setIsApply] = useState<boolean>(false);
 
@@ -113,4 +113,4 @@ const ApplicationMenu = () => {
 );
 }
 
-export default ApplicationMenu;
+export default SideBarMenu;
