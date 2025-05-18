@@ -1,5 +1,6 @@
 import { DataGrid } from '@/compos/ui/data-grid';
 import { useTreeStore } from '@/compos/ui/tree-editor';
+import { MRT_ColumnDef } from 'mantine-react-table';
 
 export function Permission(){
     const { selectedItem } = useTreeStore(s => s);
@@ -11,26 +12,31 @@ export function Permission(){
 
     return (
         <DataGrid
-            columns={_COLUMNS as any}
+            columns={_COLUMNS}
             data={_TMP_DATA}
         />
     );
 }
 
-// 컬럼 정보
-const _COLUMNS = [
-    { accessor: 'no',           title: 'No', textAlign: 'right',
-        render: (record: any) => {
-            return _TMP_DATA.indexOf(record) + 1;
-        }
-    },
-    { accessor: 'role',         title: '역할' },
-    { accessor: 'isCreate',     title: '생성 권한' },
-    { accessor: 'isRead',       title: '조회 권한' },
-    { accessor: 'isModify',     title: '수정 권한' },
-    { accessor: 'isRemove',     title: '삭제 권한' },
-    { accessor: 'regDate',      title: '생성일' },
-    { accessor: 'creator',      title: '생성자' },
+type COLUMN_ITEM = MRT_ColumnDef<any>;
+
+//* Y/N 필터
+const _YN_FILTER = {
+    filterVariant: 'select',
+    mantineFilterSelectProps: {
+        data: ['Y', 'N']
+    }
+} as COLUMN_ITEM;
+
+//* 컬럼 정보
+const _COLUMNS: COLUMN_ITEM[] = [
+    { accessorKey: 'role',         header: '역할' },
+    { accessorKey: 'isCreate',     header: '생성 권한', ..._YN_FILTER },
+    { accessorKey: 'isRead',       header: '조회 권한', ..._YN_FILTER },
+    { accessorKey: 'isModify',     header: '수정 권한', ..._YN_FILTER },
+    { accessorKey: 'isRemove',     header: '삭제 권한', ..._YN_FILTER },
+    { accessorKey: 'regDate',      header: '생성일' },
+    { accessorKey: 'creator',      header: '생성자' },
 ];
 
 // 그리드 임시 데이터

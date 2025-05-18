@@ -1,25 +1,42 @@
-import { useMemo } from 'react';
-import { DataTable } from 'mantine-datatable';
-import { NoDataIcon } from './no-data-icon';
+import {
+  MantineReactTable,
+  useMantineReactTable,
+  type MRT_ColumnDef,
+  type MRT_TableOptions,
+} from 'mantine-react-table';
+import { gridIcons } from './grid-icons'
+import 'mantine-react-table/styles.css';
+import style from './data-grid.module.css';
 
-export function DataGrid({ columns, data }: {
-    columns: any;
+export function DataGrid<T>({ columns, data, opts }: {
+    columns: MRT_ColumnDef<T>[];
     data: any;
+    opts?: MRT_TableOptions<T>;
 }){
+    const table = useMantineReactTable({
+        columns, data,
+        enableRowNumbers: true,                 // 컬럼에 숫자 표기
+        rowNumberDisplayMode: 'static',
 
-    //* 데이터 없음 아이콘 설정
-    const noDataIco = useMemo(() => {
-        return <NoDataIcon dataLen={data.length} />
-    }, [data.length]);
+        enableColumnResizing: false,            // 컬럼 리사이징
 
-    return (
-        <DataTable
-            highlightOnHover
-            columns={columns as any}
-            records={data}
-            // idAccessor='id'
-            noRecordsIcon={noDataIco}
-            noRecordsText=''
-        />
-    );
+        enableTopToolbar: true,                 // 상단 툴바 (필터)
+        enableBottomToolbar: true,              // 하단 툴바 (페이지네이션)
+        enableFullScreenToggle: true,           // 풀스크린 토글 버튼
+        enableDensityToggle: false,             // 셀 세로 높이 토클 버튼
+        initialState: {
+            density: 'xs'                       // 셀 세로 높이 기본 값
+        },
+
+        icons: gridIcons,                       // 재설정 할 아이콘
+
+        //* 상단 툴바 설정
+        mantineTopToolbarProps: (props) => ({
+            className: style['grid-top-toolbar']
+        }),
+
+        ...opts                                 // 별도 설정 값
+    } as MRT_TableOptions<any>);
+
+    return <MantineReactTable table={table} />;
 }

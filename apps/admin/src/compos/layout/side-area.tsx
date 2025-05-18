@@ -67,13 +67,13 @@ export function SideArea({className}: {
 }
 
 function MenuItem({label, link, icon, childs, depth, isOpen, searchKeyword}: {
-    label: string,          // 메뉴
-    link?: string,          // 이동할 링크
-    icon?: any,             // 표기될 아이콘
+    label: string,              // 메뉴
+    link?: string,              // 이동할 링크
+    icon?: any,                 // 표기될 아이콘
     childs?: MenuItemType[],    // 하위 항목이 있다면 관련 리스트
-    isOpen?: boolean,       // 메인 메뉴라면 펼침 여부 
-    depth: number,          // 메뉴 깊이 번호
-    searchKeyword: string, // 검색 키워드
+    isOpen?: boolean,           // 메인 메뉴라면 펼침 여부 
+    depth: number,              // 메뉴 깊이 번호
+    searchKeyword: string,      // 검색 키워드
 }){
     const navigate = useNavigate();
     const {setFold, setUnFold, childSuccess} = useSideMenuStore((s: any) => s);

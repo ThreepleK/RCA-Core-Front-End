@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+.grid-top-toolbar {
+    & {
+        @apply bg-gray-100 min-h-[35px] rounded-t-md;
+    }
+
+    & > div {
+        @apply px-1 py-0;
+    }
+
+    /* 필터 버튼 */
+    & [class*=mrt-toolbar-internal-buttons] {
+        & { @apply flex items-center h-[34px] min-h-[34px]; }
+        & > button { @apply w-[28px] min-w-[28px] h-[28px] min-h-[28px]; }
+    }
+
+    /* 검색 */
+    & [class*=mrt-global-filter-text-input] {
+        & { }
+        & input { @apply h-[28px] min-h-[28px] bg-white; }
+    }
+
+}
