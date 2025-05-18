@@ -1,7 +1,7 @@
 import { createBrowserRouter, Outlet } from 'react-router-dom';
 import type { RouteObject } from 'react-router-dom';
 import { lazy } from 'react'
-import Layout from '@/compos/layout/comm-layout'
+import { CommLayout } from '@/compos/layout'
 import { protectedLoader } from './protected'
 
 // @ts-ignore
@@ -47,7 +47,7 @@ const Errors = {
 const routeList: RouteObject[] = [
     {
         path: '/',
-        element: <Layout />,
+        element: <CommLayout />,
         loader: protectedLoader,
         children: [
             // { path: '/', element: <Main.Dashboard /> },

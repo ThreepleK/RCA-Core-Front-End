@@ -36,7 +36,7 @@
         /* 카피라이터 */
         &[class*=copyright] {
             & {
-                @apply h-[40px] justify-between text-xs border-solid border-t-1 border-gray-200;
+                @apply h-[35px] justify-between text-xs border-solid border-t-1 border-gray-200;
             }
 
             & > span {

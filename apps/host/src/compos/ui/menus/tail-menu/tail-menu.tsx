@@ -27,8 +27,8 @@ export const TailMenu = () => {
 
     // 접힘 펼침 버튼
     const foledBtn = isOpen
-        ? <IconArrowBarToLeft size={20} stroke={1.5} />
-        : <IconArrowBarToRight size={20} stroke={1.5} />
+        ? <IconArrowBarToLeft size={16} stroke={1.5} />
+        : <IconArrowBarToRight size={16} stroke={1.5} />
     ;
 
     return <>
@@ -65,7 +65,7 @@ export const TailMenu = () => {
             {/* Copyright & Folded */}
             <UnstyledButton className='copyright' onClick={onFoldToggle}>
                 <span>{isOpen
-                    ? <><IconCopyright size={14} stroke={1.5}/> 2025 Bistelligence, inc.</>
+                    ? <><IconCopyright size={12} stroke={1.5}/>&nbsp;2025 Bistelligence, inc.</>
                     : <></>
                 }</span>
                 {foledBtn}

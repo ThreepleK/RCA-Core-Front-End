@@ -2,7 +2,7 @@
 
 .layout {
     /* 레이아웃 전체 영역 */
-    & { @apply relative w-full h-svh; }
+    & { @apply absolute left-0 top-0 right-0 bottom-0; }
 
     /* 좌측 사이드 */
     & .side-area {

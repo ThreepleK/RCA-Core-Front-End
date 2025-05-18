@@ -1,12 +1,13 @@
-import { AppShell } from '@mantine/core';
+import { useEffect, useState } from 'react';
 import { useMainMenuStore } from '@repo/shared-state'
 import { KeepAliveRouter } from '@repo/core-ui'
 
-import AppSidebar from "./app-sidebar";
-import { MainMenu, TailMenu, api_getMenuData, MENU_DATAS } from "../ui/menus";
-import { useEffect, useState } from 'react';
+import { AppSidebar } from "./";
+import { MainMenu, TailMenu, api_getMenuData, MENU_DATAS } from "@/compos/ui/menus";
 
-export default function() {
+import style from './comm-layout.module.css'
+
+export function CommLayout() {
     const isOpen = useMainMenuStore((state) => state.isOpen());
     const isHide = useMainMenuStore((state) => state.isHide());
     const [menus, setMenus] = useState<MENU_DATAS|null>(null);
@@ -19,28 +20,32 @@ export default function() {
     }, []);
 
     return (
-        <AppShell
-            navbar={{
-                width: isHide ? 0 : (isOpen ? 250 : 50),
-                breakpoint: 'sm',
-            }}
-            padding="0"
-            transitionDuration={0}
-        >
+        <div className={style['comm-layout']} style={{
+            '--cl-side-w': isHide ? 0 : (isOpen ? '250px' : '50px')
+        } as any}>
+            {/* 상단 */}
+            <div className={style['cl-top']}></div>
+
+            {/* 사이드 */}
             {!isHide && 
-                <AppShell.Navbar className="flex gap-y-3 relative">
+                <div className={style['cl-side']}>
                     <AppSidebar />
                     <MainMenu
                         apps={menus?.app_hub ?? []}
                         customList={menus?.custom_links ?? []}
                     />
                     <TailMenu />
-                </AppShell.Navbar>
+                </div>
             }
-            <AppShell.Main>
+
+            {/* 본문 */}
+            <div className={style['cl-conts']}>
                 {/* 라우터 본문 출력 */}
                 <KeepAliveRouter />
-            </AppShell.Main>
-        </AppShell>
+            </div>
+
+            {/* 하단 */}
+            <div className={style['cl-bottom']}></div>
+        </div>
     )
 }

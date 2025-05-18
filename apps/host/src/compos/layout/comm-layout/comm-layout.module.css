@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+.comm-layout {
+    /* 기본 레이아웃 */
+    & {
+        @apply absolute left-0 top-0 right-0 bottom-0;
+        --cl-top-h: 40px;           /* 공용 상단 높이 */
+        --cl-bottom-h: 35px;        /* 공용 하단 높이 */
+        --cl-side-w: 250px;         /* 공용 사이드 넓이 (react를 통해서 변동 있음) */
+    }
+
+    /* 기본 레이아웃 - 상단 */
+    & > .cl-top {
+        @apply absolute left-0 top-0 right-0 h-[var(--cl-top-h)] shadow-2xs border-b border-b-gray-50;
+    }
+    /* 기본 레이아웃 - 하단 */
+    & > .cl-bottom {
+        @apply absolute left-[var(--cl-side-w)] bottom-0 right-0 h-[var(--cl-bottom-h)] border-t-gray-200 border-t;
+    }
+    /* 기본 레이아웃 - 사이드 */
+    & > .cl-side {
+        @apply absolute left-0 top-[var(--cl-top-h)] bottom-0 w-[var(--cl-side-w)] border-r-gray-200 border-r pt-3;
+    }
+    /* 기본 레이아웃 - 본문 */
+    & > .cl-conts {
+        @apply absolute left-[var(--cl-side-w)] top-[var(--cl-top-h)] bottom-[var(--cl-bottom-h)] right-0 overflow-y-auto;
+    }
+}
