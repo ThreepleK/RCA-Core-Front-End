@@ -9,7 +9,7 @@
     /* 제목  */
     & > .title-area {
         & {
-            @apply relative z-50 flex items-center h-[50px] px-4 shadow-sm;
+            @apply relative z-50 flex items-center h-[50px] px-4 border-b border-b-gray-200;
         }
 
         & > .title {

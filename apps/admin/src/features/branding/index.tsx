@@ -18,7 +18,7 @@ const Branding = () => {
   return (
     <section className={style.section} style={{'--edit-width': '300px'} as any}>
         <Flex justify='space-between' className={style['title-area']}>
-            <Title order={2} className={style.title}>Branding</Title>
+            <Title order={3} className={style.title}>Branding</Title>
             <Group gap="xs">
                 <Button size='xs' variant="default" onClick={() => handleCancelButton()}>Cancel</Button>
                 <Button size='xs' onClick={() => handleApplyButton()}>Apply</Button>

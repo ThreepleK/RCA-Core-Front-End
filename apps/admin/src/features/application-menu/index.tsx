@@ -41,7 +41,7 @@ const ApplicationMenu = () => {
         <section className={style.section} style={{'--edit-width': '300px'} as any}>
             {/* 상단 타이틀 */}
             <Flex justify='space-between' className={style['title-area']}>
-                <Title order={2} className={style.title}>Application Menu</Title>
+                <Title order={3} className={style.title}>Application Menu</Title>
                 {/* <Group gap="xs">
                     <Button size='xs' variant="default">Cancel</Button>
                     <Button size='xs'>Apply</Button>

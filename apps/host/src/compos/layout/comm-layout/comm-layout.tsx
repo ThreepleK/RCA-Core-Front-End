@@ -6,6 +6,7 @@ import { AppSidebar } from "./";
 import { MainMenu, TailMenu, api_getMenuData, MENU_DATAS } from "@/compos/ui/menus";
 
 import style from './comm-layout.module.css'
+import { Logo } from '@/compos/ui/logo';
 
 export function CommLayout() {
     const isOpen = useMainMenuStore((state) => state.isOpen());
@@ -24,7 +25,9 @@ export function CommLayout() {
             '--cl-side-w': isHide ? 0 : (isOpen ? '250px' : '50px')
         } as any}>
             {/* 상단 */}
-            <div className={style['cl-top']}></div>
+            <div className={style['cl-top']}>
+                <Logo />
+            </div>
 
             {/* 사이드 */}
             {!isHide && 

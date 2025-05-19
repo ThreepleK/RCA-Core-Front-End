@@ -11,7 +11,9 @@
 
     /* 기본 레이아웃 - 상단 */
     & > .cl-top {
-        @apply absolute left-0 top-0 right-0 h-[var(--cl-top-h)] shadow-2xs border-b border-b-gray-50;
+        @apply
+            absolute left-0 top-0 right-0 h-[var(--cl-top-h)] shadow-2xs
+            flex justify-between items-center px-2 bg-[#343B4A];
     }
     /* 기본 레이아웃 - 하단 */
     & > .cl-bottom {

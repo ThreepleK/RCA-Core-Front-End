@@ -41,7 +41,7 @@ export function SideArea({className}: {
     return (
         <div className={className}>
             {/* 제목 */}
-            <Title order={2} className={style.title}>Settings</Title>
+            <Title order={3} className={style.title}>Settings</Title>
             {/* 검색 영역 */}
             <div className={style.search}>
                 <Input size='xs'
