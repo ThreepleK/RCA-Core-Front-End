@@ -6,6 +6,7 @@ import { MENU_ITEM } from '../apis'
 
 import style from './main-menu.module.css'
 import { useMemo } from 'react'
+import { useRouterStore } from '@repo/shared-state'
 
 type MENU_LIST_TYPE = 'main' | 'custom';
 
@@ -16,7 +17,7 @@ export const MainMenu = ({apps, customList}: {
     apps: MENU_ITEM[],
     customList: MENU_ITEM[]
 }) => {
-    const navigate = useNavigate();
+    const { pageMove } = useRouterStore(s => s);
 
     // App 메뉴
     const appMenus = useMemo(() => {
@@ -31,11 +32,15 @@ export const MainMenu = ({apps, customList}: {
 
 
     //* 메뉴 링크
-    const onLink = (type: MENU_LIST_TYPE, url: string) => {
+    const onLink = (type: MENU_LIST_TYPE, label: string, url: string) => {
         if( type === 'custom' ){
             window.open(url, '_blank');
         } else {
-            navigate(url);
+            pageMove({
+                label: label,
+                path: url,
+                type: 'tab'
+            });
         }
     }
 
@@ -57,7 +62,7 @@ export const MainMenu = ({apps, customList}: {
 function MenuList({menus, menuType, onClick}: {
     menus: MENU_ITEM[];
     menuType: MENU_LIST_TYPE;
-    onClick: (type: MENU_LIST_TYPE, url: string)=>void;
+    onClick: (type: MENU_LIST_TYPE, label: string, url: string)=>void;
 }){
     const isOpen = useMainMenuStore((state) => state.isOpen());
 
@@ -72,7 +77,7 @@ function MenuList({menus, menuType, onClick}: {
                         label={isOpen ? item.displayName : ''}
                         title={item.displayName}
                         leftSection={menuIcon(menuType, item.name)}
-                        onClick={() => onClick(menuType, item.url)}
+                        onClick={() => onClick(menuType, item.displayName, item.url)}
                     />
                 })
             }

@@ -80,7 +80,7 @@ const SideBarMenu = () => {
   return (
     <section className={style.section} style={{'--edit-width': '300px'} as any}>
       <Flex justify='space-between' className={style['title-area']}>
-        <Title order={3} className={style.title}>SideBar Menu</Title>
+        <Title order={5} className={style.title}>SideBar Menu</Title>
         <Group gap="xs">
             <Button size='xs' variant="default" onClick={() => handleCancelButton()}>Cancel</Button>
             <Button size='xs' onClick={() => handleApplyButton()}>Apply</Button>

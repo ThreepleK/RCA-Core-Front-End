@@ -6,7 +6,8 @@ import { AppSidebar } from "./";
 import { MainMenu, TailMenu, api_getMenuData, MENU_DATAS } from "@/compos/ui/menus";
 
 import style from './comm-layout.module.css'
-import { Logo } from '@/compos/ui/logo';
+import { TopArea } from './top-area';
+import { BottomArea } from './bottom-area';
 
 export function CommLayout() {
     const isOpen = useMainMenuStore((state) => state.isOpen());
@@ -25,9 +26,7 @@ export function CommLayout() {
             '--cl-side-w': isHide ? 0 : (isOpen ? '250px' : '50px')
         } as any}>
             {/* 상단 */}
-            <div className={style['cl-top']}>
-                <Logo />
-            </div>
+            <TopArea />
 
             {/* 사이드 */}
             {!isHide && 
@@ -44,11 +43,11 @@ export function CommLayout() {
             {/* 본문 */}
             <div className={style['cl-conts']}>
                 {/* 라우터 본문 출력 */}
-                <KeepAliveRouter />
+                <KeepAliveRouter isHost={true} />
             </div>
 
             {/* 하단 */}
-            <div className={style['cl-bottom']}></div>
+            <BottomArea />
         </div>
     )
 }

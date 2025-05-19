@@ -6,6 +6,7 @@ import { useSideMenuStore } from '@/stores';
 import { MenuItem as MenuItemType, MenuList } from './menu-list';
 
 import style from './comm-layout.module.css'
+import { useRouterStore } from '@repo/shared-state'
 
 /**
  * 사이드 영역
@@ -41,7 +42,7 @@ export function SideArea({className}: {
     return (
         <div className={className}>
             {/* 제목 */}
-            <Title order={3} className={style.title}>Settings</Title>
+            <Title order={5} className={style.title}>Settings</Title>
             {/* 검색 영역 */}
             <div className={style.search}>
                 <Input size='xs'
@@ -75,7 +76,7 @@ function MenuItem({label, link, icon, childs, depth, isOpen, searchKeyword}: {
     depth: number,              // 메뉴 깊이 번호
     searchKeyword: string,      // 검색 키워드
 }){
-    const navigate = useNavigate();
+    const { pageMove } = useRouterStore(s => s);
     const {setFold, setUnFold, childSuccess} = useSideMenuStore((s: any) => s);
     const isFoledChild = useSideMenuStore((s: any) => s.isFoledChild());
     const [isOepnState, setIsOpenState] = useState<boolean>(isOpen ?? true);
@@ -137,7 +138,7 @@ function MenuItem({label, link, icon, childs, depth, isOpen, searchKeyword}: {
     }
 
     //* 메뉴 클릭
-    const onMenuClick = (e: any, link?: string) => {
+    const onMenuClick = (e: any, link?: string, label?: string) => {
         // NavLink의 기본 a href가 동작하지 않기 위함
         e.preventDefault();
 
@@ -145,7 +146,12 @@ function MenuItem({label, link, icon, childs, depth, isOpen, searchKeyword}: {
         if( !link || link === '' || link === '#' ){ return; }
 
         // react-router-dom을 이용한 페이지 이동
-        navigate(link);
+        // navigate(link);
+        pageMove({
+            label: label,
+            path: link,
+            type: 'tab',
+        })
     }
 
     //* 검색 키워드에 맞지 않아 보이지 않아야 할 때
@@ -157,7 +163,7 @@ function MenuItem({label, link, icon, childs, depth, isOpen, searchKeyword}: {
         key={label}
         leftSection={icon}
         onChange={onMenuChange}
-        onClick={(e: any) => { onMenuClick(e, link) }}
+        onClick={(e: any) => { onMenuClick(e, link, label) }}
         opened={isOepnState}
     >
         {childs && childs.map(c => <MenuItem

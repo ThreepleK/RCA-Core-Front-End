@@ -263,7 +263,7 @@ export function ContentArea({ className, isApply, onChangeApply, isCancel, onCha
             </Table.Thead>
             <Table.Tbody> 
               {appData?.map((row) => (<SortableRow key={row.id} row={row} onNameChange={handleAppNameChange} onToggleChange={handleAppToggleChange} onStatusToggleChange={handleStatusToggleChange} />))}
-          </Table.Tbody>
+            </Table.Tbody>
           </Table>
         </SortableContext>
       </DndContext>
