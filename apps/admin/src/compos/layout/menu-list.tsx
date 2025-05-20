@@ -11,11 +11,13 @@ export interface MenuItem {
 //* 메뉴 리스트
 export const MenuList: MenuItem[] = [
     {
-        label: 'Team',
+        label: 'General',
         icon: <IconUsersGroup size={16} stroke={1.5} />,
         isOpen: true,
         childs: [
-            { label: 'Management', link: '/admin' },
+            { label: 'Team', link: '/admin/teams' },
+            { label: 'Users', link: '/admin' },
+            { label: 'User Groups', link: '/admin' },
             { label: 'Permission', link: '/admin/permission' },
         ]
     },

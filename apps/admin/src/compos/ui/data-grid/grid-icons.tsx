@@ -1,4 +1,4 @@
-import { IconArrowsMaximize, IconArrowsMinimize, IconCaretDownFilled, IconClearAll, IconColumns, IconDotsVertical, IconEyeClosed, IconFilter, IconFilterOff, IconSearch, IconSearchOff, IconSortAscending, IconSortDescending } from '@tabler/icons-react';
+import { IconArrowsMaximize, IconArrowsMinimize, IconCaretDownFilled, IconClearAll, IconColumns, IconDotsVertical, IconEyeClosed, IconFilter, IconFilterOff, IconMenu2, IconSearch, IconSearchOff, IconSortAscending, IconSortDescending } from '@tabler/icons-react';
 import type { MRT_Icons } from 'mantine-react-table';
 
 export const gridIcons: Partial<MRT_Icons> = {
@@ -46,6 +46,9 @@ export const gridIcons: Partial<MRT_Icons> = {
 
     //* 컬럼 숨기기
     IconEyeOff: (p: any) => <IconEyeClosed size={18} />,
+
+    //* 로우 사이즈
+    IconBaselineDensitySmall: (p: any) => <IconMenu2 size={18} />,
 
     //* 더보기 (가로/세로로)
     IconDots: (p: any) => <IconEyeClosed size={18} />,
