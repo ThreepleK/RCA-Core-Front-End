@@ -3,6 +3,7 @@ import type { RouteObject } from 'react-router-dom';
 import Layout from '@/compos/layout/comm-layout'
 
 const Main = lazy(() => import('@/features/main'))
+const Teams = lazy(() => import('@/features/teams'))
 const UserGroup = lazy(() => import('@/features/user-group'))
 const Permission = lazy(() => import('@/features/permission'))
 const Branding = lazy(() => import('@/features/branding'))
@@ -15,6 +16,7 @@ export default {
     element: <Layout />,
     children: [
         { path: '', element: <Main /> },
+        { path: 'teams', element: <Teams /> },
         { path: 'user-group', element: <UserGroup /> },
         { path: 'permission', element: <Permission /> },
         { path: 'branding', element: <Branding /> },
