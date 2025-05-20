@@ -1,38 +1,39 @@
 import { useState } from "react";
-import { ActionIcon, Button, Flex, Group, Modal, Title } from "@mantine/core";
+import { Button, Flex, Group, Modal, Title } from "@mantine/core";
 import { ContentArea } from "./components/content-area/content-area";
 import style from "./style.module.css";
-import { PlusIcon } from "lucide-react";
-import { IconDotsVertical } from "@tabler/icons-react";
+
+import { IconChevronDown, IconPlus } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 
 const Teams = () => {
     const [opened, { open, close }] = useDisclosure(false);
-    const [isCancel, setIsCancel] = useState<boolean>(false);
-    const [isApply, setIsApply] = useState<boolean>(false);
-
-    const [visible, setVisible] = useState(false);
-
-
-    const handleCreateButton = () => {
-      console.log('Create Team button clicked');
-    };
     
-        
-    const handleCancelButton = () => {
-        setIsCancel(true);
-    };
-    
-
   return (
     <section className={style.section} style={{'--edit-width': '300px'} as any}>
       <Flex justify='space-between' className={style['title-area']}>
         <Title order={5} className={style.title}>Team List</Title>
-        <Group gap="xs">
-            <Button leftSection={<PlusIcon />} size='xs' onClick={open}>Create Team</Button>
-            <ActionIcon variant="default">
-              <IconDotsVertical size={18} />
-            </ActionIcon>
+        <Group gap={0}>
+          <Button
+            leftSection={<IconPlus size={14} />}
+            size="xs"
+            color="blue"
+            radius="md"
+            style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
+            onClick={open}
+          >
+            Create team
+          </Button>
+          <Button
+            size="xs"
+            color="blue"
+            radius="md"
+            px={8}
+            style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+            onClick={() => console.log('Show menu')}
+          >
+            <IconChevronDown size={14} />
+          </Button>
         </Group>
       </Flex>
       <ContentArea className={style['cont-area']} />
