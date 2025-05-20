@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router';
 import routeList from './host';
 
 // 라우터

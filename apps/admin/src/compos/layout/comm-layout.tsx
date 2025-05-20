@@ -1,11 +1,12 @@
 import { useMainMenuStore } from '@repo/shared-state'
-import { KeepAliveRouter } from '@repo/core-ui'
-import { useEffect } from 'react'
+import { ReactNode, useEffect } from 'react'
 import { SideArea } from './side-area'
 
 import style from './comm-layout.module.css'
 
-export default function() {
+export default function({children}: {
+    children: ReactNode
+}) {
     const isOpen = useMainMenuStore((state) => state.isOpen());
     const menuClose = useMainMenuStore((state) => state.menuClose);
 
@@ -20,7 +21,7 @@ export default function() {
             
             {/* 라우터 본문 출력 */}
             <div className={style['cont-area']}>
-                <KeepAliveRouter />
+                {children}
             </div>
         </div>
     )

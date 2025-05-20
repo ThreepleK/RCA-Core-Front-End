@@ -1,58 +1,34 @@
-import { ReactNode, RefObject, Suspense, useEffect, useMemo } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
-import { KeepAlive, KeepAliveRef, useKeepAliveRef } from 'keepalive-for-react'
+import { ReactNode, useEffect } from "react";
+import { useNavigate } from "react-router";
+import { KeepAlive, useKeepAliveContext } from 'keepalive-for-react'
 import { useRouterStore } from '@repo/shared-state'
 
-export function KeepAliveRouter({isHost}: {
-    isHost?: boolean
+/**
+ * 라우터 Outlet 사용
+ */
+export function KeepAliveRouter({cacheKey, children}: {
+    cacheKey: string;
+    children: ReactNode;
 }){
     return <>
-        {isHost ? <HostRouter /> : <CustomOutlet />}
-    </>;
-}
-
-/**
- * 라우터 Outlet
- */
-function CustomOutlet(){
-    return <>
-        <CustomSuspense>
-            <Outlet />
-        </CustomSuspense>
-    </>;
-}
-
-/**
- * 메인이 되는 Host 라우터
- */
-function HostRouter(){
-    const aliveRef = useKeepAliveRef();
-    const { currItem } = useRouterStore(s => s);
-
-    // 활성화 키 설정
-    const activeKey = useMemo(() => currItem === null ? null : currItem.cacheKey, [currItem]);
-
-    useEffect(() => {
-        console.log('activeKey', activeKey, aliveRef?.current?.getCacheNodes())
-    }, [activeKey])
-
-    return <>
-        <KeepAlive aliveRef={aliveRef} activeCacheKey={(activeKey??'')}>
-            <CustomOutlet />
+        {/* 탭 기능을 위한 구간 */}
+        <KeepAlive
+            activeCacheKey={cacheKey}
+            duration={0}
+            transition={false}
+        >
+            {children}
         </KeepAlive>
 
-        <RouterProcess aliveRef={aliveRef} />
+        {/* 탭 기능 제어 */}
+        <KeepAliveProcess />
     </>
 }
 
-/**
- * 라우터 처리
- */
-function RouterProcess({aliveRef}: {
-    aliveRef: RefObject<KeepAliveRef | undefined>
-}){
+function KeepAliveProcess(){
     const navigate = useNavigate();
-    const { currItem, rmItemKey, rmCacheKey } = useRouterStore(s => s);
+    const { destroy } = useKeepAliveContext();
+    const { currItem, currItemKey, rmItemKey, rmCacheKey } = useRouterStore(s => s);
 
     //* 신규 탭 처리
     useEffect(() => {
@@ -60,29 +36,16 @@ function RouterProcess({aliveRef}: {
 
         // 신규 탭 페이지 이동
         navigate(currItem.path);
-    }, [currItem]);
+    }, [currItemKey]);
 
     //* 탭 삭제 처리
     useEffect(() => {
         if( rmItemKey === null ){ return; }
 
         // 관련 탭 제거
-        aliveRef.current?.destroy(rmItemKey);
+        destroy(rmItemKey);
         rmCacheKey();
     }, [rmItemKey]);
 
-    return <></>;
-}
-
-/**
- * 라우터 로딩 화면
- */
-function CustomSuspense(props: { children: ReactNode }) {
-    const { children } = props;
-
-    return (
-        <Suspense fallback={<div className="flex justify-center items-center text-[12px] w-full h-full">Loading...</div>}>
-            {children}
-        </Suspense>
-    );
+    return <></>
 }

@@ -1,24 +1,32 @@
-import { lazy } from 'react';
-import type { RouteObject } from 'react-router-dom';
+import { lazy, ReactNode } from 'react';
+import type { RouteObject } from 'react-router';
+import { KeepAliveRouter } from '@repo/core-ui';
 import Layout from '@/compos/layout/comm-layout'
 
-const Main = lazy(() => import('@/features/main'))
-const UserGroup = lazy(() => import('@/features/user-group'))
-const Permission = lazy(() => import('@/features/permission'))
-const Branding = lazy(() => import('@/features/branding'))
-const SidebarMenu = lazy(() => import('@/features/sidebar-menu'))
-const ApplicationMenu = lazy(() => import('@/features/application-menu'))
+import Main from '@/features/main'
+import UserGroup from '@/features/user-group'
+import Permission from '@/features/permission'
+import Branding from '@/features/branding'
+import SidebarMenu from '@/features/sidebar-menu'
+import ApplicationMenu from '@/features/application-menu'
 
-//* 라우터 내역
+
+function wrapLayout(elem: ReactNode, path: string){
+    return (
+        <KeepAliveRouter cacheKey={`admin/${path}`}>
+            <Layout>{elem}</Layout>
+        </KeepAliveRouter>
+    )
+}
+
 export default {
     path: 'admin',
-    element: <Layout />,
     children: [
-        { path: '', element: <Main /> },
-        { path: 'user-group', element: <UserGroup /> },
-        { path: 'permission', element: <Permission /> },
-        { path: 'branding', element: <Branding /> },
-        { path: 'application-menu', element: <ApplicationMenu /> },
-        { path: 'sidebar-menu', element: <SidebarMenu /> },
+        { path: '', element: wrapLayout(<Main />, '') },
+        { path: 'user-group', element: wrapLayout(<UserGroup />, 'user-group') },
+        { path: 'permission', element: wrapLayout(<Permission />, 'permission') },
+        { path: 'branding', element: wrapLayout(<Branding />, 'branding') },
+        { path: 'application-menu', element: wrapLayout(<ApplicationMenu />, 'application-menu') },
+        { path: 'sidebar-menu', element: wrapLayout(<SidebarMenu />, 'sidebar-menu') },
     ]
 } as RouteObject;

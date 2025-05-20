@@ -114,6 +114,9 @@ importers:
       react-dom:
         specifier: ^19.0.0
         version: 19.1.0(react@19.1.0)
+      react-router:
+        specifier: ^7.5.2
+        version: 7.5.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       uuid:
         specifier: ^11.1.0
         version: 11.1.0
@@ -271,6 +274,9 @@ importers:
       react-dom:
         specifier: ^19.0.0
         version: 19.1.0(react@19.1.0)
+      react-router:
+        specifier: ^7.5.2
+        version: 7.5.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       recharts:
         specifier: '2'
         version: 2.15.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -437,6 +443,9 @@ importers:
       react-dom:
         specifier: ^19.0.0
         version: 19.1.0(react@19.1.0)
+      react-router:
+        specifier: ^7.5.2
+        version: 7.5.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       recharts:
         specifier: '2'
         version: 2.15.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)

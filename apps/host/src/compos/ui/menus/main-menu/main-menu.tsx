@@ -1,6 +1,5 @@
 import { Badge, Divider, NavLink } from '@mantine/core'
 import { IconCloudNetwork, IconDashboard, IconFileSearch, IconHome2, IconLink, IconPresentation, IconTimelineEvent } from '@tabler/icons-react'
-import { useNavigate } from 'react-router-dom'
 import { useMainMenuStore } from '@repo/shared-state'
 import { MENU_ITEM } from '../apis'
 

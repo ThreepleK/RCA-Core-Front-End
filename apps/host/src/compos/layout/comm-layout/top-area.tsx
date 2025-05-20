@@ -1,8 +1,7 @@
 import { UnstyledButton, Menu, Text } from '@mantine/core'
 import { IconBellRinging, IconCaretDownFilled, IconHelp, IconLogout, IconUser } from '@tabler/icons-react'
 
-import { useMainMenuStore, useUserStore } from '@repo/shared-state'
-import { NavigateFunction, useNavigate } from 'react-router-dom'
+import { useRouterStore, useUserStore, RouterState } from '@repo/shared-state'
 
 import { Logo } from '@/compos/ui/logo';
 import style from './comm-layout.module.css'
@@ -42,7 +41,7 @@ export function TopArea(){
 const DropDownItems = ({list} : {
     list: MenuItem[]        // 메뉴 아이템 리스트
 }) => {
-    const navigate = useNavigate();
+    const { pageMove } = useRouterStore(s => s);
 
     return <>{list.map((item) => {
         const props = item?.props ?? {};
@@ -57,7 +56,7 @@ const DropDownItems = ({list} : {
                 return <Menu.Item
                     key={item.label}
                     leftSection={item.icon}
-                    onClick={() => onMenuClick(navigate, item?.key)}
+                    onClick={() => onMenuClick(pageMove, item?.key)}
                     {...props}
                 >{item.label}</Menu.Item>;
             };
@@ -71,13 +70,25 @@ const DropDownItems = ({list} : {
 
 //* 메뉴 클릭
 const onMenuClick = (
-    navigate: NavigateFunction,     // 메뉴 이동처리 함수
+    pageMove: RouterState['pageMove'],     // 메뉴 이동처리 함수
     type: string|undefined          // 메뉴 타입
 ) => {    
     switch(type){
-        case 'user-p-logout': navigate('/sign-out'); break;
-        case 'label-userGroup': navigate('/admin/user-group'); break;
-        case 'label-permission': navigate('/admin/permission'); break;
+        case 'user-p-logout': pageMove({
+            label: 'Sign out',
+            path: '/sign-out',
+            type: 'move'
+        }); break;
+        case 'label-userGroup': pageMove({
+            label: 'User Group',
+            path: '/admin/user-group',
+            type: 'tab'
+        }); break;
+        case 'label-permission': pageMove({
+            label: 'Permission',
+            path: '/admin/permission',
+            type: 'tab'
+        }); break;
     }
 }
 

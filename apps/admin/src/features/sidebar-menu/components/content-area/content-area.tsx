@@ -1,6 +1,5 @@
 import { Button, Input, Switch, Table } from '@mantine/core';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   DndContext,
   closestCenter,
@@ -30,7 +29,6 @@ export function ContentArea({ className, isApply, onChangeApply, isCancel, onCha
     onChangeCancel: (isCancel: boolean) => void,
     onSendData: (data: IFetchSidebarMenu[], coreData: IFetchSidebarMenuItem[], appData: IFetchSidebarMenuItem[], customData: IFetchSidebarMenuItem[] ) => void;
 }){
-    const navigate = useNavigate();
     const [reloadFlag, setReloadFlag] = useState(false);
     const [data, setData] = useState<IFetchSidebarMenu[]>([]);
     const [coreData, setCoreData] = useState<IFetchSidebarMenuItem[]>([]);

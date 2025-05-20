@@ -3,7 +3,7 @@ import { TextInput, PasswordInput, Group, Text, Anchor, Button, Alert } from '@m
 import { IconInfoCircle } from '@tabler/icons-react';
 import axios from 'axios'
 import { useUserStore } from '@repo/shared-state'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 /**
  * 로그인 API 호출

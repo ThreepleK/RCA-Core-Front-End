@@ -1,6 +1,7 @@
-import { createBrowserRouter, Outlet } from 'react-router-dom';
-import type { RouteObject } from 'react-router-dom';
-import { lazy } from 'react'
+import { lazy, ReactNode } from 'react'
+import { createBrowserRouter } from 'react-router';
+import type { RouteObject } from 'react-router';
+import { KeepAliveRouter } from '@repo/core-ui';
 import { CommLayout } from '@/compos/layout'
 import { protectedLoader } from './protected'
 
@@ -9,21 +10,9 @@ import Admin from 'admin/router';
 // @ts-ignore
 import Rca from 'rca/router';
 
-
-// // AG Grid관련
-// const AGGrid = {
-//     Grid: lazy(() => import('@/features/aggrid/grid')),
-//     Chart: lazy(() => import('@/features/aggrid/chart')),
-// };
-
-// const Settings = {
-//     _Layout: lazy(() => import('@/features/settings')),
-//     Profile: lazy(() => import('@/features/settings/profile')),
-//     Account: lazy(() => import('@/features/settings/account')),
-//     Appearance: lazy(() => import('@/features/settings/appearance')),
-//     Notifications: lazy(() => import('@/features/settings/notifications')),
-//     Display: lazy(() => import('@/features/settings/display')),
-// };
+const Main = {
+    Home: lazy(() => import('@/features/home/home')),
+}
 
 // 인증 (로그인/가입 등)
 const Auth = {
@@ -43,6 +32,12 @@ const Errors = {
     E503: lazy(() => import('@/features/errors/maintenance-error')),
 };
 
+function wrapLayout(elem: ReactNode, path: string){
+    return (
+        <KeepAliveRouter cacheKey={`/${path}`}>{elem}</KeepAliveRouter>
+    )
+}
+
 //* 라우터 내역
 const routeList: RouteObject[] = [
     {
@@ -50,27 +45,7 @@ const routeList: RouteObject[] = [
         element: <CommLayout />,
         loader: protectedLoader,
         children: [
-            // { path: '/', element: <Main.Dashboard /> },
-            // { path: '/chats', element: <Main.Charts /> },
-            // { path: '/apps', element: <Main.Apps /> },
-            // { path: '/users', element: <Main.Users />},
-
-            // { path: '/aggrid/chart', element: <AGGrid.Chart />},
-            // { path: '/aggrid/grid', element: <AGGrid.Grid />},
-
-            // {
-            //     path: '/settings',
-            //     element: <Settings._Layout />,
-            //     children: [
-            //         { path: '/settings/', element: <Settings.Profile />},
-            //         { path: '/settings/account', element: <Settings.Account />},
-            //         { path: '/settings/appearance', element: <Settings.Appearance />},
-            //         { path: '/settings/notifications', element: <Settings.Notifications />},
-            //         { path: '/settings/display', element: <Settings.Display />},
-            //     ]
-            // },
-            // { path: '/help-center', element: <Main.HelpCenter />},
-            // { path: '/admin', element: <Main.HelpCenter />},
+            { path: '', element: wrapLayout(<Main.Home />, '') },
             Rca,
             Admin
         ]

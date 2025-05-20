@@ -1,13 +1,18 @@
+import { useRouterStore } from '@repo/shared-state';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 export default function Test() {
   const [cnt, setCnt] = useState(0);
-  const navigate = useNavigate();
-
+  const { pageMove } = useRouterStore(s => s);
+      
   const onClick = () => {
-    navigate('/rca/test');
+    pageMove({
+      label: 'Rca test',
+      path: '/rca/test',
+      type: 'tab',
+    });
   }
+
 
   return (
     <div>

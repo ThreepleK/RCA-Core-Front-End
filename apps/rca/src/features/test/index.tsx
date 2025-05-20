@@ -1,11 +1,15 @@
-import { useNavigate } from 'react-router-dom';
+import { useRouterStore } from '@repo/shared-state';
 
 export default function(){
-    const navigate = useNavigate();
+    const { pageMove } = useRouterStore(s => s);
 
     return <>
         <img src={`${$resourceUrl}/test.jpg`} />
         test
-        <button onClick={() => navigate('/rca')}>Back</button>
+        <button onClick={() => pageMove({
+            label: 'rca',
+            path: '/rca',
+            type: 'tab',
+        })}>Back</button>
     </>
 }

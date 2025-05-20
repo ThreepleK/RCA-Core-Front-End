@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client'
-import { RouterProvider } from 'react-router-dom'
+import { RouterProvider } from 'react-router'
 import { ThemeProvider } from '@repo/core-ui'
 import { initLeader } from '@repo/shared-state'
 
@@ -10,11 +10,11 @@ import './index.css'
 
 //* 리프레시 토큰 시작
 if (document.readyState === 'complete') {
-  initLeader();
+    initLeader();
 }
 
 createRoot(document.getElementById('root')!).render(
-  <ThemeProvider>
-    <RouterProvider router={router} />
-  </ThemeProvider>
+    <ThemeProvider>
+        <RouterProvider router={router} />
+    </ThemeProvider>
 )

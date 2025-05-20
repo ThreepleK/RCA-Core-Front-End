@@ -8,6 +8,7 @@ import { MainMenu, TailMenu, api_getMenuData, MENU_DATAS } from "@/compos/ui/men
 import style from './comm-layout.module.css'
 import { TopArea } from './top-area';
 import { BottomArea } from './bottom-area';
+import { Outlet } from 'react-router';
 
 export function CommLayout() {
     const isOpen = useMainMenuStore((state) => state.isOpen());
@@ -43,7 +44,7 @@ export function CommLayout() {
             {/* 본문 */}
             <div className={style['cl-conts']}>
                 {/* 라우터 본문 출력 */}
-                <KeepAliveRouter isHost={true} />
+                <Outlet />
             </div>
 
             {/* 하단 */}

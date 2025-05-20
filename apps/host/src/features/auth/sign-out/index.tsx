@@ -1,6 +1,6 @@
 import { useUserStore } from '@repo/shared-state'
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { useDisclosure } from '@mantine/hooks';
 import { Modal } from '@mantine/core';

@@ -15,6 +15,7 @@ export interface RouterState {
     // state
     list: RouterItem[];                     // 라우터 내역
     currItem: RouterItem|null;              // 현 라우터 값
+    currItemKey: string;                    // 현 라우터 캐시 key 값
     rmItemKey: string|null;                 // 삭제할 아이템 캐시 key 값
     
     // action
@@ -44,6 +45,7 @@ export interface RouterState {
 export const useRouterStore = create<RouterState>((set, get) => ({
     list: [],
     currItem: null,
+    currItemKey: '',
     rmItemKey: null,
 
     getActiveKey: (pathname, search='') => {
@@ -82,6 +84,7 @@ export const useRouterStore = create<RouterState>((set, get) => ({
             // 값 설정
             set({
                 currItem: {...currItem},
+                currItemKey: activeKey,
             });
         }
         //* 탭 관련
@@ -98,6 +101,7 @@ export const useRouterStore = create<RouterState>((set, get) => ({
             set({
                 list: [...list],
                 currItem: {...currItem},
+                currItemKey: activeKey,
             });
         }
     },
@@ -117,20 +121,21 @@ export const useRouterStore = create<RouterState>((set, get) => ({
 
         // 삭제
         let rmItem: any = list.splice(idx, 1)[0];
-        let setItems: any = {};
+        let setItems: any = {
+            list: [...list],
+            currItemKey: null,
+            rmItemKey: cacheKey,
+        };
 
         // 활성화 된 메뉴를 닫을 경우, 다른 탭 활성화
         if( currItem?.cacheKey === rmItem?.cacheKey && list.length > 0 ){
             setItems['currItem'] = list[0];
+            setItems['currItemKey'] = list[0].cacheKey;
             rmItem = null;
         }
 
         // 제거 할 캐시 키 값 등록
-        set({
-            list: [...list],
-            rmItemKey: cacheKey,
-            ...setItems
-        });
+        set(setItems);
     },
 
     rmCacheKey: () => {

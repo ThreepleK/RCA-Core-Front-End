@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   PointerSensor,
   useSensor,
@@ -14,7 +13,6 @@ export function ContentArea({ className, isCancel, onChangeCancel }: {
     isCancel: boolean,
     onChangeCancel: (isCancel: boolean) => void
 }){
-    const navigate = useNavigate();
     const [logoFile, setLogoFile] = useState<File | null>(null);
     const [faviconFile, setFaviconFile] = useState<File | null>(null);
     const [reloadFlag, setReloadFlag] = useState(false);

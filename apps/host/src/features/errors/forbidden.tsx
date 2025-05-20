@@ -1,5 +1,5 @@
-import { Button, ButtonProps, Group } from '@mantine/core';
-import { useNavigate } from 'react-router-dom';
+import { Button } from '@mantine/core';
+import { useNavigate } from 'react-router';
 
 export default function(){
   const navigate = useNavigate();

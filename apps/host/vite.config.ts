@@ -41,9 +41,10 @@ export default defineConfig((({ mode }: any) => {
         shared: {
           react: { singleton: true },
           'keepalive-for-react': { singleton: true },
-          'react-router-dom': { singleton: true },
+          'react-router': { singleton: true },
           '@mantine/core': { singleton: true },
           '@repo/shared-state': { singleton: true },
+          '@repo/core-ui': { singleton: true },
         },
       }),
       react(),

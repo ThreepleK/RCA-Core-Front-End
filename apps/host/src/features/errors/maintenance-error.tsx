@@ -1,8 +1,6 @@
 import { Button } from '@mantine/core';
-import { useNavigate } from 'react-router-dom';
 
 export default function(){
-  const navigate = useNavigate();
 
   return <>
     <div className='h-svh'>

@@ -1,4 +1,4 @@
-import { redirect } from 'react-router-dom';
+import { redirect } from 'react-router';
 import { useUserStore } from '@repo/shared-state';
 
 export async function protectedLoader(){

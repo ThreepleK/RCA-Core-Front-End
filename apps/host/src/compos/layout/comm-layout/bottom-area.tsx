@@ -9,7 +9,7 @@ export function BottomArea(){
 
     return (
         <div className={style['cl-bottom']}>
-            {list.map(item => <TabItem item={item} />)}
+            {list.map((item, idx) => <TabItem item={item} key={idx} />)}
         </div>
     );
 }

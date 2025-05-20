@@ -1,6 +1,5 @@
 import { Title, NavLink, Input, Button } from '@mantine/core';
 import { IconFolderUp, IconFolderDown, IconSearch } from '@tabler/icons-react';
-import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useSideMenuStore } from '@/stores';
 import { MenuItem as MenuItemType, MenuList } from './menu-list';
