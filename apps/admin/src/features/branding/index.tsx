@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
-import { Button, Flex, Group, Title } from "@mantine/core";
-import style from "./style.module.css";
-import { request } from '@/utils/request'
+import { useState } from "react";
 import ContentArea from "./components/content-area/content-area";
+import { ContentsLayout } from "@/compos/layout";
 
 const Branding = () => {
   const [isCancel, setIsCancel] = useState(false);
@@ -16,16 +14,12 @@ const Branding = () => {
     };
 
   return (
-    <section className={style.section} style={{'--edit-width': '300px'} as any}>
-        <Flex justify='space-between' className={style['title-area']}>
-            <Title order={5} className={style.title}>Branding</Title>
-            <Group gap="xs">
-                <Button size='xs' variant="default" onClick={() => handleCancelButton()}>Cancel</Button>
-                <Button size='xs' onClick={() => handleApplyButton()}>Apply</Button>
-            </Group>
-        </Flex>
-        <ContentArea className={style['cont-area']} isCancel={isCancel} onChangeCancel={setIsCancel}/>
-    </section>
+    <ContentsLayout
+        title={<>Branding</>}
+        titleRightSide={<></>}
+    >
+        <ContentArea isCancel={isCancel} onChangeCancel={setIsCancel}/>
+    </ContentsLayout>
 );
 }
 

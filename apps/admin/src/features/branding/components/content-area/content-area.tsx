@@ -8,8 +8,7 @@ import style from './content-area.module.css'
 import { Button, FileButton, Text, Group, Title, Image } from '@mantine/core';
 import logo from '../../../../../../host/public/logo.png'
 
-export function ContentArea({ className, isCancel, onChangeCancel }: {
-    className: string,
+export function ContentArea({ isCancel, onChangeCancel }: {
     isCancel: boolean,
     onChangeCancel: (isCancel: boolean) => void
 }){
@@ -26,7 +25,7 @@ export function ContentArea({ className, isCancel, onChangeCancel }: {
       }
     }, [isCancel]); 
   
-    return <div className={className}>
+    return <div className={style['cont-area']}>
       <div className={style['logo-section']}>
         {/* 상단 타이틀 */}
         <Title order={2} className={style.title}>Logo</Title>

@@ -15,10 +15,14 @@
         & > .title {
             @apply leading-none p-0;
         }
+
+        & .side-area-btn {
+            @apply flex justify-center items-center w-[25px] h-[25px] cursor-pointer rounded-md hover:bg-gray-200;
+        }
     }
 
     /* 본문 */
     & > .cont-area {
-        @apply absolute top-[50px] left-0 bottom-0 right-0 overflow-y-auto px-4;
+        @apply absolute top-[50px] left-[var(--cs-width)] bottom-0 right-0 overflow-y-auto;
     }
 }

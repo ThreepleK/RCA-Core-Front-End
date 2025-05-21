@@ -1,7 +1,11 @@
-const Main = () => {
+import { ContentsLayout } from "@/compos/layout";
 
-    return <>
-        <button>이동하기</button>
-    </>
+const Main = () => {
+    return <ContentsLayout
+            title={<>Test</>}
+            titleRightSide={<></>}
+        >
+        Test
+    </ContentsLayout>
 }
 export default Main;

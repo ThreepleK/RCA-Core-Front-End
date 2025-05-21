@@ -1,18 +1,18 @@
-import { useState } from "react";
 import { Button, Flex, Group, Modal, Title } from "@mantine/core";
 import { ContentArea } from "./components/content-area/content-area";
 import style from "./style.module.css";
 
 import { IconChevronDown, IconPlus } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
+import { ContentsLayout } from "@/compos/layout";
 
 const Teams = () => {
-    const [opened, { open, close }] = useDisclosure(false);
+  const [opened, { open, close }] = useDisclosure(false);
     
   return (
-    <section className={style.section} style={{'--edit-width': '300px'} as any}>
-      <Flex justify='space-between' className={style['title-area']}>
-        <Title order={5} className={style.title}>Team List</Title>
+    <ContentsLayout
+      title={<>Team List</>}
+      titleRightSide={<>
         <Group gap={0}>
           <Button
             leftSection={<IconPlus size={14} />}
@@ -35,12 +35,13 @@ const Teams = () => {
             <IconChevronDown size={14} />
           </Button>
         </Group>
-      </Flex>
-      <ContentArea className={style['cont-area']} />
+      </>}
+    >
+      <ContentArea />
       <Modal opened={opened} onClose={close} title="Create Team">
         {/* Modal content */}
       </Modal>
-    </section>
+    </ContentsLayout>
   );
 }
 

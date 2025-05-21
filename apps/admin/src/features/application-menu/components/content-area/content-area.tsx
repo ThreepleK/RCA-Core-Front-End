@@ -4,10 +4,8 @@ import { IconInfoSquareRounded, IconLicense } from '@tabler/icons-react';
 
 import style from './content-area.module.css'
 
-export function ContentArea({ className }: {
-    className: string
-}){
-    return <div className={className}>
+export function ContentArea(){
+    return <div className={style.cont}>
         <Tabs variant="default" defaultValue={_TAB_CONTS[0].key}>
             {/* 탭 목록 */}
             <Tabs.List className={style['tab-list']}>

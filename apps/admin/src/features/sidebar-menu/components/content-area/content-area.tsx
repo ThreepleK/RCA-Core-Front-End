@@ -21,8 +21,7 @@ import style from './content-area.module.css'
 import { api_getSidebarMenuData } from '../../apis';
 import { IFetchSidebarMenu, IFetchSidebarMenuItem } from '../../models';
 
-export function ContentArea({ className, isApply, onChangeApply, isCancel, onChangeCancel, onSendData }: {
-    className: string,
+export function ContentArea({ isApply, onChangeApply, isCancel, onChangeCancel, onSendData }: {
     isApply: boolean,
     isCancel: boolean,
     onChangeApply: (isCancel: boolean) => void, 
@@ -197,7 +196,7 @@ export function ContentArea({ className, isApply, onChangeApply, isCancel, onCha
     };
   
   
-    return <div className={className}>
+    return <div className={style['cont-area']}>
       <div className={style['core-table']}>
         <h1 className={style.title}>Core feature</h1>
           <Table

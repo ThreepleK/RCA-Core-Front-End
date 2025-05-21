@@ -1,7 +1,7 @@
 import { Title, NavLink, Input, Button } from '@mantine/core';
-import { IconFolderUp, IconFolderDown, IconSearch } from '@tabler/icons-react';
+import { IconFolderUp, IconFolderDown, IconSearch, IconLayoutSidebarLeftCollapseFilled, IconLayoutSidebarRightExpand, IconLayoutSidebarLeftCollapse, IconLayoutSidebarRightExpandFilled } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
-import { useSideMenuStore } from '@/stores';
+import { useSideMenuAreaStore, useSideMenuStore } from '@/stores';
 import { MenuItem as MenuItemType, MenuList } from './menu-list';
 
 import style from './comm-layout.module.css'
@@ -17,6 +17,8 @@ export function SideArea({className}: {
     const {setAllFold, setAllUnFold, setMenuTotalCnt} = useSideMenuStore((s: any) => s);
     const [inputVal, setInputVal] = useState('');
     const [searchKeyword, setSearchKeyword] = useState('');
+
+    const {currState, setState} = useSideMenuAreaStore(s => s);
 
     //* 초기 설정
     useEffect(() => {
@@ -41,7 +43,17 @@ export function SideArea({className}: {
     return (
         <div className={className}>
             {/* 제목 */}
-            <Title order={5} className={style.title}>Settings</Title>
+            <Title order={5} className={style.title}>
+                Admin
+                {currState === 'open' && <span
+                    className={style['side-area-btn']}
+                    onClick={() => {
+                        setState('close');
+                    }}
+                >
+                    <IconLayoutSidebarRightExpandFilled size={18}/>
+                </span>}
+            </Title>
             {/* 검색 영역 */}
             <div className={style.search}>
                 <Input size='xs'

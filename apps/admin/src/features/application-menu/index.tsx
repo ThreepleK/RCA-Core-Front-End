@@ -1,11 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
-import { Flex, Title, LoadingOverlay } from "@mantine/core";
+import { LoadingOverlay } from "@mantine/core";
+import { ContentsLayout } from "@/compos/layout";
 import { DB_MENU_ITEM, MenuEditor, dbRawContainData } from "./components";
 import { ContentArea } from "./components/content-area";
 
 import { api_getMenuData, api_setMenuData } from './apis'
-
-import style from "./style.module.css";
 
 const ApplicationMenu = () => {
     const [reloadFlag, setReloadFlag] = useState(false);
@@ -38,25 +37,19 @@ const ApplicationMenu = () => {
     // 보여줄 화면
     return <>
         {/* 컨텐츠 */}
-        <section className={style.section} style={{'--edit-width': '300px'} as any}>
-            {/* 상단 타이틀 */}
-            <Flex justify='space-between' className={style['title-area']}>
-                <Title order={5} className={style.title}>Application Menu</Title>
-                {/* <Group gap="xs">
-                    <Button size='xs' variant="default">Cancel</Button>
-                    <Button size='xs'>Apply</Button>
-                </Group> */}
-            </Flex>
-
-            {/* 좌측 메뉴 에디터 */}
-            {!isLoading &&
-                <MenuEditor menu={menuData} onMenuChange={onMenuChange} />
-            }
-
-            {/* 본문 영역 */}
-            <ContentArea className={style['cont-area']} />
-        </section>
-
+        <ContentsLayout
+            title={<>Application Menu</>}
+            titleRightSide={<></>}
+            sideAreaWidth='300px'
+            sideArea={<>
+                {!isLoading &&
+                    <MenuEditor menu={menuData} onMenuChange={onMenuChange} />
+                }
+            </>}
+        >
+            <ContentArea />
+        </ContentsLayout>
+        
         {/* 메뉴 데이터 로딩 시 */}
         <LoadingOverlay
             visible={isLoading}

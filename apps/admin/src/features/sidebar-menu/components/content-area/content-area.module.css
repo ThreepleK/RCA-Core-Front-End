@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+/* 본문 */
+.cont-area {
+    @apply px-4;
+}
+
 /* 테이블 */
 .core-table {
     & {

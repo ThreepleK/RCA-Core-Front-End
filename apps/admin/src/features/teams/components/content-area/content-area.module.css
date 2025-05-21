@@ -1,5 +1,5 @@
 @import "tailwindcss";
 
-.layout {
-    @apply mt-6;
+.cont-area {
+    @apply px-4 py-4;
 }

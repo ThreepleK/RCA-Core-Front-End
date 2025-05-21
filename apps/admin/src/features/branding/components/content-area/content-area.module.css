@@ -1,9 +1,13 @@
 @import "tailwindcss";
 
+.cont-area {
+    @apply flex flex-col gap-2 px-4 py-2;
+}
+
 .logo-section {
     /* 영역 */
     & {
-        @apply text-2xl mb-5 ;
+        @apply text-2xl;
     }
 
     /* 제목  */
@@ -24,7 +28,7 @@
 .favicon-section {
     /* 영역 */
     & {
-        @apply text-2xl mb-5 mt-10
+        @apply text-2xl;
     }
 
     /* 제목  */
