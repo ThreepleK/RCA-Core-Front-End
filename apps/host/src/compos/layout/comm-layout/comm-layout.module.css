@@ -17,10 +17,31 @@
                 flex justify-between items-center px-2 bg-[#343B4A];
         }
 
+        & .clt-right {
+            @apply flex gap-2 justify-center items-center;
+        }
+
+        /* [dropdown] 기본 */
+        & .dropdown-btn {
+            & { @apply h-[40px] justify-start; }
+
+            & > span {
+                @apply min-w-[30px] min-h-[30px] flex justify-center items-center rounded-md hover:bg-[#fff2] active:bg-[#fff3];
+            }
+
+            &[class*=on-active] > span {
+                @apply bg-[#fff2];
+            }
+        }
+
+        /* [dropdown] 사용자 정보 */
         & .user-info {
             & { @apply h-[40px] justify-start text-sm gap-3; }
             & > span {
-                @apply min-w-[24px] min-h-[24px] flex gap-0.5 justify-center items-center rounded-full bg-white text-gray-900 font-bold px-2;
+                @apply min-w-[24px] min-h-[24px] flex gap-1 justify-center items-center rounded-full bg-white text-gray-900 font-bold px-2;
+            }
+            &[class*=on-active] > span {
+                @apply bg-gray-950 text-white;
             }
         }
     }
