@@ -17,27 +17,51 @@ export const MenuList: MenuItem[] = [
         childs: [
             { label: 'Team', link: '/admin/teams' },
             { label: 'Users', link: '/admin/users' },
-            { label: 'User Groups', link: '/admin' },
+            { label: 'User Group', link: '/admin/user-group' },
             { label: 'Permission', link: '/admin/permission' },
         ]
     },
+    // {
+    //     label: 'System settings',
+    //     icon: <IconUser size={16} stroke={1.5} />,
+    //     isOpen: true,
+    //     childs: [
+    //         { label: 'Member', link: '/admin' },
+    //         { label: 'User group', link: '/admin/user-group' },
+    //     ]
+    // },
     {
-        label: 'User',
-        icon: <IconUser size={16} stroke={1.5} />,
-        isOpen: true,
-        childs: [
-            { label: 'Member', link: '/admin' },
-            { label: 'User group', link: '/admin/user-group' },
-        ]
-    },
-    {
-        label: 'System preferences',
+        label: 'System settings',
         icon: <IconSettings size={16} stroke={1.5} />,
         isOpen: true,
         childs: [
             { label: 'Branding', link: '/admin/branding' },
+            { label: 'Applications', link: '/admin/application-menu' },
             { label: 'Sidebar menu', link: '/admin/sidebar-menu' },
-            { label: 'Application menu', link: '/admin/application-menu' },
+            { label: 'Menus', link: '/admin' },
+            { label: 'Multi language', link: '/admin' },
+            { label: 'Global configuration', link: '/admin' },
+        ]
+    },
+    {
+        label: 'Application settings',
+        icon: <IconSettings size={16} stroke={1.5} />,
+        isOpen: true,
+        childs: [
+        ]
+    },
+    {
+        label: 'Announcement',
+        icon: <IconSettings size={16} stroke={1.5} />,
+        isOpen: true,
+        childs: [
+        ]
+    },
+    {
+        label: 'Monitoring',
+        icon: <IconSettings size={16} stroke={1.5} />,
+        isOpen: true,
+        childs: [
         ]
     },
 ];

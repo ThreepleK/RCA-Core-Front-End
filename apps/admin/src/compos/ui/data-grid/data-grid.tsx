@@ -11,7 +11,7 @@ import style from './data-grid.module.css';
 export function DataGrid<T>({ columns, data, opts }: {
     columns: MRT_ColumnDef<T>[];
     data: any;
-    opts?: MRT_TableOptions<T>;
+    opts?: any;
 }){
     const table = useMantineReactTable({
         columns, data,
