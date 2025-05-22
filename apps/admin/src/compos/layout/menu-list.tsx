@@ -16,7 +16,7 @@ export const MenuList: MenuItem[] = [
         isOpen: true,
         childs: [
             { label: 'Team', link: '/admin/teams' },
-            { label: 'Users', link: '/admin' },
+            { label: 'Users', link: '/admin/users' },
             { label: 'User Groups', link: '/admin' },
             { label: 'Permission', link: '/admin/permission' },
         ]
