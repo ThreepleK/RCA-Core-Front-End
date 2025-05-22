@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+.cont-area {
+    @apply px-4 py-4;
+}

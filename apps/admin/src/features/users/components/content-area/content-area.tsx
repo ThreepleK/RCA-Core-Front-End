@@ -3,19 +3,22 @@ import {
   Box,
   Button,
   Drawer,
-  Text,
+  Input,
   Stack,
   Switch,
   Table,
   TextInput,
 } from "@mantine/core";
-import { MRT_ColumnDef, MRT_Row } from "mantine-react-table";
+import { MRT_ColumnDef } from "mantine-react-table";
 import { useEffect, useState } from "react";
 
 import style from "./content-area.module.css";
 
 export function ContentArea() {
-  const [selectedRow, setSelectedRow] = useState<{ name: string, members: string } | null>(null);
+  const [selectedRow, setSelectedRow] = useState<(typeof _TMP_DATA)[0] | null>(
+    null
+  );
+  console.log("selectedRow", selectedRow);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const handleRowClick = (row: any) => {
@@ -36,7 +39,7 @@ export function ContentArea() {
       <Drawer
         opened={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
-        title="Edit Team"
+        title="Edit User"
         position="right"
         padding="md"
         size="md"
@@ -44,7 +47,7 @@ export function ContentArea() {
         {selectedRow && (
           <Stack>
             <TextInput label="Name" defaultValue={selectedRow.name} />
-            <TextInput label="Members" defaultValue={selectedRow.members} />
+            <TextInput label="Department" />
             <Button onClick={close}>저장</Button>
           </Stack>
         )}
@@ -66,9 +69,10 @@ const _YN_FILTER = {
 //* 컬럼 정보
 const _COLUMNS: COLUMN_ITEM[] = [
   { accessorKey: "name", header: "Name" },
-  { accessorKey: "members", header: "Members" },
-//   { accessorKey: "lastUpdatedDate", header: "Last Updated Date" },
-  { accessorKey: "lastUpdatedBy", header: "Last updated by" },
+  { accessorKey: "createdDate", header: "Created Date" },
+  { accessorKey: "createdBy", header: "Created By" },
+  { accessorKey: "lastUpdatedDate", header: "Last Updated Date" },
+  { accessorKey: "lastUpdatedBy", header: "Last Updated By" },
 ];
 
 // 그리드 임시 데이터
@@ -76,7 +80,9 @@ const _TMP_DATA = [
   {
     id: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
     name: "admin",
-    members: 'yunny',
+    createdDate: "2025-05-20",
+    createdBy: "admin",
+    lastUpdatedDate: "2025-05-20",
     lastUpdatedBy: "admin",
   },
 ];
