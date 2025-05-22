@@ -3,7 +3,11 @@ import { RouterProvider } from 'react-router'
 import { ThemeProvider } from '@repo/core-ui'
 import router from './router';
 
+//* mantine 기본 스타일 가져오기
 import '@mantine/core/styles.css'
+import '@mantine/dates/styles.css'
+
+//* 앱 기본 스타일
 import './index.css'
 
 createRoot(document.getElementById('root')!).render(
