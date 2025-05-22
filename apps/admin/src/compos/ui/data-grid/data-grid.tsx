@@ -4,13 +4,12 @@ import {
   type MRT_ColumnDef,
   type MRT_TableOptions,
 } from "mantine-react-table";
-import { ModalsProvider } from "@mantine/modals";
 import { gridIcons } from "./grid-icons";
 import "mantine-react-table/styles.css";
 import style from "./data-grid.module.css";
-import { ActionIcon, Anchor, Flex, Group, Text, Tooltip } from "@mantine/core";
+import { Anchor, Group, Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
-import { IconTrash } from "@tabler/icons-react";
+import { ConfirmModal, useConfirmModalStore } from "../modal";
 
 export function DataGrid<T>({
   columns,
@@ -23,20 +22,13 @@ export function DataGrid<T>({
   opts?: any;
 }) {
   //DELETE action
-  const openDeleteConfirmModal = (row: any) => {
-    modals.openConfirmModal({
-      title: "Are you sure you want to delete ?",
-      children: (
-        <Text>
-          Are you sure you want to delete ? This action cannot be undone.
-        </Text>
-      ),
-      labels: { confirm: "Delete", cancel: "Cancel" },
-      confirmProps: { color: "red" },
-      // onConfirm: () => deleteUser(row.original.id),
+  const onDelete = (row: any) => {
+    // 확인 모달
+    ApplyModal("delete", () => {
+      // delete action
     });
   };
-
+  
   // Action 컬럼을 추가
   const column: MRT_ColumnDef<T>[] = [
     ...columns,
@@ -53,7 +45,7 @@ export function DataGrid<T>({
           color="blue"
           onClick={(e) => {
             e.stopPropagation(); // row 클릭 방지
-            openDeleteConfirmModal(row);
+            onDelete(row);
           }}
         >
           Remove
@@ -100,8 +92,33 @@ export function DataGrid<T>({
   } as MRT_TableOptions<any>);
 
   return (
-    <ModalsProvider>
+    <>
+      <ConfirmModal />
       <MantineReactTable table={table} />
-    </ModalsProvider>
+    </>
   );
+}
+
+/**
+ * [모달] 확인
+ */
+function ApplyModal(
+  label: string, // 관련 라벨
+  callback: () => void // 확인 콜백
+) {
+  //* 모달
+  const { setOpen, setContent } = useConfirmModalStore.getState();
+
+  // 취소 모달
+  setContent(
+    <Text size="md" fw={500} c="blue">
+      Delete
+    </Text>,
+    <Text size="sm">
+      Are you sure you want to delete ? This action cannot be undone.
+    </Text>,
+    "Delete",
+    callback
+  );
+  setOpen(true);
 }
