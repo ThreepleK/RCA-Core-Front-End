@@ -1,4 +1,4 @@
-import { Button, Flex, Group, Modal, Title } from "@mantine/core";
+import { Button, Text, Group, Modal, Stack, Textarea, TextInput, Title } from "@mantine/core";
 
 import style from "./style.module.css";
 
@@ -6,10 +6,17 @@ import { IconChevronDown, IconPlus } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import { ContentsLayout } from "@/compos/layout";
 import { ContentArea } from "./components/content-area/content-area";
+import { CreateModal, EditModal, useCreateModalStore } from "@/compos/ui/modal";
 
 const Users = () => {
   const [opened, { open, close }] = useDisclosure(false);
     
+  //* 저장
+  const handleCreate = () => {
+    // 확인 모달
+    SaveModal("create", () => {});
+  };
+
   return (
     <ContentsLayout
       title={<>Users</>}
@@ -21,7 +28,7 @@ const Users = () => {
             color="blue"
             radius="md"
             style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
-            onClick={open}
+            onClick={handleCreate}
           >
             Create user
           </Button>
@@ -39,11 +46,45 @@ const Users = () => {
       </>}
     >
       <ContentArea />
-      <Modal opened={opened} onClose={close} title="Create User">
-        {/* Modal content */}
-      </Modal>
+      <CreateModal />
+      <EditModal />
     </ContentsLayout>
   );
 }
 
 export default Users;
+
+/**
+ * [모달] 생성
+ */
+function SaveModal(
+  label: string, // 관련 라벨
+  callback: () => void // 확인 콜백
+) {
+  //* 모달
+  const { setOpen, setContent, setValue } = useCreateModalStore.getState();
+
+  // 취소 모달
+  setContent(
+    <Text size="md" fw={500} c="blue">
+      Create Team
+    </Text>,
+    <Stack>
+      <TextInput
+        label="Team Name"
+        required
+        onChange={(event) => setValue(event.currentTarget.value)}
+      />
+      <Textarea
+        label="Description"
+        placeholder="Input placeholder"
+      />
+      <Group justify="space-between" mt="md">
+        {/* <Button type="submit">Save</Button> */}
+      </Group>
+    </Stack>,
+    "Save",
+    callback
+  );
+  setOpen(true);
+}

@@ -1,4 +1,4 @@
-import { IconSettings, IconUser, IconUsersGroup } from '@tabler/icons-react';
+import { IconFolder, IconSettings, IconUser, IconUsersGroup } from '@tabler/icons-react';
 
 export interface MenuItem {
     label: string,              // 메뉴 명
@@ -12,7 +12,8 @@ export interface MenuItem {
 export const MenuList: MenuItem[] = [
     {
         label: 'General',
-        icon: <IconUsersGroup size={16} stroke={1.5} />,
+        // icon: <IconUsersGroup size={16} stroke={1.5} />,
+        icon: <IconFolder size={16} stroke={1.5} />,
         isOpen: true,
         childs: [
             { label: 'Team', link: '/admin/teams' },
@@ -32,7 +33,8 @@ export const MenuList: MenuItem[] = [
     // },
     {
         label: 'System settings',
-        icon: <IconSettings size={16} stroke={1.5} />,
+        // icon: <IconSettings size={16} stroke={1.5} />,
+        icon: <IconFolder size={16} stroke={1.5} />,
         isOpen: true,
         childs: [
             { label: 'Branding', link: '/admin/branding' },
@@ -45,21 +47,21 @@ export const MenuList: MenuItem[] = [
     },
     {
         label: 'Application settings',
-        icon: <IconSettings size={16} stroke={1.5} />,
+        icon: <IconFolder size={16} stroke={1.5} />,
         isOpen: true,
         childs: [
         ]
     },
     {
         label: 'Announcement',
-        icon: <IconSettings size={16} stroke={1.5} />,
+        icon: <IconFolder size={16} stroke={1.5} />,
         isOpen: true,
         childs: [
         ]
     },
     {
         label: 'Monitoring',
-        icon: <IconSettings size={16} stroke={1.5} />,
+        icon: <IconFolder size={16} stroke={1.5} />,
         isOpen: true,
         childs: [
         ]

@@ -1,73 +1,74 @@
 import { columnFilters, DataGrid } from "@/compos/ui/data-grid";
 import {
+  Anchor,
   Box,
   Button,
   Drawer,
-  Text,
+  Group,
+  Input,
   Stack,
   Switch,
-  Table,
-  TextInput,
-  Anchor,
+  Text,
   Textarea,
-  Group,
+  TextInput,
 } from "@mantine/core";
-import { MRT_ColumnDef, MRT_Row } from "mantine-react-table";
-import { useEffect, useState } from "react";
+import { MRT_ColumnDef } from "mantine-react-table";
+import { useState } from "react";
 
 import style from "./content-area.module.css";
 import { ConfirmModal, EditModal, useConfirmModalStore, useEditModalStore } from "@/compos/ui/modal";
 
 export function ContentArea() {
-  const [selectedRow, setSelectedRow] = useState<{ name: string, members: string } | null>(null);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [selectedRow, setSelectedRow] = useState<(typeof _TMP_DATA)[0] | null>(
+    null
+  );
 
   const handleRowClick = (row: any) => {
-    setSelectedRow(row.row.original);
-    EditDetailModal(row.row.original, () => {
-    });
-  };
-
-  const opt = {
-    mantineTableBodyRowProps: (row: any) => ({
-      onClick: () => handleRowClick(row),
-      style: { cursor: "pointer" },
-    }),
-  };
-
-  //DELETE action
-  const onDelete = (row: any) => {
-    // 확인 모달
-    ApplyModal("delete", () => {
-      // delete action
-    });
-  };
-
-  // Action 컬럼을 추가
-  const columns: any = [
-    ..._COLUMNS,
-    {
-      id: "actions", // ✅ 반드시 id 명시
-      header: "Actions", // 헤더 비워도 됨
-      enableColumnOrdering: false,
-      enableSorting: false,
-      enableEditing: false,
-      Cell: ({ row }) => (
-        <Anchor
-          component="button"
-          type="button"
-          color="blue"
-          onClick={(e) => {
-            e.stopPropagation(); // row 클릭 방지
-            onDelete(row);
-          }}
-        >
-          Remove
-        </Anchor>
-      ),
-    },
-  ];
-
+      setSelectedRow(row.row.original);
+      EditDetailModal(row.row.original, () => {
+      });
+    };
+  
+    const opt = {
+      mantineTableBodyRowProps: (row: any) => ({
+        onClick: () => handleRowClick(row),
+        style: { cursor: "pointer" },
+      }),
+    };
+  
+    //DELETE action
+    const onDelete = (row: any) => {
+      // 확인 모달
+      ApplyModal("delete", () => {
+        // delete action
+      });
+    };
+  
+    // Action 컬럼을 추가
+    const columns: any = [
+      ..._COLUMNS,
+      {
+        id: "actions", // ✅ 반드시 id 명시
+        header: "Actions", // 헤더 비워도 됨
+        enableColumnOrdering: false,
+        enableSorting: false,
+        enableEditing: false,
+        Cell: ({ row }) => (
+          <Anchor
+            component="button"
+            type="button"
+            color="blue"
+            onClick={(e) => {
+              e.stopPropagation(); // row 클릭 방지
+              onDelete(row);
+            }}
+          >
+            Remove
+          </Anchor>
+        ),
+      },
+    ];
+  
   return (
     <div className={style["cont-area"]}>
       <ConfirmModal />
