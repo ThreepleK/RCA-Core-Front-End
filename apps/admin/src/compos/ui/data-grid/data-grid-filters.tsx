@@ -4,13 +4,28 @@ import { ComboboxData, TextInput, ComboboxStringData } from "@mantine/core";
 import { IconCalendar } from '@tabler/icons-react';
 
 import dayjs from '@/utils/dayjs';
+import style from './data-grid-filter.module.css'
 
 // 그리드 컬럼 Item
 export type COLUMN_ITEM = MRT_ColumnDef<any>;
 
 /**
+ * [Filter] 텍스트
+ * @param opts 텍스트 필터 옵션션
+ */
+export function f_text(opts: {
+}) {
+    return {
+        filterVariant: 'text',
+        mantineFilterTextInputProps: {
+            size: 'xs',
+        }
+    } as COLUMN_ITEM;
+}
+
+/**
  * [Filter] 자동완성
- * @param opts 자동완성 옵션션
+ * @param opts 자동완성 옵션
  * @param opts.data 자동완성에 사용될 데이터
  * @param opts.limit 자동완성으로 보여줄 최대 갯수 설정 (기본: 5줄)
  * @param opts.maxHeight 자동완성 dropdown 최대 높이 설정 (기본: 200px)
@@ -27,6 +42,7 @@ export function f_autocomplete(opts: {
             clearable: true,
             limit: opts.limit ?? 5,
             maxDropdownHeight: opts.maxHeight ?? 200,
+            size: 'xs',
         }
     } as COLUMN_ITEM;
 }
@@ -42,7 +58,8 @@ export function f_select(opts: {
     return {
         filterVariant: 'select',
         mantineFilterSelectProps: {
-            data: opts.data
+            data: opts.data,
+            size: 'xs',
         }
     } as COLUMN_ITEM;
 }
@@ -57,8 +74,9 @@ export function f_multiSelect(opts: {
 }) {
     return {
         filterVariant: 'multi-select',
-        mantineFilterSelectProps: {
-            data: opts.data
+        mantineFilterMultiSelectProps: {
+            data: opts.data,
+            size: 'xs',
         }
     } as COLUMN_ITEM;
 }
@@ -107,7 +125,7 @@ export function f_range(
                 });
             }, [value]);
 
-            return <TextInput placeholder="Min" type="number" value={value}
+            return <TextInput placeholder="Min" type="number" value={value} size='xs'
                 onChange={(e) => setValue(e.target.value.trim())}
             />;
         }
@@ -132,6 +150,7 @@ export function f_rangeSlider(opts: {
             min: opts.min,
             max: opts.max,
             step: opts.step,
+            size: 'xs',
         }
     } as COLUMN_ITEM;
 }
@@ -161,6 +180,7 @@ export function f_chkBox(opts: {
         mantineFilterCheckboxProps: {
             label: opts.label ?? '',
             defaultChecked: opts.defaultChecked,
+            size: 'xs',
         },
         Cell: ({ cell }) => {
             const { matchValue } = opts;
@@ -195,9 +215,16 @@ function commDate(opts: {
     return {
         //* mantine DateInput 속성 설정
         mantineFilterDateInputProps: {
-            rightSection: <IconCalendar size={20} strokeWidth={1.5} style={{pointerEvents: 'none'}} />,
-            monthLabelFormat: 'YYYY. MM',
-            valueFormat: dateFormat,
+            rightSection: <IconCalendar         // 달력 Picker 폼 우측에 보여질 아이콘
+                size={16}
+                strokeWidth={1.25}
+                style={{pointerEvents: 'none'}}
+            />,
+            className: style['date-input'],
+            size: 'xs',
+            monthLabelFormat: 'YYYY. MM',       // 달력에 표기되는 년, 월 표기 포맷
+            monthsListFormat: 'MM',             // 달력에서 해당 년도의 월 목록에서 보여질 '월' 포맷
+            valueFormat: dateFormat,            // 달력에서 선택한 값이 표기 될 포맷
         },
         //* 데이터 초기 설정
         accessorFn: (row) => {
@@ -252,6 +279,7 @@ export function f_dateRange(opts: {
 
 //* 필터 모음
 export const columnFilters = {
+    text: f_text,
     auto: f_autocomplete,
     select: f_select,
     multiSelect: f_multiSelect,

@@ -18,6 +18,10 @@ export function Permission(){
 }
 
 //* 자동완성 필터
+const _BASIC_FILTER = columnFilters.text({
+});
+
+//* 자동완성 필터
 const _AUTO_FILTER = columnFilters.auto({
     data: ['chatGPT', '집에 가고 싶어요', '오늘은 빨리 끝낼 수 있을까?']
 });
@@ -26,6 +30,9 @@ const _AUTO_FILTER = columnFilters.auto({
 const _YN_FILTER = columnFilters.multiSelect({
     data: ['Y', 'N']
 });
+// const _YN_FILTER = columnFilters.select({
+//     data: ['Y', 'N']
+// });
 
 //* 범위 필터
 const _CNT_FILTER = columnFilters.rangeSlider({
@@ -43,7 +50,11 @@ const _CHK_FILTER = columnFilters.chkbox({
 });
 
 //* 달력 필터
-const _DATE_FILTER = columnFilters.dateRange({
+// const _DATE_FILTER = columnFilters.date({
+//     accessorKey: 'regDate',
+//     dateFormat: 'YYYY-MM-DD',
+// });
+const _DATE_RANGE_FILTER = columnFilters.dateRange({
     accessorKey: 'regDate',
     dateFormat: 'YYYY-MM-DD',
 });
@@ -55,8 +66,8 @@ const _COLUMNS: COLUMN_ITEM[] = [
     { accessorKey: 'isRead',       header: '조회 권한', ..._YN_FILTER },
     { accessorKey: 'isModify',     header: '수정 권한', ..._YN_FILTER },
     { accessorKey: 'isRemove',     header: '삭제 권한', ..._YN_FILTER },
-    { accessorKey: 'regDate',      header: '생성일', ..._DATE_FILTER },
-    { accessorKey: 'creator',      header: '생성자', },
+    { accessorKey: 'regDate',      header: '생성일', ..._DATE_RANGE_FILTER },
+    { accessorKey: 'creator',      header: '생성자', ..._BASIC_FILTER },
     { accessorKey: 'count',        header: '카운트', ..._CNT_FILTER },
 ];
 
