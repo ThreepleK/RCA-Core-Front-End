@@ -19,7 +19,7 @@ export const MenuList: MenuItem[] = [
             { label: 'Team', link: '/admin/teams' },
             { label: 'Users', link: '/admin/users' },
             { label: 'User Group', link: '/admin/user-group' },
-            { label: 'Permission', link: '/admin/permission' },
+            { label: 'Permission', link: '/admin/add-member' },
         ]
     },
     // {

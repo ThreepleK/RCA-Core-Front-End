@@ -12,6 +12,7 @@ import Permission from '@/features/permission'
 import Branding from '@/features/branding'
 import SidebarMenu from '@/features/sidebar-menu'
 import ApplicationMenu from '@/features/application-menu'
+import AddMember from '@/features/add-member'
 
 
 function wrapLayout(elem: ReactNode, path: string){
@@ -33,5 +34,6 @@ export default {
         { path: 'branding', element: wrapLayout(<Branding />, 'branding') },
         { path: 'application-menu', element: wrapLayout(<ApplicationMenu />, 'application-menu') },
         { path: 'sidebar-menu', element: wrapLayout(<SidebarMenu />, 'sidebar-menu') },
+        { path: 'add-member', element: wrapLayout(<AddMember />, 'add-member') },
     ]
 } as RouteObject;
