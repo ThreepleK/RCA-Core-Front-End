@@ -78,6 +78,10 @@ export function SideArea({className}: {
     );
 }
 
+
+/**
+ * 메뉴
+ */
 function MenuItem({label, link, icon, childs, depth, isOpen, searchKeyword}: {
     label: string,              // 메뉴
     link?: string,              // 이동할 링크
@@ -157,7 +161,6 @@ function MenuItem({label, link, icon, childs, depth, isOpen, searchKeyword}: {
         if( !link || link === '' || link === '#' ){ return; }
 
         // react-router-dom을 이용한 페이지 이동
-        // navigate(link);
         pageMove({
             label: label,
             path: link,

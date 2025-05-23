@@ -47,23 +47,14 @@ export const MenuList: MenuItem[] = [
     },
     {
         label: 'Application settings',
-        icon: <IconFolder size={16} stroke={1.5} />,
-        isOpen: true,
-        childs: [
-        ]
+        link: '/admin',
     },
     {
         label: 'Announcement',
-        icon: <IconFolder size={16} stroke={1.5} />,
-        isOpen: true,
-        childs: [
-        ]
+        link: '/admin',
     },
     {
         label: 'Monitoring',
-        icon: <IconFolder size={16} stroke={1.5} />,
-        isOpen: true,
-        childs: [
-        ]
+        link: '/admin',
     },
 ];

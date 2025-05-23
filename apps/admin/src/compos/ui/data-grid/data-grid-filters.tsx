@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { MRT_ColumnDef } from 'mantine-react-table';
-import { ComboboxData, TextInput, ComboboxStringData } from "@mantine/core";
+import { ReactNode, useEffect, useState } from 'react';
+import { MRT_Cell, MRT_ColumnDef } from 'mantine-react-table';
+import { ComboboxData, TextInput, ComboboxStringData, UnstyledButton, Flex } from "@mantine/core";
 import { IconCalendar } from '@tabler/icons-react';
 
 import dayjs from '@/utils/dayjs';
@@ -276,6 +276,47 @@ export function f_dateRange(opts: {
     } as COLUMN_ITEM;
 }
 
+/**
+ * [Filter] 액션 버튼 전용
+ * @param opts
+ * @param opts.id 액션컬럼에 사용될 id 값
+ * @param opts.label 액션컬럼에 사용될 라벨
+ * @param opts.buttons 버튼 모음
+ * @param opts.feedback 버튼 클릭 이벤트
+ */
+export function f_actionButtons(opts: {
+    id?: string;
+    label?: string;
+    buttons: {[key: string]: string|ReactNode};
+    feedback: (btnKey: string, cell: MRT_Cell<any, any>) => void;
+}){
+    return {
+        id: opts.id ?? 'actions',
+        header: opts.label ?? 'Actions',
+        enableColumnOrdering: false,
+        enableSorting: false,
+        enableEditing: false,
+        Cell: (props) => {
+            const res = [];
+
+            // 버튼 갯수만큼 생성
+            for( const key in opts.buttons ){
+                const btn = opts.buttons[key];
+
+                res.push(
+                    <UnstyledButton onClick={(e) => {
+                        e.stopPropagation();                // row 클릭 방지
+                        opts.feedback(key, props.cell);     // 클릭 이벤트 전달
+                    }}>{btn}</UnstyledButton>
+                )
+            }
+
+            // 셀에 전달
+            return <Flex gap='xs' justify='flex-start' align='center'>{res}</Flex>;
+        },
+    } as COLUMN_ITEM;
+}
+
 
 //* 필터 모음
 export const columnFilters = {
@@ -288,4 +329,5 @@ export const columnFilters = {
     chkbox: f_chkBox,
     date: f_date,
     dateRange: f_dateRange,
+    actionBtns: f_actionButtons,
 }

@@ -2,3 +2,6 @@
 
 /* 그리드 필터 > DateInput 강제 높이 설정 값 제거 */
 .date-input > div > input { @apply h-auto!; }
+
+/* 그리드 필터 Checkbox 스타일 */
+.checkbox { @apply cursor: pointer; }
