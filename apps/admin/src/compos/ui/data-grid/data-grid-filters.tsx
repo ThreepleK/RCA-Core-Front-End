@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from 'react';
-import { MRT_Cell, MRT_ColumnDef } from 'mantine-react-table';
+import { MRT_Cell, MRT_ColumnDef, MRT_Row } from 'mantine-react-table';
 import { ComboboxData, TextInput, ComboboxStringData, UnstyledButton, Flex } from "@mantine/core";
 import { IconCalendar } from '@tabler/icons-react';
 
@@ -288,7 +288,7 @@ export function f_actionButtons(opts: {
     id?: string;
     label?: string;
     buttons: {[key: string]: string|ReactNode};
-    feedback: (btnKey: string, cell: MRT_Cell<any, any>) => void;
+    feedback: (btnKey: string, row: MRT_Row<any>) => void;
 }){
     return {
         id: opts.id ?? 'actions',
@@ -305,8 +305,8 @@ export function f_actionButtons(opts: {
 
                 res.push(
                     <UnstyledButton onClick={(e) => {
-                        e.stopPropagation();                // row 클릭 방지
-                        opts.feedback(key, props.cell);     // 클릭 이벤트 전달
+                        e.stopPropagation();                  // row 클릭 방지
+                        opts.feedback(key, props.cell.row);   // 클릭 이벤트 전달
                     }}>{btn}</UnstyledButton>
                 )
             }
