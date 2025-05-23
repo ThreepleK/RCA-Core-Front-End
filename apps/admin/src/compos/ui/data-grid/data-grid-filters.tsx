@@ -304,11 +304,11 @@ export function f_actionButtons(opts: {
                 const btn = opts.buttons[key];
 
                 res.push(
-                    <UnstyledButton onClick={(e) => {
+                    <UnstyledButton key={key} onClick={(e) => {
                         e.stopPropagation();                  // row 클릭 방지
                         opts.feedback(key, props.cell.row);   // 클릭 이벤트 전달
                     }}>{btn}</UnstyledButton>
-                )
+                );
             }
 
             // 셀에 전달

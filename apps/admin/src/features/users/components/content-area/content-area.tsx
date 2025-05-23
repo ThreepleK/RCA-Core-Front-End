@@ -44,15 +44,13 @@ export function ContentArea() {
         columnFilters.actionBtns({
             // 버튼
             buttons: {
-                // edit: <Anchor component="button" type="button" c="blue" size='sm'>Edit</Anchor>,
-                // rm: <Anchor component="button" type="button" c="red" size='sm'>Remove</Anchor>,
                 edit: <IconEdit size={20} strokeWidth={1.5} title='Edit' />,
                 rm: <IconTrash size={20} strokeWidth={1.5} title='Remove' />,
             },
             // 버튼 클릭 처리
             feedback: (btnKey, row) => {
                 switch( btnKey ){
-                    case 'edit': handleRowClick(row.original); break;
+                    case 'edit': onEdit(row.original); break;
                     case 'rm': onDelete(row.original); break;
                 }
             }

@@ -201,7 +201,7 @@ function MenuPrint({ menuList, searchKeyword }: {
     // 출력할 메뉴가 없을 경우
     if( !menuList || menuList.length === 0 ){ return <></>; }
 
-    return menuList.map((item: MenuItemType) => {   
-        return <MenuItem depth={0} searchKeyword={searchKeyword} {...item} />;
+    return menuList.map((item: MenuItemType, idx: number) => {   
+        return <MenuItem depth={0} key={idx} searchKeyword={searchKeyword} {...item} />;
     })
 }
