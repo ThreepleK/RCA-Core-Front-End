@@ -1,78 +1,85 @@
 import { columnFilters, DataGrid } from "@/compos/ui/data-grid";
-import {
-  Anchor,
-  Group,
-  Stack,
-  Text,
-  Textarea,
-  TextInput,
-} from "@mantine/core";
-import { MRT_ColumnDef } from "mantine-react-table";
-import { useState } from "react";
-
+import { Tabs } from "@mantine/core";
+import { MRT_ColumnDef, MRT_TableOptions } from "mantine-react-table";
+import { useEffect, useMemo, useState } from "react";
 import style from "./member-grid.module.css";
-import { ConfirmModal, EditModal, useConfirmModalStore, useEditModalStore } from "@/compos/ui/modal";
+import { useSelectedRowStore } from "../content-area/content-area-store";
 
 export function MemberGrid() {
-  const [selectedRow, setSelectedRow] = useState<(typeof _TMP_DATA)[0] | null>(
-    null
-  );
+  const { deletedData, isClear, setClear } = useSelectedRowStore();
+  const [selectedRow, setSelectedRow] = useState<{ [key: string]: boolean }>({});
+  
+  //* 그리드 row 선택
+  const selectedRowsData = useMemo(() => {
+    return _TMP_DATA?.filter((row) => selectedRow[row?.id]);
+  }, [selectedRow]);
 
-  const handleRowClick = (row: any) => {
-      setSelectedRow(row.row.original);
-      EditDetailModal(row.row.original, () => {
-      });
-    };
-  
-    const opt = {
-      mantineTableBodyRowProps: (row: any) => ({
-        onClick: () => handleRowClick(row),
-        style: { cursor: "pointer" },
-      }),
-      state: {}, // Add required state property
-      columns: _COLUMNS, // Ensure columns are passed
-      data: _TMP_DATA, // Ensure data is passed
-    };
-  
-    //DELETE action
-    const onDelete = (row: any) => {
-      // 확인 모달
-      ApplyModal("delete", () => {
-        // delete action
-      });
-    };
+  useEffect(() => {
+    onChangeRowSelection(selectedRowsData)
+  }, [selectedRowsData]);
+
+  useEffect(() => {
+    if(deletedData === null) return;
+    // deletedData가 변경될 때마다 선택 상태를 업데이트
+    const selectionState = deletedData.reduce((acc, item) => {
+      acc[item.id] = true;
+      return acc;
+    }, {} as { [key: string]: boolean });
+
+    setSelectedRow(selectionState); 
+  }, [deletedData]);
+
+  useEffect(() => {
+    if (isClear) {
+      setSelectedRow({}); 
+      setClear(false);
+    }
+  }, [isClear]);
+
+       
+//* 그리드 추가 옵션
+    const opts = useMemo(() => ({
+      getRowId: (row: any) => row.id,
+      enableRowSelection: true,
+      onRowSelectionChange: setSelectedRow,
+      state: { rowSelection: selectedRow },
+    }), [selectedRow]);
   
     // Action 컬럼을 추가
-    const columns: any = [
-      ..._COLUMNS,
-      {
-        id: "actions", // ✅ 반드시 id 명시
-        header: "Actions", // 헤더 비워도 됨
-        enableColumnOrdering: false,
-        enableSorting: false,
-        enableEditing: false,
-        Cell: ({ row }) => (
-          <Anchor
-            component="button"
-            type="button"
-            color="blue"
-            onClick={(e) => {
-              e.stopPropagation(); // row 클릭 방지
-              onDelete(row);
-            }}
-          >
-            Remove
-          </Anchor>
-        ),
-      },
-    ];
+    const columns: COLUMN_ITEM[] = useMemo(() => [
+        ..._COLUMNS,
+    ], [_COLUMNS]);
   
   return (
-    <div className={style["cont-area"]}>
-      <ConfirmModal />
-      <EditModal />
-      <DataGrid columns={columns} data={_TMP_DATA} opts={opt} />
+   <div className={style['hull-height']}>
+    <Tabs defaultValue="user">
+      <Tabs.List>
+        <Tabs.Tab value="user">
+          User
+        </Tabs.Tab>
+        <Tabs.Tab value="organization">
+          Organization
+        </Tabs.Tab>
+        <Tabs.Tab value="user-group" >
+          User Group
+        </Tabs.Tab>
+      </Tabs.List>
+
+      <Tabs.Panel value="user">
+        <DataGrid columns={columns} data={_TMP_DATA} opts={opts as any} />
+      </Tabs.Panel>
+
+      <Tabs.Panel value="organization">
+        organization tab content
+      </Tabs.Panel>
+
+      <Tabs.Panel value="user-group">
+        user-group tab content
+      </Tabs.Panel>
+    </Tabs>
+      
     </div>
+      
   );
 }
 
@@ -82,85 +89,48 @@ type COLUMN_ITEM = MRT_ColumnDef<any>;
 const _BASIC_FILTER = columnFilters.text({
 });
 
-const _DATE_RANGE_FILTER = columnFilters.dateRange({
-    accessorKey: 'lastUpdatedBy',
-    dateFormat: 'YYYY-MM-DD',
-});
-
 //* 컬럼 정보
 const _COLUMNS: COLUMN_ITEM[] = [
-  { accessorKey: "name", header: "Name", ..._BASIC_FILTER },
-  { accessorKey: "members", header: "Members" , ..._BASIC_FILTER},
-//   { accessorKey: "lastUpdatedDate", header: "Last Updated Date" },
-  { accessorKey: "lastUpdatedBy", header: "Last updated by", ..._BASIC_FILTER},
+    { accessorKey: "name", header: "Name", ..._BASIC_FILTER },
+    { accessorKey: "email", header: "Email" , ..._BASIC_FILTER},
 ];
 
 // 그리드 임시 데이터
 const _TMP_DATA = [
-  {
-    id: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
-    name: "admin",
-    members: 'yunny',
-    lastUpdatedBy: "admin",
-  },
+    {
+        id: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
+        name: "admin",
+        email: "test@gmail.com",
+    },
+    {
+        id: "1345addd-a4ac-4dd2-8de2-6f934969a0f1",
+        name: "yunny",
+        email: "yunny@gmail.com",
+    },
+    {
+        id: "1375addd-a4ac-4dd2-8de2-6f934969a0f1",
+        name: "ella",
+        email: "ella@gmail.com",
+    },
+    {
+        id: "1393addd-a4ac-4dd2-8de2-6f934969a0f1",
+        name: "haley",
+        email: "haley@gmail.com",
+    },
+    {
+        id: "1303addd-a4ac-4dd2-8de2-6f934969a0f1",
+        name: "tk",
+        email: "tk@gmail.com",
+    },
 ];
 
 /**
- * [모달] 확인
+ *  체크박스 선택
  */
-function ApplyModal(
-    label: string, // 관련 라벨
-    callback: () => void // 확인 콜백
+function onChangeRowSelection(
+    data: any, // 관련 라벨
+    callback?: () => void // 확인 콜백
   ) {
-    //* 모달
-    const { setOpen, setContent } = useConfirmModalStore.getState();
-  
-    // 취소 모달
-    setContent(
-      <Text size="md" fw={500} c="blue">
-        Delete
-      </Text>,
-      <Text size="sm">
-        Are you sure you want to delete ? This action cannot be undone.
-      </Text>,
-      "Delete",
-      callback
-    );
-    setOpen(true);
-  }
-
-  /**
- * [모달] 수정
- */
-function EditDetailModal(
-    row: any, // 관련 라벨
-    callback: () => void // 확인 콜백
-  ) {
-    //* 모달
-    const { setOpen, setContent, setValue } = useEditModalStore.getState();
-  
-    // 취소 모달
-    setContent(
-      <Text size="md" fw={500} c="blue">
-        Edit Team Details
-      </Text>,
-      <Stack>
-        <TextInput
-          label="Team Name"
-          defaultValue={row?.name}
-          required
-          onChange={(event) => setValue(event.currentTarget.value)}
-        />
-        <Textarea
-          label="Description"
-          placeholder="Input placeholder"
-        />
-        <Group justify="space-between" mt="md">
-          {/* <Button type="submit">Save</Button> */}
-        </Group>
-      </Stack>,
-      "Save",
-      callback
-    );
-    setOpen(true);
+        const { setSelectedRow } = useSelectedRowStore.getState();
+        setSelectedRow(data);
   }

@@ -15,7 +15,6 @@ const AddMember = () => {
       title={<>Add Members</>}
       titleRightSide={<>
         <Group gap={0}>
-
         </Group>
       </>}
     >

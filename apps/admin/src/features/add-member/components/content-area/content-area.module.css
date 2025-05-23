@@ -1,5 +1,11 @@
-@import "tailwindcss";
-
 .cont-area {
-    @apply px-4 py-4;
-}
+    @apply h-screen flex overflow-hidden border border-gray-300;
+  
+    & > .left-panel {
+      @apply flex-1 border-r border-gray-200 p-4 overflow-auto min-h-0;
+    }
+  
+    & > .right-panel {
+      @apply flex-1 p-4 overflow-auto min-h-0;
+    }
+  }
