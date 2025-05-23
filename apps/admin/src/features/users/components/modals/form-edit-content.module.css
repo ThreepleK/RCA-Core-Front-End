@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+/* 라디오 버튼 간격 수정 */
+.radio {
+    & { @apply mt-1; }
+    & [class*=mantine-Radio-label] { @apply pl-1; }
+}
