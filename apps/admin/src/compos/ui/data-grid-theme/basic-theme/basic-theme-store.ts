@@ -9,7 +9,7 @@ type ContItem = string | ReactNode;
 type ActionColBtns = {[key: string]: ContItem};
 
 //* 기본 그리드 State
-interface BasicGridState<T> {
+export interface BasicGridState<T> {
     // state ----
     columns: MRT_ColumnDef<T>[];                // 그리드 컬럼
     gridOpts?: MRT_TableOptions<T>|null;        // 그리드 옵션
@@ -39,39 +39,41 @@ interface BasicGridState<T> {
     ) => void;
 }
 
-// 기본 그리드 제어
-export const useBasicGridStore = create<BasicGridState<any>>((set, get) => ({
-    columns: [],
-    gridOpts: null,
-    gridData: [],
-    actionsCols: null,
-    isLoading: true,
+//* 기본 그리드 제어
+export const createBasicGridStore = () => {
+    return create<BasicGridState<any>>((set, get) => ({
+        columns: [],
+        gridOpts: null,
+        gridData: [],
+        actionsCols: null,
+        isLoading: true,
 
-    //* 컬럼 값 설정
-    setColumns: (columns) => set({ columns }),
+        //* 컬럼 값 설정
+        setColumns: (columns) => set({ columns }),
 
-    //* 컬럼 값 설정
-    setGridOpts: (gridOpts) => set({ gridOpts }),
+        //* 컬럼 값 설정
+        setGridOpts: (gridOpts) => set({ gridOpts }),
 
-    //* 데이터 값 설정
-    setGridData: (gridData) => set({
-        gridData: [...gridData]
-    }),
+        //* 데이터 값 설정
+        setGridData: (gridData) => set({
+            gridData: [...gridData]
+        }),
 
-    //* 컬럼에 사용될 액션 버튼 설정
-    setActionsCols: (buttons) => {
-        set({
-            actionsCols: {...buttons}
-        });
-    },
+        //* 컬럼에 사용될 액션 버튼 설정
+        setActionsCols: (buttons) => {
+            set({
+                actionsCols: {...buttons}
+            });
+        },
 
-    //* 로딩 설정
-    setIsLoading: (isLoading) => set({ isLoading }),
-}));
+        //* 로딩 설정
+        setIsLoading: (isLoading) => set({ isLoading }),
+    }))
+}
 
 
 //* 기본 그리드 State
-interface BasicGridEventState {
+export interface BasicGridEventState {
     // state ----
     evKey: string|null;                         // 이벤트 키
     evData: any;                                // 이벤트 전달 데이터
@@ -84,12 +86,14 @@ interface BasicGridEventState {
 }
 
 // 이벤트 제어 용
-export const useBasicGridEvntsStore = create<BasicGridEventState>((set, _) => ({
-    evKey: null,
-    evData: null,
+export const createBasicGridEvntsStore = () => {
+    return create<BasicGridEventState>((set, _) => ({
+        evKey: null,
+        evData: null,
 
-    //* 이벤트 설정
-    sendEvent: (evKey, evData) => {
-        set({ evKey, evData });
-    },
-}));
+        //* 이벤트 설정
+        sendEvent: (evKey, evData) => {
+            set({ evKey, evData });
+        },
+    }))
+};

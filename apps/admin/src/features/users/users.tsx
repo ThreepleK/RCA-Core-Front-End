@@ -8,23 +8,24 @@ import { DropdownMenu } from "@/compos/ui/dropdown-menu";
 import { MRT_TableInstance } from "mantine-react-table";
 import { api_list } from "./apis";
 import { gridDeactiveModal } from "./components/modals/grid-deactive-modal";
-import { BasicTheme } from "@/compos/ui/data-grid-theme/basic-theme";
-import { useBasicGridEvntsStore, useBasicGridStore } from "@/compos/ui/data-grid-theme/basic-theme/basic-theme-store";
+import { BasicTheme, GridEventProvider, GridProvider, useGridEventStore, useGridStore } from "@/compos/ui/data-grid-theme/basic-theme";
 import { COLUMN_ITEM, columnFilters } from "@/compos/ui/data-grid";
 
 import style from "./style.module.css";
+import { useStore } from "zustand";
+import { useSendAction } from "./stores";
 
 export function Users(){
-    const { sendEvent } = useBasicGridEvntsStore(s => s);
+    const { sendEvent } = useSendAction(s => s);
 
     //* 추가
     const onCreate = () => {
-        sendEvent('create', '');
+        sendEvent('create');
     };
 
     //* 액션버튼
     const onActions = (key: string) => {
-        sendEvent(`selected-${key}`, '');
+        sendEvent(`selected-${key}`);
     };
 
     return (
@@ -40,25 +41,45 @@ export function Users(){
                 </Flex>
             }
         >
-            {/* 그리드 본문 */}
-            <div className={style['cont-area']}>
-                <BasicTheme />
-            </div>
-
-            {/* 그리드 이벤트 처리 */}
-            <GridEvents />
+            <GridCtx />
         </ContentsLayout>
     );
+}
+
+function GridCtx(){
+    return (
+        <GridProvider>
+            <GridEventProvider>
+                <GridSet />
+            </GridEventProvider>
+        </GridProvider>
+    );
+}
+
+function GridSet(){
+    return <>
+        {/* 그리드 본문 */}
+        <div className={style['cont-area']}>
+            <BasicTheme />
+        </div>
+
+        {/* 그리드 이벤트 처리 */}
+        <GridEvents />
+    </>;
 }
 
 /**
  * 그리드 이벤트 처리
  */
 function GridEvents(){
+    const gridStore = useGridStore();
+    const eventStore = useGridEventStore();
+
     const [table, setTable] = useState<MRT_TableInstance<any>|null>(null);
 
-    const { setColumns, setGridData, setIsLoading, setActionsCols } = useBasicGridStore(s => s);
-    const { evKey, evData, sendEvent } = useBasicGridEvntsStore(s => s);
+    const { setColumns, setGridData, setIsLoading, setActionsCols } = useStore(gridStore, s => s);
+    const { evKey, evData, sendEvent } = useStore(eventStore, s => s);
+    const { evKey: actionKey, sendEvent: actionSend } = useSendAction(s => s);
 
     //* 리스트 가져오기
     const onListLoad = async () => {
@@ -129,6 +150,42 @@ function GridEvents(){
             } break;
         }
     }, [evKey, evData]);
+
+    //* UI 버튼 이벤트
+    useEffect(() => {
+        if( actionKey === null ){ return; }
+        actionSend(null);
+
+        // 이벤트 처리
+        switch( actionKey ){
+            // 추가
+            case 'create': {
+                // 처리하고 다시 불러오기
+                gridCreateModal(onListLoad);
+            } break;
+
+            // 선택 삭제
+            case 'selected-delete': {
+                // 그리드에서 선택된 row 리스트
+                const selectedRows = table.getSelectedRowModel().flatRows;
+
+                // 삭제 할 id만 추려오기
+                const rmList = selectedRows.map(r => r.original?.id);
+                // 삭제 모달 출력
+                gridRemoveModal(rmList, onListLoad);
+            } break;
+
+            // 선택 비활성화
+            case 'selected-deactive': {
+                // 그리드에서 선택된 row 리스트
+                const selectedRows = table.getSelectedRowModel().flatRows;
+
+                // 선택 항목 비활성화 처리
+                const list = selectedRows.map(r => r.original);
+                gridDeactiveModal(list, onListLoad);
+            } break;
+        }
+    }, [actionKey])
 
     //* 초기 설정
     useEffect(() => {

@@ -1,17 +1,21 @@
 import { useMemo } from "react";
+import { useStore } from "zustand";
 import { MRT_TableInstance, MRT_TableOptions } from "mantine-react-table";
 import { DataGrid } from "../../data-grid/data-grid";
 import { CommModal } from "../../modal/comm-modal";
 import { COLUMN_ITEM, columnFilters } from "../../data-grid/data-grid-filters";
 import { ConfirmModal } from "../../modal";
-import { useBasicGridEvntsStore, useBasicGridStore } from "./basic-theme-store";
+import { useGridEventStore, useGridStore } from "./";
 
 /**
  * 기본 그리드
  */
 export function BaseGrid(){
-    const { columns, gridOpts, gridData, actionsCols, isLoading } = useBasicGridStore(s => s);
-    const { sendEvent } = useBasicGridEvntsStore(s => s);
+    const gridStore = useGridStore();
+    const eventStore = useGridEventStore();
+
+    const { columns, gridOpts, gridData, actionsCols, isLoading } = useStore(gridStore, s => s);
+    const { sendEvent } = useStore(eventStore, s => s);
 
     //* 컬럼 재설정
     const reColumns = useMemo(() => {
