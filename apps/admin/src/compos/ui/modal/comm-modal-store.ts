@@ -17,6 +17,7 @@ export interface CommModalState {
     buttons: ButtonItem;                    // 버튼
     bottomLeftSection: ShowCont;            // 하단 왼쪽 구간
     modalSize: MantineSize;                 // 모달 크기
+    errMsg: ShowCont;                       // 에러 메시지
 
     feedback: (                             // 관련 버튼 피드백
         key: string,                        // 버튼 key
@@ -37,6 +38,9 @@ export interface CommModalState {
     setOnlyContent: (                       // -- 모달 내용만
         content: ShowCont                   // 본문
     ) => void;
+    setErrMsg: (                            // -- 에러 메시지 설정
+        msg: ShowCont                       // 에러 메시지
+    ) => void;
     setLoading: (is: boolean) => void;      // -- 로딩 설정
 }
 
@@ -49,12 +53,16 @@ export const useCommModalStore = create<CommModalState>((set, _) => ({
     buttons: {},
     bottomLeftSection: null,
     modalSize: 'md',
+    errMsg: '',
 
     feedback: (key: string)=>{},
 
     //* 열림 설정
     setOpen: ( is ) => {
-        set({isOpen: is});
+        set({
+            isOpen: is,     // on/off
+            errMsg: '',     // 에러 메시지 강제 제거
+        });
     },
 
     //* 보여줄 내용 설정
@@ -69,6 +77,11 @@ export const useCommModalStore = create<CommModalState>((set, _) => ({
     //* 본문 내용만
     setOnlyContent: (content) => {
         set({content});
+    },
+
+    //* 에러 메시지
+    setErrMsg: (msg) => {
+        set({errMsg: msg});
     },
 
     //* 로딩 설정

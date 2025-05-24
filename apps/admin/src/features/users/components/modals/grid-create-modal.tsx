@@ -1,7 +1,11 @@
 import { useCommModalStore } from "@/compos/ui/modal/comm-modal-store";
 import { Button, Switch, Text } from "@mantine/core";
 import { FormEditContent } from "./form-edit-content";
-import { api_createItem } from "../../apis";
+import { api_createItem, ApiResult } from "../../apis";
+import { formValidate } from "./form-validate";
+
+//* 컨텐츠 타입
+const _CONT_TYPE = 'new';
 
 /**
  * [모달] 추가
@@ -42,7 +46,7 @@ export function gridCreateModal(
         ),
         // 내용
         content: (
-            <FormEditContent row={row} onSetData={onSetData} key={nodeKey} />
+            <FormEditContent type={_CONT_TYPE} row={row} onSetData={onSetData} key={nodeKey} />
         ),
         // 하단 왼쪽 영역
         bottomLeftSection: (
@@ -62,24 +66,26 @@ export function gridCreateModal(
             setLoading(true);
 
             // 처리 결과
-            const result = await createAction(key, row);
-            console.log('결과', result);
+            const res = await createAction(key, row, onSetData, nodeKey);
 
-            callback(result);
+            //* 정상처리 되었을 때
+            if( res ){
+                callback();
 
-            // 모달창 유지
-            if( isKeep ){
-                // 초기 값, 재 랜더링을 위한 키 값 재설정
-                row = {...srcRow};
-                nodeKey = createNodeKey();
+                // 모달창 유지
+                if( isKeep ){
+                    // 초기 값, 재 랜더링을 위한 키 값 재설정
+                    row = {...srcRow};
+                    nodeKey = createNodeKey();
 
-                // 본문만 다시 불러오기
-                setOnlyContent(<FormEditContent row={row} onSetData={onSetData} key={nodeKey} />);
-            }
+                    // 본문만 다시 불러오기
+                    setOnlyContent(<FormEditContent type={_CONT_TYPE} row={row} onSetData={onSetData} key={nodeKey} />);
+                }
 
-            // 모달창 닫기 (정상처리 + 모달창 유지X)
-            if( result && !isKeep ){
-                setOpen(false);
+                // 모달창 닫기 (모달창 유지X)
+                if( !isKeep ){
+                    setOpen(false);
+                }
             }
 
             // 로딩 숨기기
@@ -101,24 +107,57 @@ function createNodeKey(){
 
 /**
  * 처리
+ * @param key 버튼 키 코드
+ * @param row 추가 처리 할 row 데이터
+ * @param onSetData 데이터 설정에 사용된 함수
+ * @param nodeKey 폼 컴포넌트 사용 중인 키 값
  */
-async function createAction(key: string, row: any){
-    // Create 버튼이 아니면 건너 뜀
-    if( key !== 'ok' ){
-        return {
-            isErr: true,
-            res: null,
-            msg: 'Not processed.'
-        };
+async function createAction(
+    key: string,
+    row: any,
+    onSetData: (value: any, key: string) => void,
+    nodeKey: string,
+): Promise<boolean> {
+    const { setOnlyContent, setErrMsg } = useCommModalStore.getState();
+
+    // 에러 메시지 전달
+    const formErrSend = (msg: string, code: string) => {
+        setOnlyContent(
+            <FormEditContent
+                type={_CONT_TYPE} errMsg={msg} errCode={code}
+                row={row} onSetData={onSetData} key={nodeKey}
+            />
+        );
     }
 
-    // ... 생성 처리
-    // return await api_createItem(row);
+    // 에러 메시지 초기화
+    setErrMsg('');
 
-    // (임시) 처리 비동기
-    return new Promise((res) => {
-        setTimeout(() => {
-            res(true);
-        }, 3000);
-    });
+    // Create 버튼이 아니면 건너 뜀
+    if( key !== 'ok' ){
+        setErrMsg('Not processed.');
+        return false;
+    }
+
+    // 데이터 검증
+    const validate = await formValidate(_CONT_TYPE, row);
+
+    // 검증 에러가 있을 경우
+    if( validate.isErr ){
+        formErrSend(validate.msg, validate.code);
+        return false;
+    }
+    
+    console.log('row', row);
+
+    // 추가 처리
+    const res = await api_createItem(row);
+
+    // 에러가 있을 경우
+    if( res.isErr ){
+        setErrMsg(res.msg);
+        return false;
+    }
+
+    return true;
 }

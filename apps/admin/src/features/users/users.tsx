@@ -39,13 +39,13 @@ export function Users(){
     //* 수정
     const onEdit = (row: any) => {
         // 수정 처리하고 다시 불러오기
-        gridEditModal([row.id], onListLoad);
-    };
+        gridEditModal(row, onListLoad);
+    }; 
 
     //* 삭제
     const onRemove = (row: any) => {
         // 삭제 처리하고 다시 불러오기
-        gridRemoveModal([row], onListLoad);
+        gridRemoveModal([row.id], onListLoad);
     };
 
     //* 액션버튼

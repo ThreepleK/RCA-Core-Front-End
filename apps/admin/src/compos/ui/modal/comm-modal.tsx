@@ -1,13 +1,15 @@
-import { Modal, Flex, LoadingOverlay } from "@mantine/core";
+import { Modal, Flex, LoadingOverlay, Alert } from "@mantine/core";
 import { useCommModalStore } from "./comm-modal-store";
 import { useMemo } from "react";
+import { IconInfoCircle } from "@tabler/icons-react";
 
 /**
  * 공용 모달
  */
 export function CommModal() {
     const {
-        isOpen, title, content, buttons, bottomLeftSection, modalSize, isLoading,
+        isOpen, title, content, buttons, bottomLeftSection, modalSize,
+        isLoading, errMsg,
         feedback, setOpen
     } = useCommModalStore((s) => s);
 
@@ -46,6 +48,18 @@ export function CommModal() {
         <Modal opened={isOpen} size={modalSize} title={title} onClose={onClose}>
             {/* 모달 본문 */}
             {content && content}
+
+            {/* 에러 메시지 */}
+            {errMsg && (
+                <Alert
+                    title='Please check'
+                    variant="outline" color='red' radius="md"
+                    icon={<IconInfoCircle />}
+                    mt='xs'
+                >
+                    {errMsg}
+                </Alert>
+            )}
 
             {/* 모달 하단 영역 */}
             {bottomArea}

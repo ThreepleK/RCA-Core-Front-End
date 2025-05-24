@@ -9,13 +9,63 @@ export function gridDeactiveModal(
     rows: any,                       // 관련 row
     callback: (data?: any) => void,  // 확인 콜백
 ) {
+    // 처리할 아이템이 1개도 없을 때
+    if( rows === null || (Array.isArray(rows) && rows.length === 0) ){
+        noDataModal();
+        return;
+    }
+
+    // 처리
+    deactiveModal(rows, callback);
+}
+
+/**
+ * [모달] 처리 할 아이템이 없을 때
+ */
+function noDataModal(){
+    const { setOpen, setContent } = useCommModalStore.getState();
+   
+    //* 모달 설정
+    setContent({
+        // 제목
+        title: (
+            <Text size="md" fw={500} c="red">Deactive member</Text>
+        ),
+        // 내용
+        content: (
+            <Text size="sm">
+                Please select 1 or more items to Deactive member.
+            </Text>
+        ),
+        // 버튼 표기
+        buttons: {
+            confirm: <Button size='xs'>Confirm</Button>,
+        },
+        // 피드백
+        feedback: async (key: string) => {
+            setOpen(false);
+        },
+        size: 'xs',
+    });
+
+    //* 모달 열기
+    setOpen(true);
+}
+
+/**
+ * [모달] 처리 할 아이템이 있을 때때
+ */
+export function deactiveModal(
+    rows: any,                       // 관련 row
+    callback: (data?: any) => void,  // 확인 콜백
+) {
     const { setOpen, setContent, setLoading } = useCommModalStore.getState();
    
     //* 모달 설정
     setContent({
         // 제목
         title: (
-            <Text size="md" fw={500} c="blue">Deactive member</Text>
+            <Text size="md" fw={500} c="red">Deactive member</Text>
         ),
         // 내용
         content: (
@@ -57,15 +107,15 @@ export function gridDeactiveModal(
  * 비활성화 처리
  */
 async function deactiveAction(key: string, rows: any){
+    const { setErrMsg } = useCommModalStore.getState();
+
     // Deactive 버튼이 아니면 건너 뜀
     if( key !== 'ok' ){
-        return {
-            isErr: true,
-            res: null,
-            msg: 'Not processed.'
-        };
+        setErrMsg('Not processed.');
+        return false;
     }
 
+    // 비활성화 데이터로 가공
     const reDatas = rows.map(r => ({
         ...r,
         status: 'inactive'
@@ -73,13 +123,14 @@ async function deactiveAction(key: string, rows: any){
 
     console.log('reDatas', reDatas);
 
-    // ... 비활성화 내용으로 처리
-    // return await api_updateItems(reDatas);
+    // 비활성화 내용으로 처리
+    const res = await api_updateItems(reDatas);
 
-    // (임시) 처리 비동기
-    return new Promise((res) => {
-        setTimeout(() => {
-            res(true);
-        }, 3000);
-    });
+    // 에러가 있을 경우
+    if( res.isErr ){
+        setErrMsg(res.msg);
+        return false;
+    }
+
+    return true;
 }

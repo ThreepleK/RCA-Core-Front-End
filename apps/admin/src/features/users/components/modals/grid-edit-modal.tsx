@@ -1,7 +1,11 @@
 import { useCommModalStore } from "@/compos/ui/modal/comm-modal-store";
 import { Button, Text } from "@mantine/core";
 import { FormEditContent } from "./form-edit-content";
-import { api_updateItems } from "../../apis";
+import { api_updateItems, ApiResult } from "../../apis";
+import { formValidate } from "./form-validate";
+
+//* 컨텐츠 타입
+const _CONT_TYPE = 'mod';
 
 /**
  * [모달] 수정
@@ -28,7 +32,7 @@ export function gridEditModal(
         ),
         // 내용
         content: (
-            <FormEditContent row={row} onSetData={onSetData} />
+            <FormEditContent type={_CONT_TYPE} row={row} onSetData={onSetData} />
         ),
         // 버튼 표기
         buttons: {
@@ -47,13 +51,12 @@ export function gridEditModal(
             setLoading(true);
 
             // 처리 결과
-            const result = await editAction(key, editDatas);
+            const result = await editAction(key, editDatas, onSetData);
             console.log('결과', result);
-
-            callback(result);
-
+            
             // 모달창 닫기 (정상처리)
             if( result ){
+                callback(result);
                 setOpen(false);
             }
             
@@ -69,31 +72,55 @@ export function gridEditModal(
 
 /**
  * 처리
+ * @param key 버튼 키 코드
+ * @param row 추가 처리 할 row 데이터
+ * @param onSetData 데이터 설정에 사용된 함수
  */
-async function editAction(key: string, row: any){
-    // Save 버튼이 아니면 건너 뜀
-    if( key !== 'ok' ){
-        return {
-            isErr: true,
-            res: null,
-            msg: 'Not processed.'
-        };
+async function editAction(
+    key: string,
+    row: any,
+    onSetData: (value: any, key: string) => void,
+){
+    const { setOnlyContent, setErrMsg } = useCommModalStore.getState();
+
+    // 에러 메시지 전달
+    const formErrSend = (msg: string, code: string) => {
+        setOnlyContent(
+            <FormEditContent
+                type={_CONT_TYPE} errMsg={msg} errCode={code}
+                row={row} onSetData={onSetData}
+            />
+        );
     }
 
-    // ... 수정 처리
-    // return await api_updateItems(row);
+    // 에러 메시지 초기화
+    setErrMsg('');
 
-    // (임시) 처리 비동기
-    return new Promise((res) => {
-        setTimeout(() => {
-            res(true);
-        }, 3000);
-    });
+    // Save 버튼이 아니면 건너 뜀
+    if( key !== 'ok' ){
+        setErrMsg('Not processed.');
+        return false;
+    }
 
-    // (임시) 처리 비동기
-    return new Promise((res) => {
-        setTimeout(() => {
-            res(true);
-        }, 3000);
-    });
+    // 데이터 검증
+    const validate = await formValidate(_CONT_TYPE, row);
+
+    // 검증 에러가 있을 경우
+    if( validate.isErr ){
+        formErrSend(validate.msg, validate.code);
+        return false;
+    }
+    
+    console.log('row', row);
+
+    // 수정 처리
+    const res = await api_updateItems(row);
+
+    // 에러가 있을 경우
+    if( res.isErr ){
+        setErrMsg(res.msg);
+        return false;
+    }
+
+    return true;
 }
