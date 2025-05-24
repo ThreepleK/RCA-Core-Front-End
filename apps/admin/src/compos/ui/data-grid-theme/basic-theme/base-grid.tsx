@@ -14,8 +14,15 @@ export function BaseGrid(){
     const gridStore = useGridStore();
     const eventStore = useGridEventStore();
 
-    const { columns, gridOpts, gridData, actionsCols, isLoading } = useStore(gridStore, s => s);
-    const { sendEvent } = useStore(eventStore, s => s);
+    //-- Grid 상태 관련
+    const columns = useStore(gridStore, s => s.columns);
+    const gridOpts = useStore(gridStore, s => s.gridOpts);
+    const gridData = useStore(gridStore, s => s.gridData);
+    const actionsCols = useStore(gridStore, s => s.actionsCols);
+    const isLoading = useStore(gridStore, s => s.isLoading);
+
+    //-- Grid 이벤트 관련
+    const sendEvent = useStore(eventStore, s => s.sendEvent);
 
     //* 컬럼 재설정
     const reColumns = useMemo(() => {

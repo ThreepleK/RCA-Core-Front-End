@@ -1,1 +1,1 @@
-export * from './theme-basic'
+export * from './basic-theme'
