@@ -1,7 +1,6 @@
 import { useCommModalStore } from "@/compos/ui/modal/comm-modal-store";
-import { Alert, Button, Text } from "@mantine/core";
-import { api_removeItems, ApiResult } from "../../apis";
-import { IconInfoCircle } from "@tabler/icons-react";
+import { Button, Text } from "@mantine/core";
+import { api_removeItems } from "../../apis";
 
 /**
  * [모달] 삭제

@@ -1,8 +1,7 @@
 import { useCommModalStore } from "@/compos/ui/modal/comm-modal-store";
 import { Button, Text } from "@mantine/core";
-import { FormEditContent } from "./form-edit-content";
-import { api_updateItems, ApiResult } from "../../apis";
-import { formValidate } from "./form-validate";
+import { FormEditContent, formValidate } from "../form";
+import { api_updateItems } from "../../apis";
 
 //* 컨텐츠 타입
 const _CONT_TYPE = 'mod';

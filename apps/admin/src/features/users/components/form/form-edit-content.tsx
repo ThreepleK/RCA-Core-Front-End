@@ -1,7 +1,7 @@
-import { Alert, Group, Radio, Stack, TextInput } from "@mantine/core";
-import style from "./form-edit-content.module.css";
-import { IconInfoCircle } from "@tabler/icons-react";
+import { Group, Radio, Stack, TextInput } from "@mantine/core";
 import { useEffect, useState } from "react";
+
+import style from "./form-edit-content.module.css";
 
 /**
  * 모달창에서

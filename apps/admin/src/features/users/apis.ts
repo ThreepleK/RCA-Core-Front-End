@@ -18,8 +18,8 @@ export function api_list(){
     // 임시 데이터
     return new Promise((res) => {
         setTimeout(() => {
-            res(_TMP_DATA);
-        }, 2000);
+            res(JSON.parse(JSON.stringify(_TMP_DATA)));
+        }, 1000);
     });
 }
 
@@ -119,7 +119,7 @@ export function api_demo(): Promise<ApiResult>{
 
         setTimeout(() => {
             resolve(res);
-        }, 3000);
+        }, 1000);
     });
 }
 
