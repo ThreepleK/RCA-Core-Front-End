@@ -77,6 +77,11 @@ function GridEvents(){
     const setGridData = useStore(gridStore, s => s.setGridData);
     const setIsLoading = useStore(gridStore, s => s.setIsLoading);
 
+    //-- Grid 필터 관련
+    const gobalSearch = useStore(gridStore, s => s.gobalSearch);
+    const colSorting = useStore(gridStore, s => s.colSorting);
+    const colFilters = useStore(gridStore, s => s.colFilters);
+
     //-- Grid 페이징 관련
     const pagination = useStore(gridStore, s => s.pagination);
     const setRowCount = useStore(gridStore, s => s.setRowCount);
@@ -97,7 +102,10 @@ function GridEvents(){
 
         // 리스트 불러와서 재설정
         const list = await api_list({
-            pagination
+            pagination,
+            search: gobalSearch,
+            filter: colFilters,
+            sort: colSorting,
         });
         
         // 그리드 데이터 설정
@@ -111,7 +119,13 @@ function GridEvents(){
 
     useEffect(() => {
         onListLoad();
-    }, [pagination.pageIndex, pagination.pageSize]);
+    }, [
+        colFilters,
+        gobalSearch,
+        pagination.pageIndex,
+        pagination.pageSize,
+        colSorting,
+    ]);
 
     //* 그리드 이벤트 처리
     useEffect(() => {

@@ -21,11 +21,18 @@ export function BaseGrid(){
     const actionsCols = useStore(gridStore, s => s.actionsCols);
     const isLoading = useStore(gridStore, s => s.isLoading);
 
+    //-- Grid 필터 관련
+    const gobalSearch = useStore(gridStore, s => s.gobalSearch);
+    const setGobalSearch = useStore(gridStore, s => s.setGobalSearch);
+    const colSorting = useStore(gridStore, s => s.colSorting);
+    const setColSorting = useStore(gridStore, s => s.setColSorting);
+    const colFilters = useStore(gridStore, s => s.colFilters);
+    const setColFilters = useStore(gridStore, s => s.setColFilters);
+
     //-- Grid 페이징 관련
     const pagination = useStore(gridStore, s => s.pagination);
     const setPagination = useStore(gridStore, s => s.setPagination);
     const rowCount = useStore(gridStore, s => s.rowCount);
-    const setRowCount = useStore(gridStore, s => s.setRowCount);
 
     //-- Grid 이벤트 관련
     const sendEvent = useStore(eventStore, s => s.sendEvent);
@@ -53,17 +60,36 @@ export function BaseGrid(){
         const isProgress = isLoading && gridData.length > 0;
 
         let res: any = {
-            enableRowSelection: true,           // 좌측 선택
+            enableRowSelection: true,           // 그리드 선택
+            manualFiltering: true,              // 수동 필터링
+            manualSorting: true,                // 수동 정렬
             manualPagination: true,             // 수동 페이지네이션 적용
             rowCount,                           // row 갯수
-            onPaginationChange: (updater) => {  // 수동 페이지네이션 처리
-                const update = updater(pagination);
-                setPagination(update);
-            },
             state: {
                 isLoading: isLoad,              // 로딩 여부
                 showProgressBars: isProgress,   // 프로그래스 표기 여부
+                columnFilters: colFilters,      // 그리드 필터
+                globalFilter: gobalSearch,      // 검색 키워드
+                sorting: colSorting,            // 컬럼 정렬
                 pagination,                     // 페이지
+            },
+            //* 우상단 검색 키워드 처리
+            onGlobalFilterChange: setGobalSearch,
+            //* 수동 컬럼 필터 처리
+            onColumnFiltersChange: (updater) => {
+                const update = updater(colFilters);
+                setColFilters(update);
+            },
+            //* 수동 정렬 
+            onSortingChange: (updater) => {
+                const update = updater(colSorting);
+                setColSorting(update);
+                console.log(update)
+            },
+            //* 수동 페이지네이션 처리
+            onPaginationChange: (updater) => {
+                const update = updater(pagination);
+                setPagination(update);
             },
         };
 

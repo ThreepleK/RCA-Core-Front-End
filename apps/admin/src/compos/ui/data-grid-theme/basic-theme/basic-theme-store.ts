@@ -1,4 +1,4 @@
-import { MRT_ColumnDef, MRT_PaginationState, MRT_TableOptions } from 'mantine-react-table';
+import { MRT_ColumnDef, MRT_ColumnFilterFnsState, MRT_PaginationState, MRT_SortingState, MRT_TableOptions } from 'mantine-react-table';
 import { ReactNode } from 'react';
 import { create } from 'zustand';
 
@@ -16,6 +16,10 @@ export interface BasicGridState<T> {
     gridData: any[];                            // 그리드 데이터
     actionsCols: ActionColBtns|null;            // 컬럼에 사용될 액션 버튼
     isLoading: boolean;                         // 그리드 로딩 여부
+
+    gobalSearch?: string;                       // 검색 키워드
+    colFilters: MRT_ColumnFilterFnsState[];     // 컬럼 필터
+    colSorting: MRT_SortingState[];             // 컬럼 정렬
 
     pagination: MRT_PaginationState;            // 페이지네이션
     rowCount: number;                           // Row 데이터 총 갯수
@@ -41,6 +45,18 @@ export interface BasicGridState<T> {
         isLoading: boolean                      // - 로딩 여부 값
     ) => void;
 
+    setGobalSearch: (                            // 검색 키워드 설정
+        gobalSearch: string                      // - 검색 키워드 값
+    ) => void;
+
+    setColFilters: (                             // 컬럼 필터 설정
+        colFilters: MRT_ColumnFilterFnsState[]   // - 컬럼 필터 값
+    ) => void;
+
+    setColSorting: (                             // 컬럼 정렬 설정
+        colSorting: MRT_SortingState[]           // - 컬럼 정렬 값
+    ) => void;
+
     setPagination: (                             // 페이지 설정
         pagination: MRT_PaginationState          // - 페이징 값
     ) => void;
@@ -58,6 +74,10 @@ export const createBasicGridStore = () => {
         gridData: [],
         actionsCols: null,
         isLoading: true,
+
+        gobalSearch: undefined,
+        colFilters: [],
+        colSorting: [],
 
         pagination: {
             pageIndex: 0,
@@ -85,6 +105,15 @@ export const createBasicGridStore = () => {
 
         //* 로딩 설정
         setIsLoading: (isLoading) => set({ isLoading }),
+
+        //* 검색 키워드 설정
+        setGobalSearch: (gobalSearch) => set({ gobalSearch }),
+
+        //* 컬럼 필터 설정
+        setColFilters: (colFilters) => set({ colFilters }),
+        
+        //* 컬럼 정렬 설정
+        setColSorting: (colSorting) => set({ colSorting }),
 
         //* 페이지 설정
         setPagination: (pagination) => set({ pagination }),
