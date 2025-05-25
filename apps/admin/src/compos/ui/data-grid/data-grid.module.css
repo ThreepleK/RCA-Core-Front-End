@@ -58,3 +58,18 @@
         }
     }
 }
+
+/* 그리드 본문 row */
+.grid-body {
+    & {}
+
+    & > tr:hover > td {
+        @apply bg-transparent!;
+    }
+    & > tr:nth-of-type(odd) {
+        @apply bg-gray-50! hover:bg-gray-100!;
+    }
+    & > tr:nth-of-type(even) {
+        @apply bg-white! hover:bg-gray-100!;
+    }
+}

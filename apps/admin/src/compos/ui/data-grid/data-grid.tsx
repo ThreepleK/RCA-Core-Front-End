@@ -49,6 +49,12 @@ export function DataGrid<T>({ columns, data, opts, onReady }: {
             },
         },
 
+        // 그리드 본문 설정
+        mantineTableBodyProps: () => ({
+            className: style['grid-body']
+        }),
+
+        //* 하단 툴바 설정
         mantineBottomToolbarProps: () => ({
             className: style['grid-bottom-toolbar']
         }),
