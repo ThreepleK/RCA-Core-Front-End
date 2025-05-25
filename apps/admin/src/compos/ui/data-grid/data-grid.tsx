@@ -46,6 +46,13 @@ export function DataGrid<T>({ columns, data, opts, onReady }: {
             className: style['grid-top-toolbar']
         }),
 
+        //* 상단 툴바 메시지
+        mantineToolbarAlertBannerProps: () => ({
+            className: style['grid-top-alert'],
+            variant: 'transparent',
+            radius: "xs",
+        }),
+
         //* 진행바 설정
         mantineProgressProps: () => ({
             size: 'xs',

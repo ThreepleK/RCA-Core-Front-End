@@ -22,3 +22,18 @@
         & input { @apply h-[28px] min-h-[28px] bg-white; }
     }
 }
+
+/* 그리드 상단 툴바 Alert 메시지 */
+.grid-top-alert {
+    & {
+        @apply p-0! rounded-none! border-0!;
+    }
+
+    & [class*=MRT_ToolbarAlertBanner-module_toolbar-alert] {
+        & { @apply flex items-center h-[34px] px-3! py-0!; }
+
+        & [class*=mantine-Flex-root]{
+            @apply gap-1.5! text-xs!;
+        }
+    }
+}
