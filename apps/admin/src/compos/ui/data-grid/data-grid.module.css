@@ -37,3 +37,24 @@
         }
     }
 }
+
+/* 그리드 하단 툴바 */
+.grid-bottom-toolbar {
+    & { @apply min-h-auto!; }
+
+    /* 페이지네이션 영역 */
+    & [class*=mrt-table-pagination]{
+        & { @apply gap-2 h-[40px] items-center px-1.5 py-0; }
+
+        & [class*=mantine-Group-root] { @apply gap-2 justify-center; }
+        & [class*=mantine-Text-root] { @apply text-xs!; }
+
+        & [class*=mantine-Select-input] {
+            @apply h-[24px]! min-h-[24px]! leading-none text-xs;
+        }
+
+        & button[class*=mantine-UnstyledButton-root] {
+            --ai-size: var(--ai-size-sm);
+        }
+    }
+}

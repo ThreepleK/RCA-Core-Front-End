@@ -1,4 +1,4 @@
-import { IconArrowsMaximize, IconArrowsMinimize, IconCaretDownFilled, IconClearAll, IconColumns, IconDotsVertical, IconEyeClosed, IconFilter, IconFilterOff, IconMenu2, IconSearch, IconSearchOff, IconSortAscending, IconSortDescending } from '@tabler/icons-react';
+import { IconArrowsMaximize, IconArrowsMinimize, IconCaretDownFilled, IconCaretRightFilled, IconChevronLeft, IconChevronLeftPipe, IconChevronRight, IconChevronRightPipe, IconClearAll, IconColumns, IconDotsVertical, IconEyeClosed, IconFilter, IconFilterOff, IconMenu2, IconPlayerSkipForwardFilled, IconSearch, IconSearchOff, IconSortAscending, IconSortDescending } from '@tabler/icons-react';
 import type { MRT_Icons } from 'mantine-react-table';
 
 export const gridIcons: Partial<MRT_Icons> = {
@@ -7,8 +7,6 @@ export const gridIcons: Partial<MRT_Icons> = {
     //  IconArrowsSort
     //  IconBoxMultiple
     //  IconChevronDown
-    //  IconChevronLeft
-    //  IconChevronRight
     //  IconChevronsDown
     //  IconCircleX
     //  IconDeviceFloppy
@@ -17,6 +15,12 @@ export const gridIcons: Partial<MRT_Icons> = {
     //  IconPinned
     //  IconPinnedOff
     //  IconX
+
+    //* -- 그리드 페이지네이션 ------
+    IconChevronLeft: (p: any) => <IconChevronLeft size={18} />,
+    IconChevronLeftPipe: (p: any) => <IconChevronLeftPipe size={18} />,
+    IconChevronRight: (p: any) => <IconChevronRight size={18} />,
+    IconChevronRightPipe: (p: any) => <IconChevronRightPipe size={18} />,
 
 
     //* -- 그리드 상단 툴바 ------

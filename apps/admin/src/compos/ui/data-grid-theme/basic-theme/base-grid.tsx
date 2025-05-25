@@ -60,6 +60,8 @@ export function BaseGrid(){
         const isProgress = isLoading && gridData.length > 0;
 
         let res: any = {
+            layoutMode: 'grid',
+
             enableRowSelection: true,           // 그리드 선택
             manualFiltering: true,              // 수동 필터링
             manualSorting: true,                // 수동 정렬

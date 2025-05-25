@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
     MantineReactTable,
     MRT_TableInstance,
@@ -8,7 +9,6 @@ import {
 import { gridIcons } from './grid-icons'
 import 'mantine-react-table/styles.css';
 import style from './data-grid.module.css';
-import { useEffect } from 'react';
 
 /**
  * 그리드
@@ -40,6 +40,18 @@ export function DataGrid<T>({ columns, data, opts, onReady }: {
         },
 
         icons: gridIcons,                       // 재설정 할 아이콘
+
+        //* 테이블 컨테이너 설정
+        mantineTableContainerProps: {
+            style: {
+                height: 'calc(100% - 34px - 40px)', // 높이 100% - 상단툴바 높이 - 하단툴바 높이
+                maxHeight: 'none',
+            },
+        },
+
+        mantineBottomToolbarProps: () => ({
+            className: style['grid-bottom-toolbar']
+        }),
 
         //* 상단 툴바 설정
         mantineTopToolbarProps: (props) => ({
