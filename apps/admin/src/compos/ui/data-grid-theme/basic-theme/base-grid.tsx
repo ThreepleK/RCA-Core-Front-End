@@ -86,7 +86,6 @@ export function BaseGrid(){
             onSortingChange: (updater) => {
                 const update = updater(colSorting);
                 setColSorting(update);
-                console.log(update)
             },
             //* 수동 페이지네이션 처리
             onPaginationChange: (updater) => {

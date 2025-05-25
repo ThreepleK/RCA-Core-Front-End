@@ -7,6 +7,8 @@ import { useSendAction } from "./stores";
 import { IconPlus } from "@tabler/icons-react";
 import { Grid } from "./components/grid";
 
+import style from './style.module.css'
+
 export function Users(){
     const sendEvent = useSendAction(s => s.sendEvent);
 
@@ -33,7 +35,9 @@ export function Users(){
                 </Flex>
             }
         >
-            <Grid />
+            <div className={style['cont-area']}>
+                <Grid />
+            </div>
         </ContentsLayout>
     );
 }

@@ -1,4 +1,5 @@
 import { request } from '@/utils'
+import { MRT_ColumnFilterFnsState, MRT_PaginationState, MRT_SortingState } from 'mantine-react-table';
 
 export type ApiResult = {
     isErr: boolean;     // 에러 여부
@@ -6,10 +7,56 @@ export type ApiResult = {
     msg: string;        // 에러 메시지
 };
 
+type GridListParams = {
+    pagination: MRT_PaginationState;
+    search: string;
+    filter: MRT_ColumnFilterFnsState[];
+    sort: MRT_SortingState[];
+};
+
+/**
+ * 그리드에서 사용될 요청 주소 값 적용
+ * @param baseURL 기본 주소
+ * @param opts 그리드에서 넘겨 받은 옵션 값
+ */
+function gridUrl(baseURL: string, opts: GridListParams){    
+    const encode = (key: string, data: any) => {
+        const isObj = typeof data === 'object';
+        const reData = encodeURIComponent(isObj ? JSON.stringify(data) : data);
+        return `${key}=${reData}`;
+    }
+
+    const { pageIndex, pageSize } = opts.pagination;
+
+    return ( baseURL
+        + encode('?start', pageIndex + pageSize)
+        + encode('&size', pageSize)
+        + encode('&filters', opts.filter ?? [])
+        + encode('&search', opts.search ?? '')
+        + encode('&sort', opts.sort ?? [])
+    );
+}
+
 /**
  * 리스트 가져오기
+ * @param opts
+ * @param opts.pagination   페이지 처리 값
+ * @param opts.search       검색 키워드
+ * @param opts.filter       컬럼 별 필터
+ * @param opts.sort         컬럼 별 정렬
  */
-export function api_list(){
+export function api_list(opts: {
+   pagination: MRT_PaginationState,
+   search: string,
+   filter: MRT_ColumnFilterFnsState[],
+   sort: MRT_SortingState[],
+}): Promise<{
+    data: Array<any>,
+    meta: { total: number }
+}>{
+    const url = gridUrl('/admin/api/*', opts);
+    console.log(url);
+
     // return request({
     //     type: 'get',
     //     url: '/admin/api/*'
@@ -18,7 +65,10 @@ export function api_list(){
     // 임시 데이터
     return new Promise((res) => {
         setTimeout(() => {
-            res(JSON.parse(JSON.stringify(_TMP_DATA)));
+            res({
+                data: JSON.parse(JSON.stringify(_TMP_DATA)),
+                meta: { total: 200 },
+            });
         }, 1000);
     });
 }
