@@ -1,4 +1,4 @@
-import { MRT_ColumnDef, MRT_TableOptions } from 'mantine-react-table';
+import { MRT_ColumnDef, MRT_PaginationState, MRT_TableOptions } from 'mantine-react-table';
 import { ReactNode } from 'react';
 import { create } from 'zustand';
 
@@ -16,6 +16,9 @@ export interface BasicGridState<T> {
     gridData: any[];                            // 그리드 데이터
     actionsCols: ActionColBtns|null;            // 컬럼에 사용될 액션 버튼
     isLoading: boolean;                         // 그리드 로딩 여부
+
+    pagination: MRT_PaginationState;            // 페이지네이션
+    rowCount: number;                           // Row 데이터 총 갯수
 
     // action ----
     setColumns: (                               // 컬럼 설정
@@ -37,6 +40,14 @@ export interface BasicGridState<T> {
     setIsLoading: (                             // 그리드 로딩 설정
         isLoading: boolean                      // - 로딩 여부 값
     ) => void;
+
+    setPagination: (                             // 페이지 설정
+        pagination: MRT_PaginationState          // - 페이징 값
+    ) => void;
+
+    setRowCount: (                               // Row 데이터 총 갯수
+        rowCount: number                         // - 총 갯수 값
+    ) => void;
 }
 
 //* 기본 그리드 제어
@@ -47,6 +58,12 @@ export const createBasicGridStore = () => {
         gridData: [],
         actionsCols: null,
         isLoading: true,
+
+        pagination: {
+            pageIndex: 0,
+            pageSize: 10,
+        },
+        rowCount: 0,
 
         //* 컬럼 값 설정
         setColumns: (columns) => set({ columns }),
@@ -68,18 +85,24 @@ export const createBasicGridStore = () => {
 
         //* 로딩 설정
         setIsLoading: (isLoading) => set({ isLoading }),
+
+        //* 페이지 설정
+        setPagination: (pagination) => set({ pagination }),
+
+        //* row 총 갯수 설정
+        setRowCount: (rowCount) => set({ rowCount }),
     }))
 }
 
 
-//* 기본 그리드 State
+//* 기본 그리드 이벤트 State
 export interface BasicGridEventState {
     // state ----
     evKey: string|null;                         // 이벤트 키
     evData: any;                                // 이벤트 전달 데이터
 
     // action ----
-    sendEvent: (                                 // 이벤트 전달 설정
+    sendEvent: (                                // 이벤트 전달 설정
         evKey: string,                          // - 이벤트 키
         evData: any                             // - 전달 데이터
     ) => void;

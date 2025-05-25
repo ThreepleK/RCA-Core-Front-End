@@ -21,6 +21,12 @@ export function BaseGrid(){
     const actionsCols = useStore(gridStore, s => s.actionsCols);
     const isLoading = useStore(gridStore, s => s.isLoading);
 
+    //-- Grid 페이징 관련
+    const pagination = useStore(gridStore, s => s.pagination);
+    const setPagination = useStore(gridStore, s => s.setPagination);
+    const rowCount = useStore(gridStore, s => s.rowCount);
+    const setRowCount = useStore(gridStore, s => s.setRowCount);
+
     //-- Grid 이벤트 관련
     const sendEvent = useStore(eventStore, s => s.sendEvent);
 
@@ -43,10 +49,21 @@ export function BaseGrid(){
 
     //* 옵션 재설정
     const reOpts = useMemo(() => {
+        const isLoad = isLoading && gridData.length === 0;
+        const isProgress = isLoading && gridData.length > 0;
+
         let res: any = {
-            enableRowSelection: true,       // 좌측 선택
+            enableRowSelection: true,           // 좌측 선택
+            manualPagination: true,             // 수동 페이지네이션 적용
+            rowCount,                           // row 갯수
+            onPaginationChange: (updater) => {  // 수동 페이지네이션 처리
+                const update = updater(pagination);
+                setPagination(update);
+            },
             state: {
-                isLoading,                  // 로딩 여부
+                isLoading: isLoad,              // 로딩 여부
+                showProgressBars: isProgress,   // 프로그래스 표기 여부
+                pagination,                     // 페이지
             },
         };
 

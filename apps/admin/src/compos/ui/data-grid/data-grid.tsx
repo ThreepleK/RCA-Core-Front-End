@@ -46,6 +46,12 @@ export function DataGrid<T>({ columns, data, opts, onReady }: {
             className: style['grid-top-toolbar']
         }),
 
+        //* 진행바 설정
+        mantineProgressProps: () => ({
+            size: 'xs',
+            color: 'teal',
+        }),
+
         ...opts                                 // 별도 설정 값
     } as MRT_TableOptions<T>);
 

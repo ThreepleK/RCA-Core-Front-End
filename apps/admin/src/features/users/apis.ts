@@ -1,4 +1,5 @@
 import { request } from '@/utils'
+import { MRT_PaginationState } from 'mantine-react-table';
 
 export type ApiResult = {
     isErr: boolean;     // 에러 여부
@@ -6,10 +7,17 @@ export type ApiResult = {
     msg: string;        // 에러 메시지
 };
 
+
 /**
  * 리스트 가져오기
  */
-export function api_list(){
+export function api_list({pagination}: {
+   pagination: MRT_PaginationState
+}): Promise<{
+    data: Array<any>,
+    meta: { total: number }
+}>{
+    console.log(pagination);
     // return request({
     //     type: 'get',
     //     url: '/admin/api/*'
@@ -18,7 +26,10 @@ export function api_list(){
     // 임시 데이터
     return new Promise((res) => {
         setTimeout(() => {
-            res(JSON.parse(JSON.stringify(_TMP_DATA)));
+            res({
+                data: JSON.parse(JSON.stringify(_TMP_DATA)),
+                meta: { total: 200 },
+            });
         }, 1000);
     });
 }

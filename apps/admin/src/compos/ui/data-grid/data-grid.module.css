@@ -5,7 +5,8 @@
         @apply bg-gray-100 min-h-[35px] rounded-t-md;
     }
 
-    & > div {
+    /* 상단 액션 영역 */
+    & > div[class*=MRT_TopToolbar-module_actions-container] {
         @apply px-1 py-0;
     }
 
@@ -20,5 +21,4 @@
         & { }
         & input { @apply h-[28px] min-h-[28px] bg-white; }
     }
-
 }
