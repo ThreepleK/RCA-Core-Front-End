@@ -1,7 +1,7 @@
 import { Flex, Text, Title, Button } from "@mantine/core"
-
-import { useTreeStore } from '../'
 import { useCtxBoxStore } from '@/compos/ui/ctx-box'
+import { useStore } from "zustand";
+import { useTreeStore } from "../tree-editor-store-ctx";
 
 /**
  * [마우스 우클릭]
@@ -12,7 +12,8 @@ export function RmConfirmBox({ title, msg, rmId }: {
     msg: string;        // 내용
     rmId: string;       // 삭제 할 트리 아이템 id
 }){
-    const { rmTreeItem } = useTreeStore(s => s);
+    const treeStore = useTreeStore();
+    const { rmTreeItem } = useStore(treeStore, s => s);
     const { setOpen } = useCtxBoxStore(s => s);
 
     //* 삭제

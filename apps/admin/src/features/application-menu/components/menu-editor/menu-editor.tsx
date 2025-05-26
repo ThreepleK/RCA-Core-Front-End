@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Select, Button, Text } from '@mantine/core';
-import { TreeEditor, useTreeStore, useRootCtxMenuStore, TREE_LIST } from '@/compos/ui/tree-editor'
+import { Select, Button, Text, Box } from '@mantine/core';
+import { TreeEditor, useTreeStore, useRootCtxMenuStore, TREE_LIST, TreeProvider } from '@/compos/ui/tree-editor'
 import { DB_MENU_ITEM, getSelected_treeList, getAppList, dbRaw2Data, data2DbRaw, getDeepCp } from './utils'
 
 import style from './menu-editor.module.css';
 import { ConfirmModal, useConfirmModalStore } from '@/compos/ui/modal';
+import { IconMenu4 } from '@tabler/icons-react';
+import { useStore } from 'zustand';
 
 export function MenuEditor({ menu, onMenuChange }: {
     menu: DB_MENU_ITEM[]
@@ -65,7 +67,13 @@ export function MenuEditor({ menu, onMenuChange }: {
                 onMenuChange={onMenuChange}
             />
             {/* 트리 편집 UI */}
-            <TreeEditor />
+            <TreeEditor
+                isShowRootLabel={true}
+                divderLabel={<>
+                    <IconMenu4 size={12} strokeWidth={1} />
+                    <Box ml={5}>Application Menus</Box>
+                </>}
+            />
 
             {/* 하단 버튼 */}
             <BottomArea treeData={treeData} onMenuChange={onMenuChange} />
@@ -81,8 +89,9 @@ function TreeEditorProcess({rootLabel, treeList, onMenuChange}: {
     treeList: TREE_LIST;
     onMenuChange: (changeMenu: DB_MENU_ITEM[]) => void;
 }){
+    const treeStore = useTreeStore();
     //* 트리 리스트
-    const {rootItem, list, setTreeList, isItemUpdate, setIsUpdate} = useTreeStore(s => s);
+    const {rootItem, list, setTreeList, isItemUpdate, setIsUpdate} = useStore(treeStore, s => s);
 
     //* 앱 변경
     useEffect(() => {
@@ -112,8 +121,9 @@ function BottomArea({ treeData, onMenuChange }: {
     treeData: any;
     onMenuChange: (changeMenu: DB_MENU_ITEM[]) => void;
 }) {
+    const treeStore = useTreeStore();
     //* 트리 리스트
-    const {isEditing, rootItem, list, setTreeList} = useTreeStore(s => s);
+    const {isEditing, rootItem, list, setTreeList} = useStore(treeStore, s => s);
 
     //* 취소
     const onCancel = () => {

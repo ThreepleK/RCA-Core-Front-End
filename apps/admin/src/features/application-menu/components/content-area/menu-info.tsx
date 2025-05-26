@@ -4,9 +4,11 @@ import { TREE_ITEM_TYPE, useTreeStore } from '@/compos/ui/tree-editor';
 import { useEffect, useState } from 'react';
 import { useConfirmModalStore } from '@/compos/ui/modal';
 import style from './content-area.module.css'
+import { useStore } from 'zustand';
 
 export function MenuInfo(){
-    const { selectedItem, updateTreeItem, setIsUpdate } = useTreeStore(s => s);
+    const treeStore = useTreeStore();
+    const { selectedItem, updateTreeItem, setIsUpdate } = useStore(treeStore, s => s);
 
     //* 선택된 메뉴가 없을 때
     if( selectedItem === null ){

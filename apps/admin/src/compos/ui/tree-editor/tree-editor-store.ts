@@ -26,7 +26,7 @@ export type TREE_LIST = TreeItems<TREE_ITEM_TYPE>;
 export type TREE_ITEM = TreeItem<TREE_ITEM_TYPE>;
 
 //* 트리 State
-interface TreeState {
+export interface TreeState {
     // state ----
     rootItem: TREE_ITEM;                    // Tree 최상위 아이템
     list: TREE_LIST;                        // Tree 목록
@@ -59,8 +59,197 @@ interface TreeState {
     setIsUpdate: (is: boolean) => void;             // 아이템 업데이트 신호 처리
 }
 
+//* 트리 Store
+export const createTreeStore = () => {
+    return create<TreeState>((set, get) => ({
+        rootItem: null,
+        list: [],
+        flag: false,
+        selectedItem: null,
+        isSelectedRoot: false,
+        isItemUpdate: false,
+        isEditing: false,
+        
+        setTreeList: (list) => {
+            // 등록 값이 없을경우
+            if( list.length === 0 ){ return; }
+
+            // root 아이템 가져오기
+            const rootItem = list[0];
+            // 원본 하위 내역 가져오기
+            const children = JSON.parse(JSON.stringify(rootItem.children));
+
+            // root 아이템 하위 내역 제거
+            delete rootItem.children;
+
+            set({
+                rootItem,
+                list: children,
+                flag: !get().flag,
+                isEditing: false,
+            });
+        },
+        setTreeChildList: (cList) => {
+            set({
+                list: cList,
+                flag: !get().flag,
+                isEditing: true,
+            });
+        },
+        setSelectedItem: (id) => {
+            const { rootItem, list, flag } = get();
+
+            let selected: TREE_ITEM|null = null;
+            let isSelectedRoot: boolean = false;
+
+            // 선택 처리
+            listAllLoop(rootItem, list, (item, isRoot) => {
+                if( item.id === id ){
+                    selected = item;
+                    isSelectedRoot = isRoot;
+                    item.selected = true;
+                } else {
+                    item.selected = false;
+                }
+            });
+
+            // 변경 값 재설정
+            set({
+                rootItem: {...rootItem},
+                list: [...list],
+                selectedItem: selected,
+                isSelectedRoot,
+                flag: !flag,
+            });
+        },
+        addTreeItem: (addId, label, isRoot=false) => {
+            const {list} = get();
+
+            //* 맨 상단 메뉴일 경우
+            if( isRoot ){
+                list.push({
+                    id: uuidv4(),
+                    label: label,
+                    itemType: 'new',
+                    selected: false,
+                });
+            }
+            //* 그 아래 메뉴일 경우
+            else {
+                // 아이템 찾아서 하위에 추가
+                const {isSearch} = listSearch(null, list, addId, (items, idx) => {
+                    if( !items[idx].children ){
+                        items[idx].children = [];
+                    }
+        
+                    items[idx].children.push({
+                        id: uuidv4(),
+                        label: label,
+                        itemType: 'new',
+                        selected: false,
+                    });
+                });
+        
+                // 추가 한적이 없다면
+                if( !isSearch ){ return; }
+            }
+
+            set({
+                list: [...list],
+                flag: !get().flag,
+                isEditing: true,
+            });
+        },
+        modTreeItem: (modId, label) => {
+            const {rootItem, list} = get();
+
+            let isSelectedRoot: boolean = false;
+
+            // 아이템 찾아서 이름 변경
+            const {isSearch} = listSearch(rootItem, list, modId, (items, idx, isRoot) => {
+                items[idx].label = label;
+                items[idx].itemType = items[idx]?.itemType !== 'new' ? 'update' : 'new';
+                isSelectedRoot = isRoot;
+            });
+
+            // 변경 한적이 없다면
+            if( !isSearch ){ return; }
+
+            // root에 따른 데이터 설정
+            const setData = {};
+            if( isSelectedRoot ){
+                setData['rootItem'] = {...rootItem};
+            } else {
+                setData['list'] = [...list];
+            }
+
+            set({
+                ...setData,
+                flag: !get().flag,
+                isEditing: true,
+            });
+        },
+        rmTreeItem: (rmId) => {
+            const {list} = get();
+
+            // 아이템 찾아서 제거
+            const {isSearch} = listSearch(null, list, rmId, (items, idx) => {
+                let tmp: any = items.splice(idx, 1);
+                tmp = null;
+            });
+
+            // 제거 대상이 없었을 경우 끝
+            if( !isSearch ){ return; }
+
+            set({
+                list: [...list],
+                flag: !get().flag,
+                isEditing: true,
+            });
+        },
+
+        updateTreeItem: (updateId, label, item) => {
+            const {rootItem, list, flag} = get();
+
+            let isSelectedRoot: boolean = false;
+
+            // 아이템 찾아서 교체
+            const {isSearch} = listSearch(rootItem, list, updateId, (items, idx, isRoot) => {
+                items[idx].label = label;
+                items[idx].itemType = items[idx]?.itemType !== 'new' ? 'update' : 'new';
+                items[idx].nodeProps = item;
+                isSelectedRoot = isRoot;
+            });
+
+            // 교체 한적이 없다면
+            if( !isSearch ){ return; }
+
+            // root에 따른 데이터 설정
+            if( isSelectedRoot ){
+                set({
+                    rootItem: {...rootItem},
+                    flag: !flag,
+                    isEditing: true,
+                });
+            } else {
+                set({
+                    list: [...list],
+                    flag: !flag,
+                    isEditing: true,
+                });
+            }
+        },
+
+        setIsUpdate: (is: boolean) => {
+            set({
+                isItemUpdate: is
+            });
+        }
+    }));
+}
+
 // 트리 store
-export const useTreeStore = create<TreeState>((set, get) => ({
+const useTreeStore = create<TreeState>((set, get) => ({
     rootItem: null,
     list: [],
     flag: false,
