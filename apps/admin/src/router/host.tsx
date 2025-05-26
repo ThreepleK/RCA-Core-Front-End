@@ -6,6 +6,7 @@ import Layout from '@/compos/layout/comm-layout'
 //* 라우터 내역
 import Main from '@/features/main'
 import Teams from '@/features/teams'
+import Team from '@/features/team'
 import Users from '@/features/users'
 import UserGroup from '@/features/user-group'
 import Permission from '@/features/permission'
@@ -27,7 +28,7 @@ export default {
     path: 'admin',
     children: [
         { path: '', element: wrapLayout(<Main />, '') },
-        { path: 'teams', element: wrapLayout(<Teams />, 'teams') },
+        { path: 'team', element: wrapLayout(<Team />, 'team') },
         { path: 'users', element: wrapLayout(<Users />, 'users') },
         { path: 'user-group', element: wrapLayout(<UserGroup />, 'user-group') },
         { path: 'permission', element: wrapLayout(<Permission />, 'permission') },
