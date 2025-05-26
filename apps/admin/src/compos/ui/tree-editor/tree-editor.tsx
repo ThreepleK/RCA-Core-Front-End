@@ -1,8 +1,8 @@
-import { useMemo } from 'react';
+import { ReactNode, useMemo } from 'react';
 import { Box, Divider, Text } from '@mantine/core';
 import { SortableTree } from 'dnd-kit-sortable-tree';
 
-import { useTreeStore, TREE_LIST, TREE_ITEM } from './'
+import { TREE_LIST, TREE_ITEM } from './'
 import { RootCtxMenu, TreeItem } from './components'
 
 import { CtxMenu } from '@/compos/ui/ctx-menu'
@@ -10,12 +10,21 @@ import { CtxBox } from '@/compos/ui/ctx-box'
 
 import style from "./tree-editor.module.css";
 import { IconCloudNetwork, IconMenu4 } from '@tabler/icons-react';
+import { useStore } from 'zustand';
+import { useTreeStore } from './tree-editor-store-ctx';
 
 /**
  * 트리 에디터
+ * @param opts
+ * @param opts.isShowRootLabel 루트 라벨 보임 여부
+ * @param opts.divderLabel 구분선 라벨 명
  */
-export function TreeEditor(){
-    const {flag, rootItem, list, setTreeChildList} = useTreeStore(s => s);
+export function TreeEditor({ isShowRootLabel=true, divderLabel='' }: {
+    isShowRootLabel?: boolean;
+    divderLabel?: string|ReactNode;
+}){
+    const treeStore = useTreeStore();
+    const {flag, rootItem, list, setTreeChildList} = useStore(treeStore, s => s);
     const items = useMemo(() => list, [list, flag]);
 
     // 선택된 데이터가 없을 경우
@@ -26,10 +35,9 @@ export function TreeEditor(){
         <RootItem />
 
         {/* 구분 선 */}
-        <Divider variant='dashed' label={<>
-            <IconMenu4 size={12} strokeWidth={1} />
-            <Box ml={5}>Application Menus</Box>
-        </>} />
+        {divderLabel &&
+            <Divider variant='dashed' label={divderLabel} />
+        }
 
         {/* 트리 메뉴 */}
         {items.length === 0
@@ -56,7 +64,8 @@ export function TreeEditor(){
  * 루트 아이템
  */
 function RootItem(){
-    const {flag, rootItem, setSelectedItem} = useTreeStore(s => s);
+    const treeStore = useTreeStore();
+    const {flag, rootItem, setSelectedItem} = useStore(treeStore, s => s);
     const root = useMemo(() => rootItem, [rootItem, flag]);
 
     //* 아이템 선택 여부

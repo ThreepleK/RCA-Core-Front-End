@@ -5,10 +5,12 @@ import { useCtxMenuStore, CtxMenuItem, CtxMenuState } from '@/compos/ui/ctx-menu
 import { useCtxBoxStore, CtxBoxState } from '@/compos/ui/ctx-box'
 
 import { RmConfirmBox, EditBox, TreeItemIcon } from './'
-import { TREE_ITEM, TREE_ITEM_TYPE, useTreeStore } from '../'
+import { TREE_ITEM, TREE_ITEM_TYPE } from '../'
 
 import style from "../tree-editor.module.css";
 import { IconEdit, IconPlus, IconTrash } from '@tabler/icons-react';
+import { useTreeStore } from '../tree-editor-store-ctx';
+import { useStore } from 'zustand';
 
 /**
  * 트리 아이템
@@ -17,9 +19,11 @@ export const TreeItem = forwardRef<
     HTMLDivElement,
     TreeItemComponentProps<TREE_ITEM_TYPE>
 >((props, ref) => {
+    const treeStore = useTreeStore();
+
     const { setOpen: setMenuOpen, setPosition: setMenuPt, setMenuList } = useCtxMenuStore(s => s);
     const { setOpen, setPosition, setContent } = useCtxBoxStore(s => s);
-    const { setSelectedItem } = useTreeStore(s => s);
+    const { setSelectedItem } = useStore(treeStore, s => s);
 
     //* 아이템 폴더(접힘 여부), 추가 스타일 적용 값 가져오기
     const {isFolder, collapsed, addStyle} = useMemo(() => {

@@ -5,6 +5,7 @@ import { DB_MENU_ITEM, MenuEditor, dbRawContainData } from "./components";
 import { ContentArea } from "./components/content-area";
 
 import { api_getMenuData, api_setMenuData } from './apis'
+import { TreeProvider } from "@/compos/ui/tree-editor";
 
 const ApplicationMenu = () => {
     const [reloadFlag, setReloadFlag] = useState(false);
@@ -40,6 +41,7 @@ const ApplicationMenu = () => {
         <ContentsLayout
             title={<>Application Menu</>}
             titleRightSide={<></>}
+            CtxProvider={TreeProvider}
             sideAreaWidth='300px'
             sideArea={<>
                 {!isLoading &&

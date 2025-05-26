@@ -1,8 +1,10 @@
 import { DataGrid, COLUMN_ITEM, columnFilters } from '@/compos/ui/data-grid';
 import { useTreeStore } from '@/compos/ui/tree-editor';
+import { useStore } from 'zustand';
 
 export function Permission(){
-    const { selectedItem } = useTreeStore(s => s);
+    const treeStore = useTreeStore();
+    const { selectedItem } = useStore(treeStore, s => s);
 
     //* 선택된 메뉴가 없을 때
     if( selectedItem === null ){

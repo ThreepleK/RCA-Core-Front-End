@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react"
 import { Flex, TextInput, Button } from "@mantine/core"
 
-import { useTreeStore, TREE_ITEM } from '../'
+import { TREE_ITEM } from '../'
 import { useCtxBoxStore } from '@/compos/ui/ctx-box'
+import { useTreeStore } from "../tree-editor-store-ctx";
+import { useStore } from "zustand";
 
 /**
  * [마우스 우클릭]
@@ -14,8 +16,10 @@ export function EditBox({title, item, mode, isRoot=false}: {
     mode: 'add' | 'mod';    // 편집 모드 (add: 추가, mod: 수정)
     isRoot?: boolean;       // 루트 여부
 }){
+    const treeStore = useTreeStore();
+
     const [value, setValue] = useState('');
-    const { addTreeItem, modTreeItem } = useTreeStore(s => s);
+    const { addTreeItem, modTreeItem } = useStore(treeStore, s => s);
     const { setOpen } = useCtxBoxStore(s => s);
 
     useEffect(() => {
