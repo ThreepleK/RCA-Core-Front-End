@@ -58,6 +58,7 @@ export function DataGrid<T>({ columns, data, opts, onReady }: {
 
         //* 그리드 전체 영역
         mantinePaperProps: () => ({
+            className: style['grid-area'],
             radius: 'sm',
             withBorder: false,
             shadow: 'xs'
