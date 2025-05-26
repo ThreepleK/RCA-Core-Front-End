@@ -1,15 +1,14 @@
 import { ReactNode, useMemo } from 'react';
-import { Box, Divider, Text } from '@mantine/core';
+import { Divider, Text } from '@mantine/core';
 import { SortableTree } from 'dnd-kit-sortable-tree';
 
-import { TREE_LIST, TREE_ITEM } from './'
 import { RootCtxMenu, TreeItem } from './components'
 
 import { CtxMenu } from '@/compos/ui/ctx-menu'
 import { CtxBox } from '@/compos/ui/ctx-box'
 
 import style from "./tree-editor.module.css";
-import { IconCloudNetwork, IconMenu4 } from '@tabler/icons-react';
+import { IconCloudNetwork } from '@tabler/icons-react';
 import { useStore } from 'zustand';
 import { useTreeStore } from './tree-editor-store-ctx';
 
@@ -28,11 +27,13 @@ export function TreeEditor({ isShowRootLabel=true, divderLabel='' }: {
     const items = useMemo(() => list, [list, flag]);
 
     // 선택된 데이터가 없을 경우
-    if( !rootItem ){ return <>No Tree Data</> }
+    if( !rootItem ){
+        return <Text className={style['no-tree-data']}>No Tree Data</Text>;
+    }
 
     return <>
         {/* 메인 최상위 메뉴 */}
-        <RootItem />
+        {isShowRootLabel && <RootItem />}
 
         {/* 구분 선 */}
         {divderLabel &&

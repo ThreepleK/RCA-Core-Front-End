@@ -1,5 +1,5 @@
 import { FC, ReactNode } from 'react';
-import { Flex, Title } from "@mantine/core";
+import { Flex, Grid, Title } from "@mantine/core";
 import { useSideMenuAreaStore } from '@/stores';
 import { IconLayoutSidebarLeftExpandFilled } from '@tabler/icons-react';
 
@@ -40,8 +40,14 @@ function Layout({title, titleRightSide, children, sideArea, sideAreaWidth='0px'}
         {/* 컨텐츠 */}
         <section className={style.section} style={{'--cs-width': sideAreaWidth} as any}>
             {/* 상단 타이틀 */}
-            <Flex justify='space-between' className={style['title-area']}>
-                <Flex gap='xs'>
+            <div
+                className={style['title-area']}
+                style={{
+                    '--ta-template': sideAreaWidth === '0px' ? '1fr 1fr' : `${sideAreaWidth} 1fr`,
+                    '--ta-right': sideAreaWidth === '0px' ? '0' : '1px solid var(--color-gray-200)'
+                } as any}
+            >
+                <div className={style['ta-left']}>
                     {/* 좌측 사이드 닫혔을 때 표기될 아이콘 */}
                     {sideAreaState === 'close' && <span
                         className={style['side-area-btn']}
@@ -53,10 +59,15 @@ function Layout({title, titleRightSide, children, sideArea, sideAreaWidth='0px'}
                     </span>}
                     {/* 타이틀 */}
                     <Title order={5} className={style.title}>{title}</Title>
-                </Flex>
+                </div>
+
                 {/* 타이츨 우측 영역 */}
-                {titleRightSide && titleRightSide}
-            </Flex>
+                {titleRightSide &&
+                    <div className={style['ta-right']}>
+                        {titleRightSide}
+                    </div>
+                }
+            </div>
 
             {/* 좌측 영역 */}
             {sideArea && sideArea}

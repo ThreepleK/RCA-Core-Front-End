@@ -118,18 +118,18 @@ function onCtxMenu(
         switch( selected ){
             // 하위 메뉴 추가
             case 'item-add':
-                boxOpen(<EditBox title='Add submenu' mode='add' item={item} />);
+                boxOpen(<EditBox title='Add item' mode='add' item={item} />);
             break;
             // 메뉴 이름 수정
             case 'item-mod':
-                boxOpen(<EditBox title='Modify menu' mode='mod' item={item} />);
+                boxOpen(<EditBox title='Modify item' mode='mod' item={item} />);
             break;
             // 메뉴 제거
             case 'item-remove':
                 boxOpen(<RmConfirmBox
                     rmId={String(item.id)}
                     title={item.label}
-                    msg={`Do you want to remove the menu?`}
+                    msg={`Do you want to remove the item?`}
                 />);
             break;
         }
@@ -149,7 +149,7 @@ function getCtxMenu(
 //* 우클릭 메뉴 리스트
 const _CTX_MENUS: CtxMenuItem[] = [
     {type: 'label', label: '', value: ''},
-    {type: 'item', label: 'Add submenu', value: 'item-add',    icon: <IconPlus size={16} /> },
-    {type: 'item', label: 'Modify menu', value: 'item-mod',    icon: <IconEdit size={16} /> },
+    {type: 'item', label: 'Add item',    value: 'item-add',    icon: <IconPlus size={16} /> },
+    {type: 'item', label: 'Modify item', value: 'item-mod',    icon: <IconEdit size={16} /> },
     {type: 'item', label: 'Remove',      value: 'item-remove', icon: <IconTrash size={16} /> },
 ];

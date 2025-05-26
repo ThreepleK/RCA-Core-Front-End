@@ -32,7 +32,7 @@ export function RootCtxMenu(){
                 case 'root-add':
                     boxOpen(
                         <EditBox
-                            title='Add submenu'
+                            title='Add item'
                             mode='add'
                             isRoot={true}
                             item={{
@@ -71,5 +71,5 @@ function getCtxMenu(label: string){
 //* 루트 메뉴
 const _ROOT_CTX_MENUS: CtxMenuItem[] = [
     {type: 'label', label: '', value: ''},
-    {type: 'item', label: 'Add submenu', value: 'root-add', icon: <IconPlus size={16} />},
+    {type: 'item', label: 'Add item', value: 'root-add', icon: <IconPlus size={16} />},
 ]

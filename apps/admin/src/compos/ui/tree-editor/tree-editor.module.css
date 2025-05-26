@@ -40,5 +40,5 @@
 }
 
 .no-tree-data {
-    @apply flex justify-center mt-2 text-sm;
+    @apply flex justify-center mt-2 text-xs;
 }

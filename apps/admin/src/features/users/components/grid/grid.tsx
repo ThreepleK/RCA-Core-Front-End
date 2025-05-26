@@ -200,26 +200,26 @@ function GridEvents(){
 
 //* 컬럼 정보
 const _COLUMNS: COLUMN_ITEM[] = (() => {
-    const {text, select, dateRange} = columnFilters;
+    const {text, select, dateRange, multiSelect} = columnFilters;
 
     // 기본 필터
     const basicFilter = text({});
     // Status 선택 필터
-    const statusFilter = select({data: ['Active', 'InActive']});
+    const statusFilter = multiSelect({data: ['Active', 'InActive']});
     // 생성날짜 필터
     const createTimeFilter = dateRange({
-        accessorKey: 'createTime',
+        accessorKey: 'createdTime',
         dateFormat: 'YYYY-MM-DD HH:mm'
     });
     
     // 그리드 컬럼 정보 전달
     return [
-        { accessorKey: "name",       header: "Name", ...basicFilter },
-        { accessorKey: "email",      header: "Email" , ...basicFilter },
-        { accessorKey: "team",       header: "Team" , ...basicFilter },
-        { accessorKey: "org",        header: "Organization" , ...basicFilter },
-        { accessorKey: "userGroup",  header: "User group" , ...basicFilter },
-        { accessorKey: "status",     header: "Status", ...statusFilter },
-        { accessorKey: "createTime", header: "Create time", ...createTimeFilter },
+        { accessorKey: "fullName",      header: "Name", ...basicFilter },
+        { accessorKey: "email",         header: "Email" , ...basicFilter },
+        { accessorKey: "team",          header: "Team" , ...basicFilter },
+        { accessorKey: "org",           header: "Organization" , ...basicFilter },
+        { accessorKey: "userGroup",     header: "User group" , ...basicFilter },
+        { accessorKey: "status",        header: "Status", ...statusFilter },
+        { accessorKey: "createdTime",   header: "Created time", ...createTimeFilter },
     ]
 })();

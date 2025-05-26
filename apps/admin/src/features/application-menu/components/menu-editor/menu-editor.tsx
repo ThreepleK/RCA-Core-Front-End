@@ -91,7 +91,11 @@ function TreeEditorProcess({rootLabel, treeList, onMenuChange}: {
 }){
     const treeStore = useTreeStore();
     //* 트리 리스트
-    const {rootItem, list, setTreeList, isItemUpdate, setIsUpdate} = useStore(treeStore, s => s);
+    const isItemUpdate = useStore(treeStore, s => s.isItemUpdate);
+    const rootItem = useStore(treeStore, s => s.rootItem);
+    const list = useStore(treeStore, s => s.list);
+    const setTreeList = useStore(treeStore, s => s.setTreeList);
+    const setIsUpdate = useStore(treeStore, s => s.setIsUpdate);
 
     //* 앱 변경
     useEffect(() => {
