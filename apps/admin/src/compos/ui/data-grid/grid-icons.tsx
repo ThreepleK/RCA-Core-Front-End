@@ -17,10 +17,10 @@ export const gridIcons: Partial<MRT_Icons> = {
     //  IconX
 
     //* -- 그리드 페이지네이션 ------
-    IconChevronLeft: (p: any) => <IconChevronLeft size={18} />,
-    IconChevronLeftPipe: (p: any) => <IconChevronLeftPipe size={18} />,
-    IconChevronRight: (p: any) => <IconChevronRight size={18} />,
-    IconChevronRightPipe: (p: any) => <IconChevronRightPipe size={18} />,
+    IconChevronLeft: (p: any) => <IconChevronLeft size={14} />,
+    IconChevronLeftPipe: (p: any) => <IconChevronLeftPipe size={14} />,
+    IconChevronRight: (p: any) => <IconChevronRight size={14} />,
+    IconChevronRightPipe: (p: any) => <IconChevronRightPipe size={14} />,
 
 
     //* -- 그리드 상단 툴바 ------

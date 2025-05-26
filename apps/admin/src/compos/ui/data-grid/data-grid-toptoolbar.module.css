@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+.grid-top-toolbar {
+    & {
+        @apply relative flex justify-between items-center bg-gray-800 min-h-[35px] px-2 py-0;
+    }
+
+    /* 상단 액션 영역 */
+    & .side-area {
+        @apply px-1 py-0 text-white text-sm;
+    }
+
+    /* 필터 버튼 영역 */
+    & .actions-area {
+        & { @apply flex gap-1 items-center h-[34px] min-h-[34px]; }
+        & > button { @apply w-[25px] min-w-[25px] h-[25px] min-h-[25px] border-0 text-white; }
+        & > button:hover { @apply bg-gray-600; }
+        & > button:disabled { @apply bg-gray-500 text-white; }
+
+        /* 검색 */
+        & [class*=mrt-global-filter-text-input] {
+            & { }
+            & input { @apply h-[25px] min-h-[25px] bg-white; }
+            & input:focus { @apply border-transparent; }
+        }
+    }
+}

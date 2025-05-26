@@ -9,6 +9,7 @@ import {
 import { gridIcons } from './grid-icons'
 import 'mantine-react-table/styles.css';
 import style from './data-grid.module.css';
+import { DataGridTopToolbar } from './data-grid-toptoolbar';
 
 /**
  * 그리드
@@ -40,6 +41,7 @@ export function DataGrid<T>({ columns, data, opts, onReady }: {
         },
 
         icons: gridIcons,                       // 재설정 할 아이콘
+        positionToolbarAlertBanner: 'bottom',   // 툴바 alert 위치
 
         //* 테이블 컨테이너 설정
         mantineTableContainerProps: {
@@ -49,7 +51,19 @@ export function DataGrid<T>({ columns, data, opts, onReady }: {
             },
         },
 
-        // 그리드 본문 설정
+        paginationDisplayMode: 'pages',
+        mantinePaginationProps: () => ({
+            size: 'xs',
+        }),
+
+        //* 그리드 전체 영역
+        mantinePaperProps: () => ({
+            radius: 'sm',
+            withBorder: false,
+            shadow: 'xs'
+        }),
+
+        //* 그리드 본문 설정
         mantineTableBodyProps: () => ({
             className: style['grid-body']
         }),
@@ -64,7 +78,11 @@ export function DataGrid<T>({ columns, data, opts, onReady }: {
             className: style['grid-top-toolbar']
         }),
 
-        //* 상단 툴바 메시지
+        renderTopToolbar: ({ table }) => {
+            return <DataGridTopToolbar table={table} />
+        },
+
+        //* 툴바 메시지
         mantineToolbarAlertBannerProps: () => ({
             className: style['grid-top-alert'],
             variant: 'transparent',

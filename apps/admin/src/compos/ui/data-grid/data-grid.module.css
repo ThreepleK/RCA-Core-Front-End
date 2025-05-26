@@ -1,36 +1,13 @@
 @import "tailwindcss";
 
-.grid-top-toolbar {
-    & {
-        @apply bg-gray-100 min-h-[35px] rounded-t-md;
-    }
-
-    /* 상단 액션 영역 */
-    & > div[class*=MRT_TopToolbar-module_actions-container] {
-        @apply px-1 py-0;
-    }
-
-    /* 필터 버튼 */
-    & [class*=mrt-toolbar-internal-buttons] {
-        & { @apply flex items-center h-[34px] min-h-[34px]; }
-        & > button { @apply w-[28px] min-w-[28px] h-[28px] min-h-[28px]; }
-    }
-
-    /* 검색 */
-    & [class*=mrt-global-filter-text-input] {
-        & { }
-        & input { @apply h-[28px] min-h-[28px] bg-white; }
-    }
-}
-
-/* 그리드 상단 툴바 Alert 메시지 */
+/* 그리드 툴바 Alert 메시지 */
 .grid-top-alert {
     & {
-        @apply p-0! rounded-none! border-0!;
+        @apply px-0 py-0 rounded-none! border-0!;
     }
 
     & [class*=MRT_ToolbarAlertBanner-module_toolbar-alert] {
-        & { @apply flex items-center h-[34px] px-3! py-0!; }
+        & { @apply flex items-center h-[40px] px-3! py-0!; }
 
         & [class*=mantine-Flex-root]{
             @apply gap-1.5! text-xs!;
@@ -40,7 +17,7 @@
 
 /* 그리드 하단 툴바 */
 .grid-bottom-toolbar {
-    & { @apply min-h-auto!; }
+    & { @apply min-h-[40px]! bg-gray-100; }
 
     /* 페이지네이션 영역 */
     & [class*=mrt-table-pagination]{
@@ -55,6 +32,14 @@
 
         & button[class*=mantine-UnstyledButton-root] {
             --ai-size: var(--ai-size-sm);
+        }
+
+        /* mantine 전용 페이지네이션 구간 */
+        & [class*=mantine-Pagination-root] {
+            & {}
+            & [class*=mantine-Group-root] {
+                @apply gap-1;
+            }
         }
     }
 }
