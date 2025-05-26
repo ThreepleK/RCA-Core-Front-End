@@ -16,7 +16,7 @@ export const MenuList: MenuItem[] = [
         icon: <IconFolder size={16} stroke={1.5} />,
         isOpen: true,
         childs: [
-            { label: 'Team', link: '/admin/teams' },
+            { label: 'Team', link: '/admin/team' },
             { label: 'Users', link: '/admin/users' },
             { label: 'User Group', link: '/admin/user-group' },
             { label: 'Permission', link: '/admin/add-member' },
