@@ -8,6 +8,7 @@ import { BasicTheme, GridEventProvider, GridProvider, useGridEventStore, useGrid
 import { useSendAction } from "../../stores";
 import { api_list } from "../../apis";
 import { gridCreateModal, gridEditModal, gridRemoveModal, gridDeactiveModal } from "../modals";
+import { gridAddMemberModal } from "../modals/grid-add-modal";
 
 /**
  * UI에 적용할 그리드
@@ -52,7 +53,7 @@ function GridInit(){
     useEffect(() => {
         // 컬럼에 적용 할 Action 버튼 추가
         setActionsCols({
-            edit: <IconEdit size={20} strokeWidth={1.5} title='Edit' />,
+            // edit: <IconEdit size={20} strokeWidth={1.5} title='Edit' />,
             delete: <IconTrash size={20} strokeWidth={1.5} title='Delete' />,
         });
 
@@ -167,6 +168,12 @@ function GridEvents(){
             case 'create': {
                 // 처리하고 다시 불러오기
                 gridCreateModal(onListLoad);
+            } break;
+
+            // 추가
+            case 'add-member': {
+                // 처리하고 다시 불러오기
+                gridAddMemberModal(onListLoad);
             } break;
 
             // 선택 삭제

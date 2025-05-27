@@ -11,12 +11,15 @@ import { Members } from "./members";
 import { Settings } from "./settings";
 import { DropdownMenu } from "@/compos/ui/dropdown-menu";
 import { useSendAction } from "../../stores";
+import { useState } from "react";
 
 export function ContentArea() {
   const sendEvent = useSendAction((s) => s.sendEvent);
+  const [tabKey, setTabKey] = useState<any>(_TAB_CONTS[0].key);
+  console.log('tabKey', tabKey)
   //* 추가
   const onCreate = () => {
-    sendEvent("create");
+    sendEvent("add-member");
   };
 
   //* 액션버튼
@@ -29,7 +32,7 @@ export function ContentArea() {
       <Tabs variant="default" defaultValue={_TAB_CONTS[0].key}>
         <Tabs.List className={style["tab-list"]}>
           {_TAB_CONTS.map((item, idx) => (
-            <Tabs.Tab key={idx} value={item.key} leftSection={item.icon}>
+            <Tabs.Tab key={idx} value={item.key} leftSection={item.icon}  onClick={() => setTabKey(item.key)}>
               {item.label}
             </Tabs.Tab>
           ))}
@@ -37,12 +40,12 @@ export function ContentArea() {
 
         {/* 탭 본문 */}
         {_TAB_CONTS.map((item, idx) => (
-          <Tabs.Panel className={style["tab-cont"]} key={idx} value={item.key}>
+          <Tabs.Panel className={style["tab-cont"]} key={idx} value={item.key} onClick={() => setTabKey(item.key)}>
             {item.comp}
           </Tabs.Panel>
         ))}
       </Tabs>
-      <Flex justify="flex-end" gap="xs" style={{ marginTop: "5px" }}>
+      {tabKey === "members" && <Flex justify="flex-end" gap="xs" style={{ marginTop: "5px" }}>
         <DropdownMenu
           label="Actions"
           menuList={_ACTION_MENUS}
@@ -56,7 +59,8 @@ export function ContentArea() {
         >
           Add member
         </Button>
-      </Flex>
+      </Flex>}
+      
     </>
   );
 }
