@@ -5,7 +5,10 @@ import { SideArea } from './side-area'
 import style from './comm-layout.module.css'
 import { useSideMenuAreaStore } from '@/stores'
 
-export default function({children}: {
+/**
+ * App 기본 레이아웃
+ */
+export function CommLayout({children}: {
     children: ReactNode
 }) {
     const isOpen = useMainMenuStore((state) => state.isOpen());

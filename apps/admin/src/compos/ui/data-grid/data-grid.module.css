@@ -2,7 +2,7 @@
 
 /* 그리드 전체 영역 */
 .grid-area {
-    @apply w-full;
+    @apply w-full h-full;
 }
 
 /* 그리드 툴바 Alert 메시지 */

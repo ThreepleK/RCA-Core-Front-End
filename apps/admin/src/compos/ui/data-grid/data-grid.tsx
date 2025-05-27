@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {
     MantineReactTable,
     MRT_TableInstance,
@@ -18,12 +18,12 @@ import { DataGridTopToolbar } from './data-grid-toptoolbar';
  * @param opts 그리드 기본 설정
  * @param onReady 그리드 준비완료
  */
-export function DataGrid<T>({ columns, data, opts, onReady }: {
+export const DataGrid = React.memo(<T,>({ columns, data, opts, onReady }: {
     columns: MRT_ColumnDef<T>[];
     data: any;
     opts?: MRT_TableOptions<T>;
     onReady?: (table: MRT_TableInstance<T>)=>void;
-}){
+}) => {
     const table = useMantineReactTable({
         columns, data,
         enableRowNumbers: true,                 // 컬럼에 숫자 표기
@@ -106,4 +106,4 @@ export function DataGrid<T>({ columns, data, opts, onReady }: {
     }, []);
 
     return <MantineReactTable table={table} />;
-}
+});

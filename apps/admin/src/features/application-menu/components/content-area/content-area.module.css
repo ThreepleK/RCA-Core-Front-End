@@ -1,23 +1,29 @@
 @import "tailwindcss";
 
+/* 타이틀 우측 영역 */
+.title-right {
+    & { @apply flex items-center justify-between w-full h-full; }
+    & > div { @apply h-full; }
+}
+
 /* 탭 리스트 */
 .tab-list {
-    & {
-        @apply absolute left-0 top-0 right-0 h-[40px];
-    }
-
-    &::before {
-        @apply border-b-[1px];
+    & { @apply h-full; }
+    & > div {
+        & { @apply h-full; }
+        &::before { @apply border-b-[3px]; }
     }
 
     & > button {
-        @apply h-[40px];
+        & { @apply h-full; }
+        &[data-active=true] { @apply border-t-[5px]; }
     }
 }
 
 /* 탭 본문 */
 .tab-cont {
-    @apply absolute left-0 top-[40px] right-0 bottom-0 overflow-y-auto px-4 py-3;
+    & { @apply hidden px-4 py-3 h-full; }
+    &[class*=on-active] { @apply block; }
 }
 
 

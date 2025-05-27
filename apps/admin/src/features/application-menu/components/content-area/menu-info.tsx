@@ -8,7 +8,9 @@ import { useStore } from 'zustand';
 
 export function MenuInfo(){
     const treeStore = useTreeStore();
-    const { selectedItem, updateTreeItem, setIsUpdate } = useStore(treeStore, s => s);
+    const selectedItem = useStore(treeStore, s => s.selectedItem);
+    const updateTreeItem = useStore(treeStore, s => s.updateTreeItem);
+    const setIsUpdate = useStore(treeStore, s => s.setIsUpdate);
 
     //* 선택된 메뉴가 없을 때
     if( selectedItem === null ){
@@ -47,7 +49,8 @@ function EditForm({ label, data, onSave }: {
     const [item, setItem] = useState<TREE_ITEM_TYPE['nodeProps']>(data);
 
     //* 모달
-    const { setOpen: modalOepn, setContent: modalCont } = useConfirmModalStore(s => s);
+    const modalOepn = useConfirmModalStore(s => s.setOpen);
+    const modalCont = useConfirmModalStore(s => s.setContent);
 
     useEffect(() => { setName(label) }, [label]);
     useEffect(() => { setItem(data) }, [data]);

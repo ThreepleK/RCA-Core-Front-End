@@ -23,7 +23,12 @@ export function TreeEditor({ isShowRootLabel=true, divderLabel='' }: {
     divderLabel?: string|ReactNode;
 }){
     const treeStore = useTreeStore();
-    const {flag, rootItem, list, setTreeChildList} = useStore(treeStore, s => s);
+
+    const flag = useStore(treeStore, s => s.flag);
+    const rootItem = useStore(treeStore, s => s.rootItem);
+    const list = useStore(treeStore, s => s.list);
+    const setTreeChildList = useStore(treeStore, s => s.setTreeChildList);
+
     const items = useMemo(() => list, [list, flag]);
 
     // 선택된 데이터가 없을 경우
@@ -66,7 +71,9 @@ export function TreeEditor({ isShowRootLabel=true, divderLabel='' }: {
  */
 function RootItem(){
     const treeStore = useTreeStore();
-    const {flag, rootItem, setSelectedItem} = useStore(treeStore, s => s);
+    const flag = useStore(treeStore, s => s.flag);
+    const rootItem = useStore(treeStore, s => s.rootItem);
+    const setSelectedItem = useStore(treeStore, s => s.setSelectedItem);
     const root = useMemo(() => rootItem, [rootItem, flag]);
 
     //* 아이템 선택 여부

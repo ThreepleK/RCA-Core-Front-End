@@ -127,7 +127,10 @@ function BottomArea({ treeData, onMenuChange }: {
 }) {
     const treeStore = useTreeStore();
     //* 트리 리스트
-    const {isEditing, rootItem, list, setTreeList} = useStore(treeStore, s => s);
+    const isEditing = useStore(treeStore, s => s.isEditing);
+    const rootItem = useStore(treeStore, s => s.rootItem);
+    const list = useStore(treeStore, s => s.list);
+    const setTreeList = useStore(treeStore, s => s.setTreeList);
 
     //* 취소
     const onCancel = () => {

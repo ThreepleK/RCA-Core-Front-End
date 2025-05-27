@@ -9,9 +9,22 @@ import { useEffect } from 'react';
  * Root 메뉴
  */
 export function RootCtxMenu(){
-    const { clientX, clientY, label, isOpen, close } = useRootCtxMenuStore(s => s);
-    const { isOpen: ctxIsOpen, setOpen, setPosition, setMenuList } = useCtxMenuStore(s => s);
-    const { setOpen: setBoxOpen, setPosition: setBoxPosition, setContent: setBoxContent } = useCtxBoxStore(s => s);
+    //-- root 우클릭
+    const clientX = useRootCtxMenuStore(s => s.clientX);
+    const clientY = useRootCtxMenuStore(s => s.clientY);
+    const label = useRootCtxMenuStore(s => s.label);
+    const isOpen = useRootCtxMenuStore(s => s.isOpen);
+    const close = useRootCtxMenuStore(s => s.close);
+    
+    //-- 우클릭
+    const ctxIsOpen = useCtxMenuStore(s => s.isOpen);
+    const setOpen = useCtxMenuStore(s => s.setOpen);
+    const setPosition = useCtxMenuStore(s => s.setPosition);
+    const setMenuList = useCtxMenuStore(s => s.setMenuList);
+
+    const setBoxOpen = useCtxBoxStore(s => s.setOpen);
+    const setBoxPosition = useCtxBoxStore(s => s.setPosition);
+    const setBoxContent = useCtxBoxStore(s => s.setContent);
 
     //* 메뉴 오픈
     useEffect(() => {

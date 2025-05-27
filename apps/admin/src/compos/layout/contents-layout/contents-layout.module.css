@@ -22,12 +22,12 @@
         }
 
         & .ta-left {
-            @apply flex gap-1 h-full justify-start items-center pl-4 ;
+            @apply flex gap-1 h-full justify-start items-center pl-4;
             border-right: var(--ta-right);
         }
 
         & .ta-right {
-            @apply flex gap-1 h-full justify-end items-center px-4;
+            @apply flex gap-1 h-full justify-end items-center;
         }
     }
 

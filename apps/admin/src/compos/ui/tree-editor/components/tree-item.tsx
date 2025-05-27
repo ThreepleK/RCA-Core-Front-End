@@ -21,9 +21,15 @@ export const TreeItem = forwardRef<
 >((props, ref) => {
     const treeStore = useTreeStore();
 
-    const { setOpen: setMenuOpen, setPosition: setMenuPt, setMenuList } = useCtxMenuStore(s => s);
-    const { setOpen, setPosition, setContent } = useCtxBoxStore(s => s);
-    const { setSelectedItem } = useStore(treeStore, s => s);
+    const setMenuOpen = useCtxMenuStore(s => s.setOpen);
+    const setMenuPt = useCtxMenuStore(s => s.setPosition);
+    const setMenuList = useCtxMenuStore(s => s.setMenuList);
+
+    const setOpen = useCtxBoxStore(s => s.setOpen);
+    const setPosition = useCtxBoxStore(s => s.setPosition);
+    const setContent = useCtxBoxStore(s => s.setContent);
+    
+    const setSelectedItem = useStore(treeStore, s => s.setSelectedItem);
 
     //* 아이템 폴더(접힘 여부), 추가 스타일 적용 값 가져오기
     const {isFolder, collapsed, addStyle} = useMemo(() => {

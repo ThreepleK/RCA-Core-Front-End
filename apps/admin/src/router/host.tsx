@@ -1,7 +1,7 @@
 import { lazy, ReactNode } from 'react';
 import type { RouteObject } from 'react-router';
 import { KeepAliveRouter } from '@repo/core-ui';
-import Layout from '@/compos/layout/comm-layout'
+import { CommLayout } from '@/compos/layout'
 
 //* 라우터 내역
 import Main from '@/features/main'
@@ -19,7 +19,7 @@ import AddMember from '@/features/add-member'
 function wrapLayout(elem: ReactNode, path: string){
     return (
         <KeepAliveRouter cacheKey={`admin/${path}`}>
-            <Layout>{elem}</Layout>
+            <CommLayout>{elem}</CommLayout>
         </KeepAliveRouter>
     )
 }

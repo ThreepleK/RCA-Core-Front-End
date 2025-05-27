@@ -27,6 +27,7 @@ export const useTreeStore = () => {
     const store = useContext(TreeCtx);
 
     if( !store ){
+        debugger;
         throw new Error('useTreeStore must be used within TreeProvider');
     }
 

@@ -5,7 +5,15 @@ import { Modal, Button, Flex } from "@mantine/core"
  * 확인 모달
  */
 export function ConfirmModal(){
-    const {isOpen, title, content, btnLabel, feedback, setOpen} = useConfirmModalStore(s => s);
+    //-- state
+    const isOpen = useConfirmModalStore(s => s.isOpen);
+    const title = useConfirmModalStore(s => s.title);
+    const content = useConfirmModalStore(s => s.content);
+    const btnLabel = useConfirmModalStore(s => s.btnLabel);
+    
+    //- Action
+    const feedback = useConfirmModalStore(s => s.feedback);
+    const setOpen = useConfirmModalStore(s => s.setOpen);
 
     //* 관련 이벤트 처리
     const onModal = (type: 'close'|'confirm') => {
