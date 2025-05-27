@@ -36,6 +36,7 @@ import {
 import { IconDots, IconPlus, IconSearch } from "@tabler/icons-react";
 import { useSendAction, useSendSelectedItem } from "../../stores";
 import { DropdownMenu } from "@/compos/ui/dropdown-menu";
+import { gridEditModal, gridRemoveModal } from "../modals";
 
 export function MenuEditor({
   menu,
@@ -45,9 +46,10 @@ export function MenuEditor({
   onMenuChange: (changeMenu: DB_MENU_ITEM[]) => void;
 }) {
   const menuEditRef = useRef<HTMLDivElement>(null);
+  const [data, setData] = useState(_TMP_TEAM_DATA);
+  const [selectedId, setSelectedId] = useState("");
   const [query, setQuery] = useState("");
-  const acKey = useSendAction((s) => s.evKey);
-
+  
   const { setSelectedItem} = useSendSelectedItem(s => s);
 
   // 메뉴, 앱 메뉴에 필요한 형태로 변환
@@ -59,9 +61,41 @@ export function MenuEditor({
     appList && appList.length > 0 ? appList[0].value : ""
   );
 
+  useEffect(() => {
+    if(!query) setData(_TMP_TEAM_DATA);
+
+    const filteredData = _TMP_TEAM_DATA.filter((item) => {
+      return item.name.toLowerCase().includes(query.toLowerCase());
+    });
+
+    setData(filteredData);
+  },[query]);
+
+  //* 리스트 가져오기
+      const onListLoad = async () => {
+          // 그리드에 로딩 표기
+        //   setIsLoading(true);
+  
+        //   // 리스트 불러와서 재설정
+        //   const list = await api_list({
+        //       pagination,
+        //       search: gobalSearch,
+        //       filter: colFilters,
+        //       sort: colSorting,
+        //   });
+          
+        //   // 그리드 데이터 설정
+        //   setGridData(list.data as any);
+        //   // 그리드 총 갯수 설정
+        //   setRowCount(list.meta.total);
+  
+        //   // 그리드에 로딩 숨김
+        //   setIsLoading(false);
+      }
+
   const handleRowClick = (item) => {
-    console.log('Row clicked:', item);
     setSelectedItem(item)
+    setSelectedId(item.id);
     // 예: navigate(`/team/${item.id}`);
   };
 
@@ -70,9 +104,14 @@ export function MenuEditor({
     // 검색 로직 처리 (ex: debounce + API 요청)
   };
 
-  //* 액션버튼
-  const onActions = (key: string) => {
-    console.log("key", key);
+  //* 수정  
+  const onEdit = (row: any) => {
+      gridEditModal(row, onListLoad);
+  };
+
+  //* 삭제
+  const onDelete = (row: any) => {
+      gridRemoveModal(row, onListLoad);
   };
 
   return (
@@ -90,10 +129,13 @@ export function MenuEditor({
         size="md"
         rightSectionWidth={40}
       />
-      <Stack>
-        {_TMP_TEAM_DATA?.map((item) => (
+      <Stack style={{
+            marginTop: '10px',
+          }}>
+        {data?.map((item) => (
           <Group key={item?.id} justify="space-between" style={{
             cursor: 'pointer',
+            backgroundColor: selectedId === item.id ? '#e0f2ff' : 'transparent',
             transition: 'background 0.2s',
           }}
           className="hover:bg-gray-100" onClick={() => handleRowClick(item)}>
@@ -106,8 +148,8 @@ export function MenuEditor({
               </Menu.Target>
 
               <Menu.Dropdown>
-                <Menu.Item onClick={(e) => { e.stopPropagation(); alert('Edit!'); }} >Edit Team</Menu.Item>
-                <Menu.Item onClick={(e) => { e.stopPropagation(); alert('Manage!'); }}>Manage Team</Menu.Item>
+                <Menu.Item onClick={(e) => { e.stopPropagation(); onEdit(item) }} >Edit Team</Menu.Item>
+                <Menu.Item onClick={(e) => { e.stopPropagation(); onDelete(item) }}>Delete Team</Menu.Item>
               </Menu.Dropdown>
             </Menu>
             {/* </ActionIcon> */}

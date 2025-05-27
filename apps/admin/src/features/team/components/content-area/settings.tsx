@@ -7,12 +7,11 @@ import style from './content-area.module.css'
 import { useSendSelectedItem } from '../../stores';
 
 export function Settings(){
-    // const { selectedItem, updateTreeItem, setIsUpdate } = useTreeStore(s => s);
     const {selectedItem, setSelectedItem} = useSendSelectedItem(s => s);
 
     //* 선택된 메뉴가 없을 때
     if( selectedItem === null ){
-        return <>Please select the menu on the left.</>;
+        return <>Please select the team on the left.</>;
     }
 
     //* 저장하기
@@ -93,7 +92,7 @@ function EditForm({ label, data, onSave }: {
     
     return (
         <Flex direction="column" gap="xs" justify="center" className={style['menu-info']}>
-            <TextInput label="Team details" value={item?.name} />
+            <TextInput label="Team details" value={item?.name} onChange={e => onChangeSwitch(e, 'name')} />
  
 
             <Flex direction='column'>

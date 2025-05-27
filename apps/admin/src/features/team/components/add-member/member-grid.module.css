@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+
+.full-height {
+    @apply h-full;
+  }
+
