@@ -4,6 +4,11 @@
 .title-right {
     & { @apply flex items-center justify-between w-full h-full; }
     & > div { @apply h-full; }
+    & > .tr-right {
+        & { @apply h-full; } 
+        & > div { @apply hidden justify-end items-center h-full pr-3; } 
+        & > div[class*=on-active] { @apply flex; } 
+    }
 }
 
 /* 탭 리스트 */

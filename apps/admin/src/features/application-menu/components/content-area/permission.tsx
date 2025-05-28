@@ -6,7 +6,8 @@ import { MRT_TableInstance } from 'mantine-react-table';
 import { useEffect, useRef } from 'react';
 import { useStore } from 'zustand';
 import { api_list } from '../../apis';
-import { gridEditModal, gridRemoveModal } from '../modals';
+import { gridCreateModal, gridEditModal, gridRemoveModal } from '../modals';
+import { useGlobalSendAction } from '../../stores';
 
 export function Permission(){
     const treeStore = useTreeStore();
@@ -104,6 +105,10 @@ function GridEvents(){
     const evData = useStore(eventStore, s => s.evData);
     const sendEvent = useStore(eventStore, s => s.sendEvent);
 
+    //-- UI 버튼 이벤트 관련
+    const uiEvKey = useGlobalSendAction(s => s.evKey);
+    const uiSendEvent = useGlobalSendAction(s => s.sendEvent);
+
     //* 리스트 가져오기
     const onListLoad = async () => {
         // 그리드에 로딩 표기
@@ -164,6 +169,40 @@ function GridEvents(){
             } break;
         }
     }, [evKey, evData]);
+
+    //* UI 버튼 이벤트 처리
+    useEffect(() => {
+        // 이벤트 데이터가 없으면 처리 안함
+        if( uiEvKey === null ){ return; }
+
+        // 기존 이벤트 제거
+        uiSendEvent(null);
+
+        const table = tableRef.current;
+
+        // 아직 table이 준비되지 않았을 경우 건너 뜀
+        if( !table ){ return; }
+
+        // 이벤트 처리
+        switch( uiEvKey ){
+            // 추가
+            case 'create': {
+                // 처리하고 다시 불러오기
+                gridCreateModal(onListLoad);
+            } break;
+
+            // 선택 삭제
+            case 'selected-delete': {
+                // 그리드에서 선택된 row 리스트
+                const selectedRows = table.getSelectedRowModel().flatRows;
+
+                // 삭제 할 id만 추려오기
+                const rmList = selectedRows.map(r => r.original?.id);
+                // 삭제 모달 출력
+                gridRemoveModal(rmList, onListLoad);
+            } break;
+        }
+    }, [uiEvKey]);
 
     return <></>;
 }
