@@ -1,26 +1,58 @@
+import { useStore } from "zustand";
 import { useEffect, useMemo, useState } from "react";
-import { Button, Flex, LoadingOverlay } from "@mantine/core";
-import { ContentsLayout } from "@/compos/layout";
-
-import { api_getMenuData, api_setMenuData } from './apis'
+import { ContentsLayout, useContsLayoutStore } from "@/compos/layout";
 import { MenuEditor } from "./components/menu-editor";
-
-import style from './style.module.css'
-import { Grid } from "./components/grid";
-import { DropdownMenu } from "@/compos/ui/dropdown-menu";
-import { IconPlus } from "@tabler/icons-react";
-import { useSendAction } from "./stores";
 import { ContentArea } from "./components/content-area";
 
+import { api_getMenuData, api_setMenuData } from './apis'
+import { TreeProvider } from "@/compos/ui/tree-editor";
+import { LoadingOverlay } from "@mantine/core";
+
+import style from './style.module.css'
+
 const Team = () => {
+    return <>
+        <ContentsLayout CtxProvider={TreeProvider}>
+            {/* 초기 레이아웃 설정 */}
+            <InitLayout />
+            {/* 컨텐츠 */}
+            <ContentArea />
+        </ContentsLayout>
+    </>;
+}
+
+/**
+ * 초기 레이아웃 설정
+ */
+function InitLayout(){
+    const contLayout = useContsLayoutStore();
+    
+    //-- 컨텐츠 설정
+    const setTitleLeft = useStore(contLayout, s => s.setTitleLeft);
+    const setSideArea = useStore(contLayout, s => s.setSideArea);
+
+    //* 초기 설정
+    useEffect(() => {
+        // 타이틀 설정
+        setTitleLeft('Team');
+
+        // 사이드 영역 설정
+        setSideArea('300px', <SideArea />);
+    }, []);
+
+    return <></>;
+}
+
+/**
+ * 사이드 영역
+ */
+function SideArea(){
     const [reloadFlag, setReloadFlag] = useState(false);
     const [menuData, setMenuData] = useState<any[]|null>(null);
 
     //* 로딩 여부
     const isLoading = useMemo(() => (menuData === null), [menuData]);
 
-    const sendEvent = useSendAction(s => s.sendEvent);
-    
     //* 메뉴 데이터 가져오기
     useEffect(() => {
         api_getMenuData().then(({ isErr, res }) => {
@@ -42,34 +74,12 @@ const Team = () => {
         // });
     };
 
-    // 보여줄 화면
-    return <>
-        {/* 컨텐츠 */}
-        <ContentsLayout
-            title='Team'
-            titleRightSide={
-                <></>
-            }
-            sideAreaWidth='300px'
-            sideArea={<>
-                {!isLoading &&
-                    <MenuEditor menu={menuData} onMenuChange={onMenuChange} />
-                }
-            </>}
-        >
-            <div className={style['cont-area']}>
-                <ContentArea />
-            </div>
-        </ContentsLayout>
-        
-        {/* 메뉴 데이터 로딩 시 */}
-        <LoadingOverlay
-            visible={isLoading}
-            zIndex={1000}
-            overlayProps={{ radius: 'sm', blur: 1 }}
-            loaderProps={{ color: 'blue', type: 'bar' }}
-        />
-    </>;
+    return <>{isLoading
+        ? <div className={style['side-area-loading']}>
+            <LoadingOverlay visible={true} zIndex={1000} />
+        </div>
+        : <MenuEditor menu={menuData} onMenuChange={onMenuChange} />
+    }</>
 }
 
 export default Team;
