@@ -139,46 +139,37 @@ export async function api_list(opts: {
 /**
  * 아이템 추가
  */
-export function api_createItem(data: any){
-    console.log('create', data)
-    // return request({
-    //     type: 'post',
-    //     url: '/admin/api/*',
-    //     datas: data
-    // });
-
-    // 임시 시연용 api
-    return api_demo();
+export function api_createItem(datas: any[]){
+    return request({
+        type: 'put',
+        url: '/admin/api/users',
+        datas: datas
+    });
 }
 
 /**
  * 아이템 수정
  */
 export function api_updateItems(datas: any[]){
-    console.log('update', datas)
-    // return request({
-    //     type: 'post',
-    //     url: '/admin/api/*',
-    //     datas: datas
-    // });
-
-    // 임시 시연용 api
-    return api_demo();
+    return request({
+        type: 'put',
+        url: '/admin/api/users',
+        datas: datas
+    });
 }
 
 /**
  * 아이템 삭제
  */
 export function api_removeItems(datas: any[]){
-    console.log('remove', datas)
-    // return request({
-    //     type: 'post',
-    //     url: '/admin/api/*',
-    //     datas: datas
-    // });
+    return request({
+        type: 'delete',
+        url: '/admin/api/users',
+        datas: {id: datas},
+    });
 
     // 임시 시연용 api
-    return api_demo();
+    // return api_demo();
 }
 
 /**
@@ -187,7 +178,6 @@ export function api_removeItems(datas: any[]){
  * @param id 사용자 고유 아이디
  */
 export function api_chkDupleEmail(email: string, id?: string){
-    console.log('duple', email, id);
     // return request({
     //     type: 'post',
     //     url: '/admin/api/*',
@@ -220,39 +210,41 @@ export function api_chkDupleEmail(email: string, id?: string){
     });
 }
 
-export function api_treeList(): Promise<ApiResult>{
+/**
+ * id 중복 확인
+ * @param userid 사용자 id
+ * @param id 사용자 고유 아이디
+ */
+export function api_chkDupleID(userid: string, id?: string){
+    // return request({
+    //     type: 'post',
+    //     url: '/admin/api/*',
+    //     datas: {email}
+    // });
+
+    // (임시 로컬 개발 테스트 용) 
     return new Promise((resolve) => {
-        const data = [
-            {
-                "name": "org",
-                "id": "3",
-                "displayName": "org",
-                "level": 1,
-                "parentMenuId": null,
-                "sortOrder": 0,
-            },
-            {
-                "name": "team",
-                "id": "50",
-                "displayName": "Team A",
-                "level": 2,
-                "parentMenuId": '3',
-                "sortOrder": 0,
-            },
-            {
-                "name": "team",
-                "id": "51",
-                "displayName": "Team B",
-                "level": 2,
-                "parentMenuId": '3',
-                "sortOrder": 0,
-            },
-        ];
-        resolve({
-            isErr: false,
-            msg: '',
-            res: data,
-        });
+
+        // 중복 아이디 체크
+        const isDuple = ((chkId: string) => {
+            for( const item of _TMP_DATA ){
+                // 다른 사용자의 id와 같은지 확인
+                if( item.username === chkId && (item?.id && item.id !== id) ){
+                    return true;
+                }
+            }
+            return false;
+        })(userid);
+
+        // 딜레이 이후 결과 값 전달
+        setTimeout(() => {
+            resolve({
+                isErr: isDuple,
+                msg: isDuple ? '중복된 사용자 ID 입니다.' : '',
+                res: null,
+            });
+        }, 1000);
+    
     });
 }
 
@@ -281,6 +273,7 @@ const _TMP_DATA = [
     {
         id: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
         name: "admin",
+        username: "admin",
         email: 'admin@bistelligence.ai',
         team: 'bistelligence',
         org: '',
@@ -291,6 +284,7 @@ const _TMP_DATA = [
     {
         id: "1323addd-a4ac-4dd1-8de2-6f934969a0f2",
         name: "yunny",
+        username: "yunny",
         email: 'yunny@bistelligence.ai',
         team: 'bistelligence',
         org: '',
@@ -301,6 +295,7 @@ const _TMP_DATA = [
     {
         id: "2343addd-a4ac-4dd1-8de2-6f934969a0f2",
         name: "tk",
+        username: "tk",
         email: 'tk@bistelligence.ai',
         team: 'bistelligence',
         org: '',

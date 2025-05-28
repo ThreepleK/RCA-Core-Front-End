@@ -20,16 +20,13 @@ export function FormEditContent({type, row, onSetData, errMsg, errCode}: {
     errMsg?: string;
     errCode?: string;
 }){
-    const [r, setRow] = useState(type === 'new' ? {} : row);
+    const [r, setRow] = useState(row);
 
     //* 초기 설정
     useEffect(() => {
-        // 추가 모드
-        if( type === 'new' ){
-            setRow(r => ({
-                ...r,
-                status: 'inactive'      // Status 기본 값 설정
-            }));
+        // 초기 데이터 전달
+        for( const key in r ){
+            onSetData(r[key], key);
         }
     }, []);
 
@@ -48,12 +45,24 @@ export function FormEditContent({type, row, onSetData, errMsg, errCode}: {
     return <>
         {/* 폼 */}
         <Stack>
+            {/* 신규 등록 폼 */}
+            {type === 'new' && 
+                <TextInput
+                    label="User ID"
+                    value={r?.username ?? ''}
+                    error={errCode === 'username' && errMsg}
+                    required
+                    onChange={(e) => onData(e.currentTarget.value, 'username')}
+                />
+            }
+
+            {/* 신규/수정 등록 폼 */}
             <TextInput
-                label="Name"
-                value={r?.name}
-                error={errCode === 'name' && errMsg}
+                label="Full name"
+                value={r?.fullName}
+                error={errCode === 'fullName' && errMsg}
                 required
-                onChange={(e) => onData(e.currentTarget.value, 'name')}
+                onChange={(e) => onData(e.currentTarget.value, 'fullName')}
             />
             <TextInput
                 label="Email"

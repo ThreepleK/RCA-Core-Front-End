@@ -16,8 +16,10 @@ export function gridCreateModal(
 
     //* 추가 할 row 기본 값 데이터
     const srcRow = {
-        name: '',
+        username: '',
+        fullName: '',
         email: '',
+        status: 'inactive',
     };
     let row = {...srcRow};
 
@@ -150,7 +152,7 @@ async function createAction(
     console.log('row', row);
 
     // 추가 처리
-    const res = await api_createItem(row);
+    const res = await api_createItem([row]);
 
     // 에러가 있을 경우
     if( res.isErr ){

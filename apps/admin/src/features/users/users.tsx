@@ -58,7 +58,7 @@ function TitleRightSide(){
     };
 
     return (
-        <Flex justify='flex-end' gap='xs'>
+        <Flex justify='flex-end' gap='xs' pr='xs'>
             <DropdownMenu label='Actions' menuList={_ACTION_MENUS} onActions={onActions} />
             <Button size="xs" radius="md"
                 leftSection={<IconPlus size={14} />}

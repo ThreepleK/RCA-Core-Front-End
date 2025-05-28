@@ -106,7 +106,7 @@ export function deactiveModal(
 /**
  * 비활성화 처리
  */
-async function deactiveAction(key: string, rows: any){
+async function deactiveAction(key: string, rows: any[]){
     const { setErrMsg } = useCommModalStore.getState();
 
     // Deactive 버튼이 아니면 건너 뜀

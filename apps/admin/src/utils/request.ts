@@ -2,7 +2,7 @@ import axios from 'axios'
 import { useUserStore } from '@repo/shared-state'
 
 export async function request({ type, url, params={}, datas={} }: {
-    type: 'get'|'post';     // 요청 타입
+    type: 'get'|'post'|'put'|'delete';     // 요청 타입
     url: string;            // 요청 주소
     params?: any;           // 요청 데이터 (url)
     datas?: any;            // 요청 데이터 (body)

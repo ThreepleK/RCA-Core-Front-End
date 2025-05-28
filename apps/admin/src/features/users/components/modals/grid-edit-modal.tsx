@@ -113,7 +113,7 @@ async function editAction(
     console.log('row', row);
 
     // 수정 처리
-    const res = await api_updateItems(row);
+    const res = await api_updateItems([row]);
 
     // 에러가 있을 경우
     if( res.isErr ){
