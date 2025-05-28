@@ -34,7 +34,7 @@ import {
   useCreateModalStore,
 } from "@/compos/ui/modal";
 import { IconDots, IconPlus, IconSearch } from "@tabler/icons-react";
-import { useSendAction, useSendSelectedItem } from "../../stores";
+import { useGlobalSendAction, useSendSelectedItem } from "../../stores";
 import { DropdownMenu } from "@/compos/ui/dropdown-menu";
 import { gridEditModal, gridRemoveModal } from "../modals";
 
@@ -170,7 +170,8 @@ function BottomArea({
 }: {
   onMenuChange: (changeMenu: DB_MENU_ITEM[]) => void;
 }) {
-  const sendEvent = useSendAction((s) => s.sendEvent);
+  // const sendEvent = useSendAction((s) => s.sendEvent);
+  const sendEvent = useGlobalSendAction(s => s.sendEvent);
 
   //* 취소
   const onCancel = () => {
