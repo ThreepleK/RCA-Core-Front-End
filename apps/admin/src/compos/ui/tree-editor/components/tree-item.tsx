@@ -1,16 +1,15 @@
-import { SimpleTreeItemWrapper, TreeItemComponentProps } from 'dnd-kit-sortable-tree';
 import { forwardRef, useMemo } from 'react';
+import { useStore } from 'zustand';
+import { SimpleTreeItemWrapper, TreeItemComponentProps } from 'dnd-kit-sortable-tree';
+import { IconEdit, IconPlus, IconTrash } from '@tabler/icons-react';
 
 import { useCtxMenuStore, CtxMenuItem, CtxMenuState } from '@/compos/ui/ctx-menu'
 import { useCtxBoxStore, CtxBoxState } from '@/compos/ui/ctx-box'
 
 import { RmConfirmBox, EditBox, TreeItemIcon } from './'
-import { TREE_ITEM, TREE_ITEM_TYPE } from '../'
+import { TREE_ITEM, TREE_ITEM_TYPE, useTreeStore } from '../'
 
 import style from "../tree-editor.module.css";
-import { IconEdit, IconPlus, IconTrash } from '@tabler/icons-react';
-import { useTreeStore } from '../tree-editor-store-ctx';
-import { useStore } from 'zustand';
 
 /**
  * 트리 아이템

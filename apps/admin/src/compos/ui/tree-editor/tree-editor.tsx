@@ -1,16 +1,15 @@
 import { ReactNode, useMemo } from 'react';
+import { useStore } from 'zustand';
 import { Divider, Text } from '@mantine/core';
+import { IconCloudNetwork } from '@tabler/icons-react';
 import { SortableTree } from 'dnd-kit-sortable-tree';
-
-import { RootCtxMenu, TreeItem } from './components'
 
 import { CtxMenu } from '@/compos/ui/ctx-menu'
 import { CtxBox } from '@/compos/ui/ctx-box'
+import { RootCtxMenu, TreeItem } from './components'
+import { useTreeStore } from './';
 
 import style from "./tree-editor.module.css";
-import { IconCloudNetwork } from '@tabler/icons-react';
-import { useStore } from 'zustand';
-import { useTreeStore } from './tree-editor-store-ctx';
 
 /**
  * 트리 에디터

@@ -1,3 +1,4 @@
+import { storeContext } from '@/utils';
 import { MRT_ColumnDef, MRT_ColumnFilterFnsState, MRT_PaginationState, MRT_SortingState, MRT_TableOptions } from 'mantine-react-table';
 import { ReactNode } from 'react';
 import { create } from 'zustand';
@@ -149,3 +150,17 @@ export const createBasicGridEvntsStore = () => {
         },
     }))
 };
+
+
+//*-- 독립 state 생성
+// 기본 그리드
+export const {
+    Provider: GridProvider,
+    useStore: useGridStore
+} = storeContext<BasicGridState<any>>(createBasicGridStore);
+
+// 이벤트 용
+export const {
+    Provider: GridEventProvider,
+    useStore: useGridEventStore
+} = storeContext<BasicGridEventState>(createBasicGridEvntsStore);

@@ -1,7 +1,8 @@
 import { Flex, Text, Title, Button } from "@mantine/core"
 import { useCtxBoxStore } from '@/compos/ui/ctx-box'
 import { useStore } from "zustand";
-import { useTreeStore } from "../tree-editor-store-ctx";
+
+import { useTreeStore } from "../";
 
 /**
  * [마우스 우클릭]

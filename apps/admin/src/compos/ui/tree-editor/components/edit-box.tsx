@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react"
 import { Flex, TextInput, Button } from "@mantine/core"
-
-import { TREE_ITEM } from '../'
-import { useCtxBoxStore } from '@/compos/ui/ctx-box'
-import { useTreeStore } from "../tree-editor-store-ctx";
 import { useStore } from "zustand";
+
+import { TREE_ITEM, useTreeStore } from '../'
+import { useCtxBoxStore } from '@/compos/ui/ctx-box'
 
 /**
  * [마우스 우클릭]

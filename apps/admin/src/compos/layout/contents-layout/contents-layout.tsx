@@ -4,7 +4,7 @@ import { useSideMenuAreaStore } from '@/stores';
 import { IconLayoutSidebarLeftExpandFilled } from '@tabler/icons-react';
 
 import style from './contents-layout.module.css'
-import { ContsLayoutProvider, useContsLayoutStore } from './contents-layout-store-ctx';
+import { ContsLayoutProvider, useContsLayoutStore } from './contents-layout-store';
 import { useStore } from 'zustand';
 
 /**

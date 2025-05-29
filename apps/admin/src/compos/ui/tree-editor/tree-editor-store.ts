@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { TreeItems, TreeItem } from 'dnd-kit-sortable-tree';
 import { v4 as uuidv4 } from 'uuid'
 import { ReactNode } from 'react';
+import { storeContext } from '@/utils';
 
 //* 트리 아이템 추가 타입
 export type TREE_ITEM_TYPE = {
@@ -316,3 +317,11 @@ function listSearch(
     loop(list, false);
     return {isSearch};
 }
+
+
+//*-- 독립 state 생성
+// 기본 그리드
+export const {
+    Provider: TreeProvider,
+    useStore: useTreeStore
+} = storeContext<TreeState>(createTreeStore);

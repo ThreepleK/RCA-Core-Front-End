@@ -1,3 +1,4 @@
+import { storeContext } from '@/utils';
 import { FC, ReactNode } from 'react';
 import { create } from 'zustand';
 
@@ -47,3 +48,9 @@ export const createContLayoutStore = () => {
         }),
     }))
 }
+
+//* 독립 state 생성
+export const {
+    Provider: ContsLayoutProvider,
+    useStore: useContsLayoutStore,
+} = storeContext<ContLayoutState>(createContLayoutStore);
