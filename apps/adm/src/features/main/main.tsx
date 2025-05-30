@@ -1,3 +1,5 @@
+import { Button } from 'antd';
+
 export function Main(){
-    return <>메인</>
+    return <Button>메인</Button>
 }

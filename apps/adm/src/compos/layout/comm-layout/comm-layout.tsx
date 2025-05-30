@@ -1,6 +1,6 @@
 import { useMainMenuStore } from '@repo/shared-state'
 import { type ReactNode, useEffect } from 'react'
-// import { SideArea } from './side-area'
+import { SideArea } from './side-area'
 
 import style from './comm-layout.module.css'
 import { useSideMenuAreaStore } from '@/stores'
@@ -26,7 +26,7 @@ export function CommLayout({children}: {
             style={{'--side-width': (currState === 'close' ? '0px' : '250px')} as any}
         >
             {/* 좌측 사이드 */}
-            {/* <SideArea className={`${style['side-area']} ${currState === 'close' && 'area-close'}`} /> */}
+            <SideArea className={`${style['side-area']} ${currState === 'close' && 'area-close'}`} />
             
             {/* 라우터 본문 출력 */}
             <div className={style['cont-area']}>

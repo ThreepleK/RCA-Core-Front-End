@@ -43,6 +43,19 @@
         & .search-keyword > b {
             @apply px-1 bg-amber-100 rounded-md font-semibold leading-none;
         }
+
+        & .menu-list {
+            & { @apply flex flex-col gap-y-1 px-2 py-2; }
+            & li { @apply m-0 w-full rounded-xs transition-none!; }
+            & li > div { @apply m-0 w-full rounded-xs transition-none!; }
+
+            & li[class*=ant-menu-item-divider] {
+                @apply m-0;
+            }
+            & li > ul {
+                @apply transition-none!;
+            }
+        }
     }
 
     /* 컨텐츠 본문 */
