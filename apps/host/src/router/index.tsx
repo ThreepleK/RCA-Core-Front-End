@@ -6,9 +6,11 @@ import { CommLayout } from '@/compos/layout'
 import { protectedLoader } from './protected'
 
 // @ts-ignore
-import Admin from 'admin/router';
+// import Admin from 'admin/router';
 // @ts-ignore
 import Rca from 'rca/router';
+// @ts-ignore
+import Adm from 'adm/router';
 
 const Main = {
     Home: lazy(() => import('@/features/home/home')),
@@ -47,7 +49,8 @@ const routeList: RouteObject[] = [
         children: [
             { path: '', element: wrapLayout(<Main.Home />, '') },
             Rca,
-            Admin
+            // Admin
+            Adm
         ]
     },
 

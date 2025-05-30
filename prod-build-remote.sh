@@ -27,7 +27,7 @@ cd "$buildPath"
 docker compose up --build
 
 # 컨테이너 이미지 생성
-app_arr=("host" "admin" "rca")
+app_arr=("host" "admin" "adm" "rca")
 
 cd "./prod-img"
 for app in "${app_arr[@]}"; do

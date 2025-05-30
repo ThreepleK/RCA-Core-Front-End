@@ -17,6 +17,7 @@ export default {
         rca: 'rca',
         dashboard: 'dashboard',
         admin: 'admin',
+        adm: 'adm',
     },
 
     //* 원격 앱 개발/배포 주소
@@ -25,11 +26,13 @@ export default {
             rca: `${_DEV_HOST}:5001`,
             dashboard: `${_DEV_HOST}:5002`,
             admin: `${_DEV_HOST}:5009`,
+            adm: `${_DEV_HOST}:5010`,
         },
         production: {
             rca: `${_PROD_HOST_REMOTE}/rca`,
             dashboard: `${_PROD_HOST_REMOTE}/dashboard`,
             admin: `${_PROD_HOST_REMOTE}/admin`,
+            adm: `${_PROD_HOST_REMOTE}/adm`,
         }
     },
 
@@ -45,6 +48,9 @@ export default {
             // './main': './src/App.tsx'
         },
         admin: {
+            './router': './src/router/host.tsx'
+        },
+        adm: {
             './router': './src/router/host.tsx'
         }
     }

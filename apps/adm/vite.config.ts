@@ -7,72 +7,42 @@ import envs from '../../packages/env/env-common';
 
 // https://vite.dev/config/
 export default defineConfig((({ mode }: any) => {
+
   const remote = (envs.remoteAppHost as any)[mode];
-  const accKey = envs.remoteAccessKey;
+  const accKey = envs.remoteAccessKey.adm;
+  const exposes = envs.exposeSync.adm;
   const filename = envs.mf_fileName;
 
-  const remotes: any = {};
-  //* RCA
-  remotes[accKey.rca] = {
-    type: "module",
-    name: accKey.rca,
-    entry: `${remote.rca}/${filename}`,
-    shareScope: 'default'
-  };
-  
-  //* Admin
-  remotes[accKey.admin] = {
-    type: "module",
-    name: accKey.admin,
-    entry: `${remote.admin}/${filename}`,
-    shareScope: 'default'
-  };
-
-  //* Adm
-  remotes[accKey.adm] = {
-    type: "module",
-    name: accKey.adm,
-    entry: `${remote.adm}/${filename}`,
-    shareScope: 'default'
-  };
-  
   return {
     publicDir: path.resolve(__dirname, './public'),
+    define: { '$resourceUrl': JSON.stringify(remote.admin) },
     build: {
       target: 'chrome89',
-    },    
+    },
+    base: `${remote.admin}`,
     plugins: [
       federation({
-        name: 'vite_provider',
-        manifest: true,
-        remotes,
+        name: accKey,
+        filename,
+        exposes,
         shared: {
           react: { singleton: true },
           'keepalive-for-react': { singleton: true },
           'react-router': { singleton: true },
-          '@mantine/core': { singleton: true },
           '@repo/shared-state': { singleton: true },
           '@repo/core-ui': { singleton: true },
-        },
+        }
       }),
       react(),
       tailwindcss(),
     ],
     server: {
-      port: 5000,
+      port: 5010,
       proxy: {
-        '/auth': {
-          target: 'http://192.168.7.230:9081',
-          changeOrigin: true,
-        },
         '/admin/api': {
           target: 'http://192.168.7.230:9081',
           changeOrigin: true,
-        },
-        '/core/api': {
-          target: 'http://192.168.7.230:9081',
-          changeOrigin: true,
-        },
+        }
       }
     },
     resolve: {
@@ -81,6 +51,5 @@ export default defineConfig((({ mode }: any) => {
         '@tabler/icons-react': '@tabler/icons-react/dist/esm/icons/index.mjs'
       },
     },
-    
   };
 }))
