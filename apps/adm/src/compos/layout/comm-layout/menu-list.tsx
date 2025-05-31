@@ -11,8 +11,8 @@ export const MenuList: MenuItem[] = [
         icon: <IconFolder size={16} stroke={1.5} />,
         label: 'General',
         children: [
-            { label: 'Team', key: '/adm/team' },
-            { label: 'Users', key: '#/adm/users' },
+            { label: 'Team', key: '#/adm/team' },
+            { label: 'Users', key: '/adm/users' },
             { label: 'User Group', key: '#/adm/user-group' },
             { label: 'Permission', key: '#/adm/add-member' },
         ]

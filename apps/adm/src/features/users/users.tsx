@@ -1,0 +1,88 @@
+import { useEffect } from 'react';
+import { useStore } from 'zustand';
+import type { MenuProps } from 'antd';
+import { IconPlus } from '@tabler/icons-react';
+
+import { SendActionProvider, useSendAction } from '@/stores/send-event';
+import { ContentsLayout, useContsLayoutStore } from '@/compos/layout';
+import { UI_Flex, UI_Button, UI_DropdownMenu } from '@/compos/ui';
+import { ContentArea } from './components';
+
+import style from './users.module.css'
+
+export function Users(){
+    return <>
+        {/* 페이지 내 Action을 주고 받기 위한 SendActionProvider 추가 */}
+        <ContentsLayout CtxProvider={SendActionProvider}>
+            {/* 초기 레이아웃 설정 */}
+            <InitLayout />
+            {/* 컨텐츠 */}
+            <ContentArea />
+        </ContentsLayout>
+    </>;
+}
+
+/**
+ * 초기 레이아웃 설정
+ */
+function InitLayout(){
+    const contLayout = useContsLayoutStore();
+    
+    //-- 컨텐츠 설정
+    const setTitleLeft = useStore(contLayout, s => s.setTitleLeft);
+    const setTitleRight = useStore(contLayout, s => s.setTitleRight);
+    const setContClass = useStore(contLayout, s => s.setContClass);
+
+    //* 초기 설정
+    useEffect(() => {
+        // 타이틀 설정
+        setTitleLeft('Users');
+        setTitleRight(<TitleRightSide />);
+
+        // 본문 클래스 설정
+        setContClass(style.content);
+    }, []);
+
+    return <></>;
+}
+
+/**
+ * 타이틀 우측
+ */
+function TitleRightSide(){
+    // 이벤트 가져오기
+    const sendEvent = useSendAction().getState().sendEvent;
+
+    //* 추가
+    const onCreate = () => {
+        sendEvent('create');
+    };
+
+    //* 액션버튼
+    const onActions = (key: string) => {
+        sendEvent(`selected-${key}`);
+    };
+
+    return (
+        <UI_Flex justify='flex-end' align='center' gap='small' className={style['top-right']}>
+            <UI_DropdownMenu
+                menu={{ items: _ACTION_MENUS }}
+                trigger={['click']}
+                onClick={onActions}
+            >Actions</UI_DropdownMenu>
+
+            <UI_Button
+                icon={<IconPlus size={14} />}
+                iconPosition='end'
+                onClick={onCreate}
+                type="primary"
+            >Create user</UI_Button>
+        </UI_Flex>
+    )
+}
+
+//* Actions 드랍다운 메뉴
+const _ACTION_MENUS: MenuProps['items'] = [
+    { key: 'deactive', label: 'Deactive member' },
+    { key: 'delete',   label: 'Delete member', danger: true },
+];

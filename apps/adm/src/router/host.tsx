@@ -7,7 +7,7 @@ import { CommLayout } from '@/compos/layout'
 import { Main } from '@/features/main'
 // import Teams from '@/features/teams'
 // import Team from '@/features/team'
-// import Users from '@/features/users'
+import { Users } from '@/features/users'
 // import UserGroup from '@/features/user-group'
 // import Permission from '@/features/permission'
 // import Branding from '@/features/branding'
@@ -29,7 +29,7 @@ export default {
     children: [
         { path: '', element: wrapLayout(<Main />, '') },
         // { path: 'team', element: wrapLayout(<Team />, 'team') },
-        // { path: 'users', element: wrapLayout(<Users />, 'users') },
+        { path: 'users', element: wrapLayout(<Users />, 'users') },
         // { path: 'user-group', element: wrapLayout(<UserGroup />, 'user-group') },
         // { path: 'permission', element: wrapLayout(<Permission />, 'permission') },
         // { path: 'branding', element: wrapLayout(<Branding />, 'branding') },

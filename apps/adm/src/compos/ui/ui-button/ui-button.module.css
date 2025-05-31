@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+.ui-button {
+    /* 기본 크기 버튼 */
+    & { @apply gap-1.5; }
+
+    /* small 크기 버튼 */
+    &[class*=ant-btn-sm] {
+        @apply gap-1;
+    }
+
+    /* large 크기 버튼 */
+    &[class*=ant-btn-lg] {
+        @apply gap-2;
+    }
+}

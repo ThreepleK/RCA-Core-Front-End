@@ -1,5 +1,5 @@
 import { Menu, type MenuProps } from 'antd';
-import { concatClassName } from '../utils';
+import { menuLoop } from '../utils';
 
 import style from './ui-menu.module.css'
 import { useMemo } from 'react';
@@ -18,65 +18,41 @@ export interface UiMenuProps extends MenuProps {
  * https://ant.design/components/menu
  */
 export function UI_Menu(props: UiMenuProps){
-    // ClassName 설정
-    const className = concatClassName(props, style['ui-menu']);
 
     // 메뉴 검색
     const menuData = useMemo(() => {
-        const loop = (items: any[], search: string) => {
-            const res = [];
-
-            for( const item of items ){
-                //* React의 불변성으로 얕은 복사 처리
-                const nItem = { ...item };
-
-                //* 서브 메뉴가 있으면
-                if( 'children' in nItem ){
-                    // 하위 메뉴 필터링
-                    const children = loop(nItem.children as any[], search);
-
-                    // 필터링 된 메뉴가 있으면 추가
-                    if( children.length > 0 ){
-                        nItem.children = children;
-                        res.push(nItem);
-                    }
-
-                    // 아래 라벨 검색 건너 뜀 (하위 메뉴가 없으면 의미 없음)
-                    continue;
-                }
-
-                // 구분 선 일때는 건너 뜀
-                if( nItem?.type === 'divider' ){ continue; }
-                
-                //* 메뉴 라벨을 검색
-                if( RegExp(search, 'i').test(nItem.label) ){
-
-                    // 검색 키워드에 태그 추가
-                    const sText = nItem.label.replace(
-                        RegExp('(.+)?('+search+')(.+)?', 'ig'),
-                        '$1<b class="item-search">$2</b>$3'
-                    );
-
-                    // 라벨에 적용
-                    nItem.label = <span
-                        key={nItem.key}
-                        dangerouslySetInnerHTML={{__html: sText}}
-                    />;
-
-                    res.push(nItem);
-                }
-            }
-
-            return res;
-        }
-
         const {searchKeyword, items} = props;
 
         // 검색 키워드가 있을 경우
-        return (
-            searchKeyword
-                ? loop(items, searchKeyword)
-                : items
+        return ( searchKeyword
+            ? menuLoop({
+                menus: items,
+                feedbackCB: (item) => {
+                    const label = item.label as string;
+
+                    //* 메뉴 라벨을 검색
+                    if( RegExp(searchKeyword, 'i').test(label) ){
+
+                        // 검색 키워드에 태그 추가
+                        const sText = label.replace(
+                            RegExp('(.+)?('+searchKeyword+')(.+)?', 'ig'),
+                            '$1<b class="item-search">$2</b>$3'
+                        );
+
+                        // 라벨에 적용
+                        item.label = <span
+                            key={item.key}
+                            dangerouslySetInnerHTML={{__html: sText}}
+                        />;
+
+                        return true;
+                    }
+
+                    // 검색 라벨이 없을 경우
+                    return false;
+                }
+            })
+            : items
         ) as MenuItemType[];
     }, [props?.searchKeyword]);
 
@@ -88,5 +64,5 @@ export function UI_Menu(props: UiMenuProps){
     }, [props]);
     
     // Antd Input 기본 설정
-    return <Menu {...pureProps} items={menuData} className={className} />
+    return <Menu {...pureProps} items={menuData} rootClassName={style['ui-menu']} />
 }

@@ -1,4 +1,4 @@
-import { ContentsLayout, useContsLayoutStore } from '@/compos/layout/contents-layout';
+import { ContentsLayout, useContsLayoutStore } from '@/compos/layout';
 import { useEffect } from 'react';
 import { useStore } from 'zustand';
 import { ContentArea } from './components';

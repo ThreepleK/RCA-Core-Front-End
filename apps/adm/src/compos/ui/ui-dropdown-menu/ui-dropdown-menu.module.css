@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+.ui-dropdown-menu-root {
+    & {}
+
+    /* 기본 스타일의 패딩 제거 */
+    & ul > li { @apply p-0!; }
+
+    /* 메뉴 위치 스타일 */
+    & span[class*=ant-dropdown-menu-title-content] > div {
+        @apply px-2 py-1;
+    }
+}
+
+.ui-dropdown-menu {
+    & {}
+}

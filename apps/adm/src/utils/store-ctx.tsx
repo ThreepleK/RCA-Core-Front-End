@@ -1,5 +1,6 @@
-import { createContext, FC, ReactNode, useContext, useRef } from "react";
-import { StoreApi, UseBoundStore } from "zustand";
+import { createContext, useContext, useRef } from "react";
+import type { FC, ReactNode } from "react";
+import type { StoreApi, UseBoundStore } from "zustand";
 
 /**
  * zustand Store

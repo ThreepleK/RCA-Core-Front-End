@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+.ui-dropdown-root {
+    & {}
+}
+
+.ui-dropdown {
+    & {}
+}
