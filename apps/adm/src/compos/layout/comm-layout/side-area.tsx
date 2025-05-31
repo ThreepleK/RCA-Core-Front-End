@@ -1,12 +1,13 @@
-import { Menu, Button, type MenuProps } from 'antd';
+import { useState } from 'react';
+import { Button, type MenuProps } from 'antd';
 import { IconFolderUp, IconFolderDown, IconSearch, IconLayoutSidebarRightExpandFilled } from '@tabler/icons-react';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { useSideMenuAreaStore, useSideMenuStore } from '@/stores';
-import { MenuDefaultOpenList, type MenuItem, type MenuItem as MenuItemType, MenuList } from './menu-list';
 
-import style from './comm-layout.module.css'
+import { useSideMenuAreaStore } from '@/stores';
+import { MenuDefaultOpenList, type MenuItem as MenuItemType, MenuList } from './menu-list';
 import { useRouterStore } from '@repo/shared-state'
 import { UI_Title, UI_Input, UI_Menu } from '@/compos/ui';
+
+import style from './comm-layout.module.css'
 
 /**
  * 사이드 영역
@@ -18,17 +19,14 @@ export function SideArea({className}: {
     const [inputVal, setInputVal] = useState('');
     const [searchKeyword, setSearchKeyword] = useState('');
 
+    // 사이드 메뉴 open/close 상태
     const {currState, setState} = useSideMenuAreaStore(s => s);
 
     //* 메뉴 토글
-    const onToggle = () => {
-        setIsFold(!isFoled);
-    }
+    const onToggle = () => setIsFold(!isFoled);
 
     //* 메뉴 검색
-    const onSearch = () => {
-        setSearchKeyword(inputVal);
-    }
+    const onSearch = () => setSearchKeyword(inputVal);
 
     return (
         <div className={className}>
@@ -44,6 +42,7 @@ export function SideArea({className}: {
                     <IconLayoutSidebarRightExpandFilled size={18}/>
                 </span>}
             </UI_Title>
+
             {/* 검색 영역 */}
             <div className={style.search}>
                 <UI_Input
@@ -61,6 +60,7 @@ export function SideArea({className}: {
                     }
                 </Button>
             </div>
+
             {/* 메뉴 */}
             <MenuPrint
                 menuList={MenuList}

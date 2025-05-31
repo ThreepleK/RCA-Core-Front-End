@@ -16,7 +16,7 @@
         }
 
         & .title {
-            @apply flex justify-between items-center px-4 text-gray-950 leading-none border-b border-b-gray-100 h-[50px];
+            @apply flex justify-between items-center px-3 text-gray-950 leading-none border-b border-b-gray-100 h-[50px];
         }
 
         & .side-area-btn {
@@ -25,7 +25,7 @@
 
         & .search {
             & {
-                @apply grid gap-1 items-center px-2 pt-2;
+                @apply grid gap-1.5 items-center px-3 pt-3;
                 grid-template-columns: 1fr 27px;
             }
             & input {
@@ -41,7 +41,7 @@
 
         /* 메뉴 */
         & .menu-list {
-            @apply flex flex-col gap-y-1 px-2 py-2;
+            @apply flex flex-col gap-y-1 px-3 py-3 pt-2;
         }
     }
 
