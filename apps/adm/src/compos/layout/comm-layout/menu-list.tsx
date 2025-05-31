@@ -1,4 +1,4 @@
-import { IconFolder, IconSettings, IconUser, IconUsersGroup } from '@tabler/icons-react';
+import { IconFolder } from '@tabler/icons-react';
 import type { MenuProps } from 'antd';
 
 
@@ -11,10 +11,10 @@ export const MenuList: MenuItem[] = [
         icon: <IconFolder size={16} stroke={1.5} />,
         label: 'General',
         children: [
-            { label: 'Team', key: '/adm/team' },
-            { label: 'Users', key: '/adm/users' },
-            { label: 'User Group', key: '/adm/user-group' },
-            { label: 'Permission', key: '/adm/add-member' },
+            { label: 'Team', key: '#/adm/team' },
+            { label: 'Users', key: '#/adm/users' },
+            { label: 'User Group', key: '#/adm/user-group' },
+            { label: 'Permission', key: '#/adm/add-member' },
         ]
     },
     {
@@ -22,12 +22,12 @@ export const MenuList: MenuItem[] = [
         label: 'System settings',
         icon: <IconFolder size={16} stroke={1.5} />,
         children: [
-            { label: 'Branding', key: '/adm/branding' },
-            { label: 'Applications', key: '/adm/application-menu' },
-            { label: 'Sidebar menu', key: '/adm/sidebar-menu' },
-            { label: 'Menus', key: '/adm/menus' },
-            { label: 'Multi language', key: '/adm/i18n' },
-            { label: 'Global configuration', key: '/adm/g-config' },
+            { label: 'Branding', key: '#/adm/branding' },
+            { label: 'Applications', key: '#/adm/application-menu' },
+            { label: 'Sidebar menu', key: '#/adm/sidebar-menu' },
+            { label: 'Menus', key: '#/adm/menus' },
+            { label: 'Multi language', key: '#/adm/i18n' },
+            { label: 'Global configuration', key: '#/adm/g-config' },
         ]
     },
     {
@@ -35,15 +35,15 @@ export const MenuList: MenuItem[] = [
     },
     {
         label: 'Application settings',
-        key: 'app_settings',
+        key: '#/adm/app_settings',
     },
     {
         label: 'Announcement',
-        key: 'announcement',
+        key: '#/adm/announcement',
     },
     {
         label: 'Monitoring',
-        key: 'monitoring',
+        key: '#/adm/monitoring',
     },
 ];
 

@@ -1,4 +1,7 @@
 import type { ReactNode } from "react";
+import { concatClassName } from '../utils';
+
+import style from './ui-title.module.css';
 
 type Props = {
     order?: number;
@@ -6,9 +9,17 @@ type Props = {
     children?: ReactNode
 };
 
+/**
+ * 타이틀 컴포넌트
+ */
 export function UI_Title({order=1, className, children}: Props){
+    // 크기별 컴포넌트 가져오기
     const Order = _ORDER[order];
-    return <Order className={className}>{children}</Order>
+
+    // ClassName 설정
+    const cn = concatClassName({className}, style['ui-title']);
+
+    return <Order className={cn}>{children}</Order>
 }
 
 const _ORDER = {

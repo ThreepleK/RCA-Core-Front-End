@@ -1,10 +1,19 @@
 @import "tailwindcss";
 
 .ui-menu {
-    & {}
+    & { }
+    &::before { content: none; }
+    
+    & li { @apply w-full; }
+    & li > div { @apply w-full; }
+
+    /* 구분선 */
+    & li[class*=ant-menu-item-divider] {
+        @apply m-0;
+    }
 
     /* 검색키워드 */
     & b[class*=item-search] {
-        @apply px-1 mx-0.5 bg-amber-200 rounded-md;
+        @apply px-1 mx-0.5 bg-amber-100 rounded-md;
     }
 }

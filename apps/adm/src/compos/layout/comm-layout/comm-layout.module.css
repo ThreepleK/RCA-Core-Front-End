@@ -39,19 +39,9 @@
             }
         }
 
-        /* 메뉴 검색 키워드 표기기 */
-        & .search-keyword > b {
-            @apply px-1 bg-amber-100 rounded-md font-semibold leading-none;
-        }
-
+        /* 메뉴 */
         & .menu-list {
-            & { @apply flex flex-col gap-y-1 px-2 py-2; }
-            & li { @apply w-full; }
-            & li > div { @apply w-full; }
-
-            & li[class*=ant-menu-item-divider] {
-                @apply m-0;
-            }
+            @apply flex flex-col gap-y-1 px-2 py-2;
         }
     }
 
