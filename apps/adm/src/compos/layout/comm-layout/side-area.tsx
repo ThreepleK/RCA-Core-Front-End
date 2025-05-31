@@ -79,23 +79,45 @@ function MenuPrint({ menuList, searchKeyword, isFold }: {
     searchKeyword: string;          // 메뉴 검색
     isFold: boolean;                // 메뉴 전체 접힘 여부
 }) {
+    const { pageMove } = useRouterStore(s => s);
+
+    // 수동 메뉴 펼침 여부 값
+    const [openKeys, setOpenKeys] = useState(MenuDefaultOpenList);
     
     // 출력할 메뉴가 없을 경우
     if( !menuList || menuList.length === 0 ){ return <></>; }
 
+    //* 메뉴 클릭 이벤트
     const onClick: MenuProps['onClick'] = (e) => {
-        console.log('e', e);
+        const label = e.keyPath[0];
+        const link = e.key;
+
+        // 이동 할 링크가 없으면 처리 안함
+        if( !link || link === '' || link === '#' ){ return; }
+
+        // react-router-dom을 이용한 페이지 이동
+        pageMove({
+            label: label,
+            path: link,
+            type: 'tab',
+        })
     }
 
+    //* 메뉴 펼침 여부 이벤트
+    const onOpenChange = ((data: any) => {
+        if( !Array.isArray(data) ){ return; }
+        setOpenKeys(data);
+    });
+
     return <UI_Menu
-        className={style['menu-list']}
-        onClick={onClick}
-        defaultSelectedKeys={['/adm']}
-        openKeys={isFold ? [] : MenuDefaultOpenList}
-        mode="inline"
-        inlineIndent={10}
-        items={menuList}
-        searchKeyword={searchKeyword}
-        subMenuCloseDelay={0}
+        className={style['menu-list']}      // 스타일
+        openKeys={isFold ? [] : openKeys}   // 메뉴 펼침 여부 배열 값
+        defaultSelectedKeys={['/adm']}      // 초기 선택 값
+        mode="inline"                       // 메뉴 모드
+        inlineIndent={10}                   // 들어쓰기 넓이
+        items={menuList}                    // 메뉴 데이터
+        onClick={onClick}                   // 클릭
+        onOpenChange={onOpenChange}         // 메뉴 펼침 여부 이벤트
+        searchKeyword={searchKeyword}       // 검색어
     />;
 }

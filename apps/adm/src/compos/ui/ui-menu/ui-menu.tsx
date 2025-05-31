@@ -83,9 +83,7 @@ export function UI_Menu(props: UiMenuProps){
     // Menu 컴포넌트에 맞게 재설정
     const pureProps = useMemo(() => {
         const p = {...props};
-
         delete p.searchKeyword;     // 검색어 속성 제거
-
         return p;
     }, [props]);
     
