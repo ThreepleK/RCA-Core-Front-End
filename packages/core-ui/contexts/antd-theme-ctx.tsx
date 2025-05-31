@@ -1,5 +1,5 @@
 import { ConfigProvider } from 'antd';
-import { _MENU } from './antd-compos'
+import { _INPUT, _MENU } from './antd-compos'
 
 /**
  * 테마 Provider
@@ -11,6 +11,7 @@ export function AntdThemeProvider({ children }: {
         <ConfigProvider theme={{
             components: {
                 Menu: _MENU,
+                Input: _INPUT
             },
             token: {
                 motionDurationFast: '0.05s',

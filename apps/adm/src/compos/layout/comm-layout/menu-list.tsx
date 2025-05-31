@@ -46,3 +46,6 @@ export const MenuList: MenuItem[] = [
         key: 'monitoring',
     },
 ];
+
+//* 기본으로 펼칠 메인 메뉴 키 값
+export const MenuDefaultOpenList: string[] = ['general', 'system_settings'];

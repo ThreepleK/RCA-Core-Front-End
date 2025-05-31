@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+.ui-input {
+    & {}
+
+    /* addon 구간 설정 */
+    & [class*=ant-input-group-addon] {
+        @apply px-1.5 cursor-pointer;
+    }
+}

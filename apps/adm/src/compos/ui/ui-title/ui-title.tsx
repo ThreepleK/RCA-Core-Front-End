@@ -6,7 +6,7 @@ type Props = {
     children?: ReactNode
 };
 
-export function Title({order=1, className, children}: Props){
+export function UI_Title({order=1, className, children}: Props){
     const Order = _ORDER[order];
     return <Order className={className}>{children}</Order>
 }
