@@ -46,14 +46,11 @@
 
         & .menu-list {
             & { @apply flex flex-col gap-y-1 px-2 py-2; }
-            & li { @apply m-0 w-full rounded-xs transition-none!; }
-            & li > div { @apply m-0 w-full rounded-xs transition-none!; }
+            & li { @apply w-full; }
+            & li > div { @apply w-full; }
 
             & li[class*=ant-menu-item-divider] {
                 @apply m-0;
-            }
-            & li > ul {
-                @apply transition-none!;
             }
         }
     }

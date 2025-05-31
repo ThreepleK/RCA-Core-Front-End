@@ -96,10 +96,10 @@ function MenuPrint({ menuList }: {
     return <Menu
         className={style['menu-list']}
         onClick={onClick}
-        style={{ width: '100%' }}
         defaultSelectedKeys={['/adm']}
         // defaultOpenKeys={['']}
         mode="inline"
+        inlineIndent={10}
         items={menuList}
     />
 }

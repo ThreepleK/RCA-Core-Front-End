@@ -694,6 +694,9 @@ importers:
       '@types/node':
         specifier: ^22.14.0
         version: 22.14.0
+      antd:
+        specifier: ^5.25.3
+        version: 5.25.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       dayjs:
         specifier: ^1.11.13
         version: 1.11.13
