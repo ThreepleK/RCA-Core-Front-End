@@ -51,6 +51,18 @@ importers:
       '@types/node':
         specifier: ^22.14.0
         version: 22.14.0
+      ag-charts-community:
+        specifier: ^11.3.1
+        version: 11.3.1
+      ag-charts-react:
+        specifier: ^11.3.1
+        version: 11.3.1(react@19.1.0)
+      ag-grid-community:
+        specifier: ^33.3.1
+        version: 33.3.1
+      ag-grid-react:
+        specifier: ^33.3.1
+        version: 33.3.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       antd:
         specifier: ^5.25.3
         version: 5.25.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -2108,6 +2120,32 @@ packages:
     resolution: {integrity: sha512-OvQ/2pUDKmgfCg++xsTX1wGxfTaszcHVcTctW4UJB4hibJx2HXxxO5UmVgyjMa+ZDsiaf5wWLXYpRWMmBI0QHg==}
     engines: {node: '>=0.4.0'}
     hasBin: true
+
+  ag-charts-community@11.3.1:
+    resolution: {integrity: sha512-s4zFvFY1DzF6HHLkdT4H5LHpZE8ybMdzsCGGE6AnU7/mh5oCW62M3fvNSKCU0RlGqj58VNHa6bkCc/EogZtTfw==}
+
+  ag-charts-core@11.3.1:
+    resolution: {integrity: sha512-7x4y3UNgkHKHnEVfhcbgFj1XTcFh620H5xa2OXdWVoyr+sN6wNRuEt7a34BnXI/DQHrC2rvKgu7CdycYB/8cEg==}
+
+  ag-charts-locale@11.3.1:
+    resolution: {integrity: sha512-PLuCYd1TbQGPlG5nWuXxyNeeDtTfslBA1Hg/Vh21NdAfW5SXfD8HQqwAbCM/vwWH6xv4SOJBrEx3TplNL2yIlg==}
+
+  ag-charts-react@11.3.1:
+    resolution: {integrity: sha512-zZNBl+rGGb9I3OiNN2jO7JWDPP26ML/UFkEEYf5QEMguOEiFAbHLCE17lXaXbEf+S1QZ4Dj0YqL+HfKld5B3Zw==}
+    peerDependencies:
+      react: ^18.0.0 || ^19.0.0
+
+  ag-charts-types@11.3.1:
+    resolution: {integrity: sha512-kUSSypwsmkQDT5Oqgcr3zYQShzQuhvYeHaT1l2ocUrz3hBzkIiYwzp9CVG3Vs//M9TUCJLTcR0CBIr9ADhPITw==}
+
+  ag-grid-community@33.3.1:
+    resolution: {integrity: sha512-c3JXKY5K5V5KVZ6rhFc13hK/8UzaZNwTqL70YKkqUbqwOcogDVVeG4I25W6o5YOlFO6LFN/5xFnFPASWn4LwBw==}
+
+  ag-grid-react@33.3.1:
+    resolution: {integrity: sha512-CHuuHxzuz2rsKuyxjuGnBadwm0/I2DCG4j1WgIa2wJkdlTUrcKjF6RD9qwfRLYKA4P40shG640emVuU6/qiZLA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   ajv@6.12.6:
     resolution: {integrity: sha512-j3fVLgvTo527anyYyJOGTYJbG+vnnQYvE0m5mmkc1TK+nxAppkCLMIL0aZ4dblVCNoGShhm+kzE4ZUykBoMg4g==}
@@ -5078,6 +5116,36 @@ snapshots:
       acorn: 8.14.1
 
   acorn@8.14.1: {}
+
+  ag-charts-community@11.3.1:
+    dependencies:
+      ag-charts-core: 11.3.1
+      ag-charts-locale: 11.3.1
+      ag-charts-types: 11.3.1
+
+  ag-charts-core@11.3.1:
+    dependencies:
+      ag-charts-types: 11.3.1
+
+  ag-charts-locale@11.3.1: {}
+
+  ag-charts-react@11.3.1(react@19.1.0):
+    dependencies:
+      ag-charts-community: 11.3.1
+      react: 19.1.0
+
+  ag-charts-types@11.3.1: {}
+
+  ag-grid-community@33.3.1:
+    dependencies:
+      ag-charts-types: 11.3.1
+
+  ag-grid-react@33.3.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+    dependencies:
+      ag-grid-community: 33.3.1
+      prop-types: 15.8.1
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
 
   ajv@6.12.6:
     dependencies:

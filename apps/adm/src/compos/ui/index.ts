@@ -5,5 +5,8 @@ export * from './ui-flex'
 export * from './ui-button'
 export * from './ui-dropdown'
 export * from './ui-dropdown-menu'
+export * from './ui-select'
+
+export * from './ui-data-grid'
 
 export * from './utils'

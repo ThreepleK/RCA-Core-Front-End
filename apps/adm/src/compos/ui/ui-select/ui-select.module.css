@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+.ui-select-root {
+    & {}
+}
+
+.ui-select {
+    & {}
+}

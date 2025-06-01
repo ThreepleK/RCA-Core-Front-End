@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+.ui-list-root {
+    & {}
+}
+
+.ui-list {
+    & {}
+}
