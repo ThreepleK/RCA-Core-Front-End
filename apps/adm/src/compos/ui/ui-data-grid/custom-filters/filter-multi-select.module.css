@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+.filter-multi-select {
+    & {
+        @apply flex flex-row gap-1 p-2;
+    }
+
+    & .select {
+        @apply w-full;
+    }
+}

@@ -8,11 +8,11 @@ export function ContentArea(){
 }
 
 const _COLUMNS: ColDef[] = (() => {
-    const {text, select} = columnFilters;
+    const {text, select, multiSelect} = columnFilters;
 
     // 기본 필터
     const basicFilter = text({});
-    const ActiveFilter = select({
+    const ActiveFilter = multiSelect({
         data: [
             {label: 'Active', value: 'active'},
             {label: 'Deactive', value: 'deactive'},

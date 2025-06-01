@@ -4,7 +4,7 @@ import { IconCalendar } from '@tabler/icons-react';
 import dayjs from '@/utils/dayjs';
 // import style from './data-grid-filter.module.css'
 import type { ColDef } from './';
-import { FilterSelect } from './custom-filters';
+import { FilterSelect, FilterMultiSelect } from './custom-filters';
 
 /**
  * [Filter] 텍스트
@@ -34,29 +34,23 @@ export function f_select(opts: {
 }) {
     return {
         filter: FilterSelect,
-        filterParams: {
-            ...opts,
-            closeOnApply: false
-        },
+        filterParams: opts,
     } as ColDef;
 }
 
-// /**
-//  * [Filter] 멀티 Select
-//  * @param opts 멀티 Select 옵션
-//  * @param opts.data 필터에 보여줄 내역
-//  */
-// export function f_multiSelect(opts: {
-//     data?: ComboboxData
-// }) {
-//     return {
-//         filterVariant: 'multi-select',
-//         mantineFilterMultiSelectProps: {
-//             data: opts.data,
-//             size: 'xs',
-//         }
-//     } as COLUMN_ITEM;
-// }
+/**
+ * [Filter] 멀티 Select
+ * @param opts 멀티 Select 옵션
+ * @param opts.data 필터에 보여줄 내역
+ */
+export function f_multiSelect(opts: {
+    data: {label: string, value: string}[],
+}) {
+    return {
+        filter: FilterMultiSelect,
+        filterParams: opts,
+    } as ColDef;
+}
 
 // /**
 //  * [Filter] 범위
@@ -299,7 +293,7 @@ export function f_select(opts: {
 export const columnFilters = {
     text: f_text,
     select: f_select,
-    // multiSelect: f_multiSelect,
+    multiSelect: f_multiSelect,
     // range: f_range,
     // rangeSlider: f_rangeSlider,
     // chkbox: f_chkBox,
