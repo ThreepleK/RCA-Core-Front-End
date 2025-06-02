@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+.filter-date {
+    & {
+        @apply flex gap-1.5 p-2;
+    }
+
+    .date-picker {
+        @apply w-full;
+    }
+    
+    .btn-area {
+        & {
+            @apply flex gap-1 justify-end items-center;
+        }
+
+        & button > span {
+            @apply text-xs;
+        }
+    }
+}

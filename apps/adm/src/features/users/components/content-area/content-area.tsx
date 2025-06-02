@@ -9,9 +9,8 @@ export function ContentArea(){
 
 const _COLUMNS: ColDef[] = (() => {
     const {
-        text,
-        select, multiSelect,
-        range
+        text, select, multiSelect,
+        range, date
     } = columnFilters;
 
     // 기본 필터
@@ -23,6 +22,7 @@ const _COLUMNS: ColDef[] = (() => {
         ]
     });
     const rangeFilter = range(100, 300);
+    const dateFilter = date();
 
     return [
         { field: 'fullName',    headerName: 'Name', ...basicFilter },
@@ -31,7 +31,7 @@ const _COLUMNS: ColDef[] = (() => {
         { field: 'org',         headerName: 'Organization', ...rangeFilter},
         { field: 'userGroup',   headerName: 'User group', },
         { field: 'status',      headerName: 'Status', ...activeFilter},
-        { field: 'createdTime', headerName: 'Created time', },
+        { field: 'createdTime', headerName: 'Created time', ...dateFilter},
     ];
 })();
 
@@ -45,7 +45,7 @@ const _TMP_DATA = [
         org: 100,
         userGroup: '',
         status: 'active',
-        createTime: '2025-05-23 15:47:00',
+        createdTime: '2025-05-23 15:47:00',
     },
     {
         id: "1323addd-a4ac-4dd1-8de2-6f934969a0f2",
@@ -55,7 +55,7 @@ const _TMP_DATA = [
         org: 200,
         userGroup: '',
         status: 'deactive',
-        createTime: '2025-05-23 15:49:00',
+        createdTime: '2025-06-10 15:49:00',
     },
     {
         id: "2343addd-a4ac-4dd1-8de2-6f934969a0f2",
@@ -65,6 +65,6 @@ const _TMP_DATA = [
         org: 300,
         userGroup: '',
         status: 'active',
-        createTime: '2025-05-23 16:24:00',
+        createdTime: '2025-06-23 16:24:00',
     },
 ];
