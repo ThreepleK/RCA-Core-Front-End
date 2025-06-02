@@ -8,8 +8,6 @@ import { protectedLoader } from './protected'
 // @ts-ignore
 // import Admin from 'admin/router';
 // @ts-ignore
-import Rca from 'rca/router';
-// @ts-ignore
 import Adm from 'adm/router';
 
 const Main = {
@@ -48,7 +46,6 @@ const routeList: RouteObject[] = [
         loader: protectedLoader,
         children: [
             { path: '', element: wrapLayout(<Main.Home />, '') },
-            Rca,
             // Admin
             Adm
         ]

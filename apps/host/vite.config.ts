@@ -12,14 +12,7 @@ export default defineConfig((({ mode }: any) => {
   const filename = envs.mf_fileName;
 
   const remotes: any = {};
-  //* RCA
-  remotes[accKey.rca] = {
-    type: "module",
-    name: accKey.rca,
-    entry: `${remote.rca}/${filename}`,
-    shareScope: 'default'
-  };
-  
+
   //* Admin
   remotes[accKey.admin] = {
     type: "module",

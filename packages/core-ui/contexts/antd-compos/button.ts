@@ -1,4 +1,4 @@
-import { ComponentTokenMap } from "antd/es/theme/interface";
+import type { ComponentTokenMap } from "antd/es/theme/interface";
 
 /**
  * Button 컴포넌트 설정

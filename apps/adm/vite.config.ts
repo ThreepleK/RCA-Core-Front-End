@@ -15,11 +15,11 @@ export default defineConfig((({ mode }: any) => {
 
   return {
     publicDir: path.resolve(__dirname, './public'),
-    define: { '$resourceUrl': JSON.stringify(remote.admin) },
+    define: { '$resourceUrl': JSON.stringify(remote.adm) },
     build: {
       target: 'chrome89',
     },
-    base: `${remote.admin}`,
+    base: `${remote.adm}`,
     plugins: [
       federation({
         name: accKey,

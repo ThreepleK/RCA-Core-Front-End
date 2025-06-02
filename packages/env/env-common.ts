@@ -14,7 +14,6 @@ export default {
 
     //* 원격 앱 연결 키 값
     remoteAccessKey: {
-        rca: 'rca',
         dashboard: 'dashboard',
         admin: 'admin',
         adm: 'adm',
@@ -23,13 +22,11 @@ export default {
     //* 원격 앱 개발/배포 주소
     remoteAppHost: {
         development: {
-            rca: `${_DEV_HOST}:5001`,
             dashboard: `${_DEV_HOST}:5002`,
             admin: `${_DEV_HOST}:5009`,
             adm: `${_DEV_HOST}:5010`,
         },
         production: {
-            rca: `${_PROD_HOST_REMOTE}/rca`,
             dashboard: `${_PROD_HOST_REMOTE}/dashboard`,
             admin: `${_PROD_HOST_REMOTE}/admin`,
             adm: `${_PROD_HOST_REMOTE}/adm`,
@@ -41,9 +38,6 @@ export default {
 
     //* 연결 시 사용 될 항목 (각 앱 경로 기준)
     exposeSync: {
-        rca: {
-            './router': './src/router/host.tsx'
-        },
         dashboard: {
             // './main': './src/App.tsx'
         },

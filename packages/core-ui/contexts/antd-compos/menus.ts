@@ -1,4 +1,4 @@
-import { ComponentTokenMap } from "antd/es/theme/interface";
+import type { ComponentTokenMap } from "antd/es/theme/interface";
 
 /**
  * 메뉴 컴포넌트 설정

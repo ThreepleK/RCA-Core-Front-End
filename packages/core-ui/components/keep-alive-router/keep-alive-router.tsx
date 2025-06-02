@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from "react";
+import { type ReactNode, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { KeepAlive, useKeepAliveContext } from 'keepalive-for-react'
 import { useRouterStore } from '@repo/shared-state'
