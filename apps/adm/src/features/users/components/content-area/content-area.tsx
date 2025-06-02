@@ -8,24 +8,29 @@ export function ContentArea(){
 }
 
 const _COLUMNS: ColDef[] = (() => {
-    const {text, select, multiSelect} = columnFilters;
+    const {
+        text,
+        select, multiSelect,
+        range
+    } = columnFilters;
 
     // 기본 필터
     const basicFilter = text({});
-    const ActiveFilter = multiSelect({
+    const activeFilter = multiSelect({
         data: [
             {label: 'Active', value: 'active'},
             {label: 'Deactive', value: 'deactive'},
         ]
     });
+    const rangeFilter = range(100, 300);
 
     return [
         { field: 'fullName',    headerName: 'Name', ...basicFilter },
         { field: 'email',       headerName: 'Email', },
         { field: 'team',        headerName: 'Team', },
-        { field: 'org',         headerName: 'Organization', },
+        { field: 'org',         headerName: 'Organization', ...rangeFilter},
         { field: 'userGroup',   headerName: 'User group', },
-        { field: 'status',      headerName: 'Status', ...ActiveFilter},
+        { field: 'status',      headerName: 'Status', ...activeFilter},
         { field: 'createdTime', headerName: 'Created time', },
     ];
 })();
@@ -37,7 +42,7 @@ const _TMP_DATA = [
         fullName: "admin",
         email: 'admin@bistelligence.ai',
         team: 'bistelligence',
-        org: '',
+        org: 100,
         userGroup: '',
         status: 'active',
         createTime: '2025-05-23 15:47:00',
@@ -47,7 +52,7 @@ const _TMP_DATA = [
         fullName: "yunny",
         email: 'yunny@bistelligence.ai',
         team: 'bistelligence',
-        org: '',
+        org: 200,
         userGroup: '',
         status: 'deactive',
         createTime: '2025-05-23 15:49:00',
@@ -57,7 +62,7 @@ const _TMP_DATA = [
         fullName: "tk",
         email: 'tk@bistelligence.ai',
         team: 'bistelligence',
-        org: '',
+        org: 300,
         userGroup: '',
         status: 'active',
         createTime: '2025-05-23 16:24:00',

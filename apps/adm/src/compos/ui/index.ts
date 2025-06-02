@@ -6,6 +6,7 @@ export * from './ui-button'
 export * from './ui-dropdown'
 export * from './ui-dropdown-menu'
 export * from './ui-select'
+export * from './ui-slider'
 
 export * from './ui-data-grid'
 

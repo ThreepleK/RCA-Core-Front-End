@@ -4,7 +4,7 @@ import { IconCalendar } from '@tabler/icons-react';
 import dayjs from '@/utils/dayjs';
 // import style from './data-grid-filter.module.css'
 import type { ColDef } from './';
-import { FilterSelect, FilterMultiSelect } from './custom-filters';
+import { FilterSelect, FilterMultiSelect, FilterRange } from './custom-filters';
 
 /**
  * [Filter] 텍스트
@@ -52,56 +52,64 @@ export function f_multiSelect(opts: {
     } as ColDef;
 }
 
-// /**
-//  * [Filter] 범위
-//  * @param defaultMin [기본 값] 범위 최소 값
-//  * @param defaultMax [기본 값] 범위 최대 값
-//  */
-// export function f_range(
-//     defaultMin?: number,
-//     defaultMax?: number,
-// ) {
-//     return {
-//         filterVariant: 'range',
-//         Filter: (props) => {
-//             const {column, rangeFilterIndex: rangeIdx} = props;
-//             const [value, setValue] = useState('');
+/**
+ * [Filter] 범위
+ * @param defaultMin [기본 값] 범위 최소 값
+ * @param defaultMax [기본 값] 범위 최대 값
+ */
+export function f_range(
+    defaultMin?: number,
+    defaultMax?: number,
+) {
+    return {
+        filter: FilterRange,
+        filterParams: {
+            min: defaultMin,
+            max: defaultMax,
+        },
+    } as ColDef;
 
-//             //* 초기 설정
-//             useEffect(() => {
-//                 // min 설정
-//                 if( rangeIdx === 0 && typeof defaultMin === 'number' ){
-//                     setValue(defaultMin+'');
-//                 }
-//                 // max 설정
-//                 else if( rangeIdx === 1 && typeof defaultMax === 'number' ){
-//                     setValue(defaultMax+'');
-//                 }
-//             }, []);
+    // return {
+    //     filterVariant: 'range',
+    //     Filter: (props) => {
+    //         const {column, rangeFilterIndex: rangeIdx} = props;
+    //         const [value, setValue] = useState('');
 
-//             //* min/max 적용
-//             useEffect(() => {
-//                 column.setFilterValue((old: number[]|undefined) => {
-//                     const res = new Array(2);
+    //         //* 초기 설정
+    //         useEffect(() => {
+    //             // min 설정
+    //             if( rangeIdx === 0 && typeof defaultMin === 'number' ){
+    //                 setValue(defaultMin+'');
+    //             }
+    //             // max 설정
+    //             else if( rangeIdx === 1 && typeof defaultMax === 'number' ){
+    //                 setValue(defaultMax+'');
+    //             }
+    //         }, []);
 
-//                     // min/max로 사용될 index 설정
-//                     const currIdx = rangeIdx;
-//                     const diffIdx = ( currIdx === 0 ? 1 : 0 );
+    //         //* min/max 적용
+    //         useEffect(() => {
+    //             column.setFilterValue((old: number[]|undefined) => {
+    //                 const res = new Array(2);
 
-//                     // 변경된 min/max 값 적용
-//                     res[currIdx] = Number(value);
-//                     res[diffIdx] = old === undefined ? undefined : old[diffIdx];
+    //                 // min/max로 사용될 index 설정
+    //                 const currIdx = rangeIdx;
+    //                 const diffIdx = ( currIdx === 0 ? 1 : 0 );
 
-//                     return res;
-//                 });
-//             }, [value]);
+    //                 // 변경된 min/max 값 적용
+    //                 res[currIdx] = Number(value);
+    //                 res[diffIdx] = old === undefined ? undefined : old[diffIdx];
 
-//             return <TextInput placeholder="Min" type="number" value={value} size='xs'
-//                 onChange={(e) => setValue(e.target.value.trim())}
-//             />;
-//         }
-//     } as COLUMN_ITEM;
-// }
+    //                 return res;
+    //             });
+    //         }, [value]);
+
+    //         return <TextInput placeholder="Min" type="number" value={value} size='xs'
+    //             onChange={(e) => setValue(e.target.value.trim())}
+    //         />;
+    //     }
+    // }
+}
 
 // /**
 //  * [Filter] 범위 슬라이더
@@ -294,7 +302,7 @@ export const columnFilters = {
     text: f_text,
     select: f_select,
     multiSelect: f_multiSelect,
-    // range: f_range,
+    range: f_range,
     // rangeSlider: f_rangeSlider,
     // chkbox: f_chkBox,
     // date: f_date,

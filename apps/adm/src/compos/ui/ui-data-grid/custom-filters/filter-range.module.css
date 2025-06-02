@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+.filter-range {
+    & {
+        @apply flex flex-col gap-1.5 p-2 pt-0;
+    }
+
+    .slider {
+        /* 기본 마진 변경 */
+        & { @apply mx-3 mt-7 mb-1; }
+
+        /* 마커 위치 아래 → 위로 이동 */
+        & [class*=ant-slider-mark] {
+            @apply top-auto bottom-[6px];
+        }
+    }
+
+    .btn-area {
+        & {
+            @apply flex gap-1 justify-end items-center;
+        }
+
+        & button > span {
+            @apply text-xs;
+        }
+    }
+}
