@@ -5,6 +5,7 @@ import dayjs from '@/utils/dayjs';
 // import style from './data-grid-filter.module.css'
 import type { ColDef } from './';
 import { FilterSelect, FilterMultiSelect, FilterRange, FilterDate } from './custom-filters';
+import { FilterDateRange } from './custom-filters/filter-date-range';
 
 /**
  * [Filter] 텍스트
@@ -80,21 +81,16 @@ export function f_date() {
     } as ColDef;
 }
 
-// /**
-//  * [Filter] 날짜 선택
-//  * @param opts 날짜 선택 옵션
-//  * @param opts.accessorKey 필터에 사용될 컬럼 키 값
-//  * @param opts.dateFormat 날짜 포맷 (기본: YYYY-MM-DD)
-//  */
-// export function f_date(opts: {
-//     accessorKey: string,
-//     dateFormat?: dayjs.OptionType,
-// }) {
-//     return {
-//         filterVariant: 'date',
-//         ...commDate(opts),
-//     } as COLUMN_ITEM;
-// }
+/**
+ * [Filter] 날짜 범위 선택
+ */
+export function f_dateRange() {
+    return {
+        filter: FilterDateRange,
+        filterParams: {},
+    } as ColDef;
+}
+
 
 // /**
 //  * [Filter] 날짜 범위 선택
@@ -161,6 +157,6 @@ export const columnFilters = {
     multiSelect: f_multiSelect,
     range: f_range,
     date: f_date,
-    // dateRange: f_dateRange,
+    dateRange: f_dateRange,
     // actionBtns: f_actionButtons,
 }

@@ -10,7 +10,7 @@ export function ContentArea(){
 const _COLUMNS: ColDef[] = (() => {
     const {
         text, select, multiSelect,
-        range, date
+        range, date, dateRange,
     } = columnFilters;
 
     // 기본 필터
@@ -22,7 +22,7 @@ const _COLUMNS: ColDef[] = (() => {
         ]
     });
     const rangeFilter = range(100, 300);
-    const dateFilter = date();
+    const dateFilter = dateRange();
 
     return [
         { field: 'fullName',    headerName: 'Name', ...basicFilter },

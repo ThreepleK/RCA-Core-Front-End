@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
-.filter-date {
+.filter-date-range {
     & {
         @apply flex gap-1.5 p-2;
     }
 
-    .date-picker {
-        @apply w-[110px];
+    .range-picker {
+        @apply w-[210px];
     }
     
     .btn-area {
