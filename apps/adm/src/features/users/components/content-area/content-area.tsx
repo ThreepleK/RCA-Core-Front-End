@@ -1,21 +1,49 @@
 import { columnFilters, UI_DataGrid, type ColDef } from '@/compos/ui';
+import { columnCustom } from '@/compos/ui/ui-data-grid/data-grid-cols';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
+import { GridProcess } from './grid-process';
+import { useLocalSendEvent } from '../../stores';
+import { useCallback, useRef } from 'react';
+import type { AgGridReact } from 'ag-grid-react';
 
+/**
+ * 본문 컨텐츠
+ */
 export function ContentArea(){
-    return <UI_DataGrid
-        columnDefs={_COLUMNS}
-        rowData={_TMP_DATA}
-    />;
+    const gridRef = useRef<AgGridReact>(null);
+    const onReady = useCallback((e) => {
+        // 이벤트 전달 함수 가져오기
+        const { sendEvent } = useLocalSendEvent.getState();
+
+        // 준비 완료
+        sendEvent('ready', e.api);
+    }, []);
+
+    return <>
+        {/* 그리드 */}
+        <UI_DataGrid
+            columnDefs={_COLUMNS}
+            rowData={_TMP_DATA as any}
+            rowSelection={{mode: 'multiRow'}}
+            ref={gridRef}
+            onGridReady={onReady}
+        />
+
+        {/* 그리드 처리 관련 */}
+        <GridProcess />
+    </>;
 }
 
+// 그리드 컬럼 설정
 const _COLUMNS: ColDef[] = (() => {
     const {
         text, select, multiSelect,
         range, date, dateRange,
-        actionBtns
     } = columnFilters;
 
-    // 기본 필터
+    const { actionBtns } = columnCustom;
+
+    //* 컬럼에 사용될 필터
     const basicFilter = text();
     const activeFilter = multiSelect({
         data: [
@@ -26,16 +54,22 @@ const _COLUMNS: ColDef[] = (() => {
     const rangeFilter = range(100, 300);
     const dateFilter = dateRange();
     
+    //* 액션 버튼 제어
     const actions = actionBtns({
         buttons: {
             edit: <IconEdit size={20} strokeWidth={1.5} title='Edit' />,
             delete: <IconTrash size={20} strokeWidth={1.5} title='Delete' />,
         },
-        feedback: (btnKey: string) => {
-            console.log('btnKey', btnKey);
+        feedback: (btnKey: string, row: any) => {
+            // 이벤트 전달 함수 가져오기
+            const { sendEvent } = useLocalSendEvent.getState();
+
+            // 버튼 제어 이벤트
+            sendEvent(btnKey, row);
         }
     });
 
+    //* 그리드 컬럼 설정
     return [
         { field: 'fullName',    headerName: 'Name', ...basicFilter },
         { field: 'email',       headerName: 'Email', },

@@ -16,9 +16,9 @@ export function AntdThemeProvider({ children }: {
             },
             token: {
                 //-- transition Fast, Mid, Slow 타입 별 속도
-                motionDurationFast: '0.05s',
-                motionDurationMid: '0.1s',
-                motionDurationSlow: '0.15s',
+                motionDurationFast: '0.025s',
+                motionDurationMid: '0.05s',
+                motionDurationSlow: '0.10s',
 
                 //-- 그림자 설정
                 boxShadowSecondary: '0 1px 4px 0px rgba(0, 0, 0, 0.175)'

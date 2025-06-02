@@ -1,4 +1,3 @@
-import { storeContext } from "@/utils";
 import { create } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 
@@ -21,14 +20,11 @@ export const createSendAction = <T = any>() => {
     );
 };
 
-// store instance (subscribe 등 직접 접근 가능)
-export const sendActionStore = createSendAction<any>();
-
-//* 독립 state 생성
-export const {
-    Provider: SendActionProvider,
-    useStore: useSendAction,
-} = storeContext<useSendActionState>(() => sendActionStore);
+// //* 독립 state 생성
+// export const {
+//     Provider: SendActionProvider,
+//     useStore: useSendAction,
+// } = storeContext<useSendActionState>(createSendAction);
 
 
 //--------------------------------------------------------

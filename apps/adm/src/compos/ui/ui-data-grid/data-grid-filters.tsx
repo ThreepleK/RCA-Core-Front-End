@@ -1,7 +1,6 @@
-import { type ReactNode } from 'react';
 import {
     FilterSelect, FilterMultiSelect, FilterRange,
-    FilterDate, FilterDateRange, ActionButtons
+    FilterDate, FilterDateRange
 } from './custom-filters';
 import type { ColDef } from './';
 
@@ -87,21 +86,6 @@ export function f_dateRange() {
     } as ColDef;
 }
 
-/**
- * [Filter] 액션 버튼
- * @param opts
- * @param opts.buttons 버튼 모음
- * @param opts.feedback 버튼 클릭 이벤트
- */
-export function f_actionButtons(opts: {
-    buttons: {[key: string]: string|ReactNode};
-    feedback: (btnKey: string) => void;
-}) {
-    return {
-        cellRenderer: ActionButtons,
-        cellRendererParams: opts,
-    } as ColDef;
-}
 
 //* 필터 모음
 export const columnFilters = {
@@ -111,5 +95,4 @@ export const columnFilters = {
     range: f_range,
     date: f_date,
     dateRange: f_dateRange,
-    actionBtns: f_actionButtons,
-}
+};

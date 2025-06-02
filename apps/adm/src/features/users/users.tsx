@@ -3,17 +3,17 @@ import { useStore } from 'zustand';
 import type { MenuProps } from 'antd';
 import { IconPlus } from '@tabler/icons-react';
 
-import { SendActionProvider, useSendAction } from '@/stores/send-event';
 import { ContentsLayout, useContsLayoutStore } from '@/compos/layout';
 import { UI_Flex, UI_Button, UI_DropdownMenu } from '@/compos/ui';
 import { ContentArea } from './components';
 
 import style from './users.module.css'
+import { useLocalSendEvent } from './stores';
 
 export function Users(){
     return <>
         {/* 페이지 내 Action을 주고 받기 위한 SendActionProvider 추가 */}
-        <ContentsLayout CtxProvider={SendActionProvider}>
+        <ContentsLayout>
             {/* 초기 레이아웃 설정 */}
             <InitLayout />
             {/* 컨텐츠 */}
@@ -51,7 +51,7 @@ function InitLayout(){
  */
 function TitleRightSide(){
     // 이벤트 가져오기
-    const sendEvent = useSendAction().getState().sendEvent;
+    const sendEvent = useLocalSendEvent(s => s.sendEvent);
 
     //* 추가
     const onCreate = () => {
