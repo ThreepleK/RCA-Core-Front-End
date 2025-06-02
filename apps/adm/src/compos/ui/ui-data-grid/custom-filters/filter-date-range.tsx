@@ -14,7 +14,7 @@ export interface FilterDateRange extends CustomFilterProps {
  */
 export function FilterDateRange(props: FilterDateRange){
     const [isOpen, setIsOpen] = useState(false);
-    const [dates, setDates] = useState<[Dayjs,Dayjs]|null>(props.model ?? [dayjs(), dayjs()]);
+    const [dates, setDates] = useState<[Dayjs,Dayjs]|null>(props.model ?? [null, null]);
 
     //* 제어할 필드명 설정
     const field = useMemo(() => props.colDef.field, [props.colDef.field]);
@@ -52,7 +52,7 @@ export function FilterDateRange(props: FilterDateRange){
     ) => {
         // null이 들어오면 초기 설정
         if( !dates ){
-            setDates([dayjs(), dayjs()]);
+            setDates([null, null]);
             props.onModelChange(null);
             return;
         }

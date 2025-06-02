@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+.action-buttons {
+    & {
+        @apply h-full flex items-center justify-center;
+    }
+}

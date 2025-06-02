@@ -1,4 +1,5 @@
 import { columnFilters, UI_DataGrid, type ColDef } from '@/compos/ui';
+import { IconEdit, IconTrash } from '@tabler/icons-react';
 
 export function ContentArea(){
     return <UI_DataGrid
@@ -11,10 +12,11 @@ const _COLUMNS: ColDef[] = (() => {
     const {
         text, select, multiSelect,
         range, date, dateRange,
+        actionBtns
     } = columnFilters;
 
     // 기본 필터
-    const basicFilter = text({});
+    const basicFilter = text();
     const activeFilter = multiSelect({
         data: [
             {label: 'Active', value: 'active'},
@@ -23,6 +25,16 @@ const _COLUMNS: ColDef[] = (() => {
     });
     const rangeFilter = range(100, 300);
     const dateFilter = dateRange();
+    
+    const actions = actionBtns({
+        buttons: {
+            edit: <IconEdit size={20} strokeWidth={1.5} title='Edit' />,
+            delete: <IconTrash size={20} strokeWidth={1.5} title='Delete' />,
+        },
+        feedback: (btnKey: string) => {
+            console.log('btnKey', btnKey);
+        }
+    });
 
     return [
         { field: 'fullName',    headerName: 'Name', ...basicFilter },
@@ -32,6 +44,7 @@ const _COLUMNS: ColDef[] = (() => {
         { field: 'userGroup',   headerName: 'User group', },
         { field: 'status',      headerName: 'Status', ...activeFilter},
         { field: 'createdTime', headerName: 'Created time', ...dateFilter},
+        { field: 'actions',     headerName: 'Actions', width: 120, ...actions},
     ];
 })();
 

@@ -14,7 +14,7 @@ export interface FilterDate extends CustomFilterProps {
  */
 export function FilterDate(props: FilterDate){
     const [isOpen, setIsOpen] = useState(false);
-    const [date, setDate] = useState<Dayjs|null>(props.model ?? dayjs());
+    const [date, setDate] = useState<Dayjs|null>(props.model ?? null);
 
     //* 제어할 필드명 설정
     const field = useMemo(() => props.colDef.field, [props.colDef.field]);
@@ -47,7 +47,7 @@ export function FilterDate(props: FilterDate){
     const setChange = (date: Dayjs|null, dateString?: string) => {
         // null이 들어오면 초기 설정
         if( !date ){
-            setDate(dayjs());
+            setDate(null);
             props.onModelChange(null);
             return;
         }
