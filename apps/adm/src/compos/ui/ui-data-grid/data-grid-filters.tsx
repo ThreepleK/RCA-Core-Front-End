@@ -5,7 +5,8 @@ import {
 import type { ColDef } from './';
 
 /**
- * [Filter] 텍스트
+ * [Filter]
+ * 텍스트
  */
 export function f_text() {
     return {
@@ -21,7 +22,8 @@ export function f_text() {
 }
 
 /**
- * [Filter] Select
+ * [Filter]
+ * Select
  * @param opts Select 옵션
  * @param opts.data 필터에 보여줄 내역
  */
@@ -67,7 +69,8 @@ export function f_range(
 }
 
 /**
- * [Filter] 날짜
+ * [Filter]
+ * 날짜
  */
 export function f_date() {
     return {
@@ -77,7 +80,8 @@ export function f_date() {
 }
 
 /**
- * [Filter] 날짜 범위 선택
+ * [Filter]
+ * 날짜 범위 선택
  */
 export function f_dateRange() {
     return {

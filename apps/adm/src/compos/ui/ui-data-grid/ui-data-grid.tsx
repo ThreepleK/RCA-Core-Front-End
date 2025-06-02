@@ -21,9 +21,9 @@ export type ColDef = coldef;
  * Updating data: https://www.ag-grid.com/react-data-grid/data-update-row-data/
  * Interaction:   https://www.ag-grid.com/react-data-grid/keyboard-navigation/
  */
-export const UI_DataGrid = forwardRef(function(
-    props: AgGridReactProps<'AgGridReact'>,
+export const UI_DataGrid = forwardRef((
+    props: AgGridReactProps,
     ref: Ref<AgGridReact<any>>
-){
+) => {
     return <AgGridReact {...props} ref={ref} />
 })

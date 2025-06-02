@@ -45,8 +45,12 @@ export function FilterMultiSelect(props: FilterMultiSelect){
 
     //* 선택 값 처리
     useEffect(() => {
-        console.log('select', select);
-        props.onModelChange(select);
+        // 선택 항목이 0개면 초기화(null)
+        const reData = Array.isArray(select) && select.length === 0
+            ? null
+            : select;
+
+        props.onModelChange(reData);
     }, [select])
 
     return <>

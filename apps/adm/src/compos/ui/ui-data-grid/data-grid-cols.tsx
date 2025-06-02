@@ -18,7 +18,7 @@ export function f_actionButtons(opts: {
     } as ColDef;
 }
 
-//* 필터 모음
+//* 커스텀 컬럼 모음
 export const columnCustom = {
     actionBtns: f_actionButtons,
 }

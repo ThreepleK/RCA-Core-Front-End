@@ -3,7 +3,6 @@ import { useCallback, useMemo, useState } from "react";
 import { UI_Button, UI_DatePicker } from "../..";
 
 import style from "./filter-date.module.css";
-import dayjs from "@/utils/dayjs";
 import type { Dayjs } from "dayjs";
 
 export interface FilterDate extends CustomFilterProps {
