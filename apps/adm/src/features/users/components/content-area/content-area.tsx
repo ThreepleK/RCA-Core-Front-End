@@ -52,7 +52,7 @@ const _COLUMNS: ColDef[] = (() => {
     const activeFilter = multiSelect({
         data: [
             {label: 'Active', value: 'active'},
-            {label: 'Deactive', value: 'deactive'},
+            {label: 'Inactive', value: 'inactive'},
         ]
     });
     const rangeFilter = range(100, 300);
@@ -105,7 +105,7 @@ const _TMP_DATA = [
         team: 'bistelligence',
         org: 200,
         userGroup: '',
-        status: 'deactive',
+        status: 'inactive',
         createdTime: '2025-06-10 15:49:00',
     },
     {

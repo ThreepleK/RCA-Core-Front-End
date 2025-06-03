@@ -1,18 +1,34 @@
+import { useEffect, useState } from 'react';
 import style from './ui-loading-overlay.module.css'
 
 /**
  * 로딩 컴포넌트
  */
-export function UI_LoadingOverlay({visible=true, zIndex=9999}: {
-    visible?: boolean   // 보임여부
+export function UI_LoadingOverlay({isOpen=false, zIndex=9999}: {
+    isOpen?: boolean    // 보임여부
     zIndex?: number     // z축 index
 }){
+    const [isShow, setIsShow] = useState(isOpen);
+
+    // 보임 여부 제어 (컨텐츠 클린을 위함)
+    useEffect(() => {
+        if( isOpen ){
+            setIsShow(true);
+            return;
+        }
+
+        // 애니메이션 종료 시점에 닫기 처리
+        setTimeout(() => {
+            setIsShow(false);
+        }, 350);
+    }, [isOpen]);
+
     return <>
-        {visible && <div
+        {isShow && <div
             style={{
                 '--lo-zIndex': zIndex   // 로딩 표기할 z축
             } as any}
-            className={style['ui-loading-overlay']}
-        >로딩</div>}
+            className={`${style['ui-loading-overlay']} ${isOpen ? 'active-fade-in' : 'active-fade-out'}`}
+        ></div>}
     </>;
 }

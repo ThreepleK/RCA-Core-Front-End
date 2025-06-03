@@ -1,7 +1,7 @@
 import { useCommModalStore } from "@/compos/modal";
 import { FormEditContent, formValidate } from "../form";
 import { UI_Button, UI_Switch } from "@/compos/ui";
-// import { api_createItem } from "../../apis";
+import { api_createItem } from "../../apis";
 
 import style from './grid-create-modal.module.css'
 
@@ -37,8 +37,8 @@ export function gridCreateModal(
     };
 
     //* 팝업창 유지 여부 설정
-    const onSetCreateMore = (e: any) => {
-        isKeep = e.currentTarget.checked;
+    const onSetCreateMore = (checked: boolean) => {
+        isKeep = checked;
     }
   
     //* 모달 설정
@@ -96,7 +96,7 @@ export function gridCreateModal(
             // 로딩 숨기기
             setLoading(false);
         },
-        size: 'md',
+        size: 'sm',
     });
 
     //* 모달 열기
@@ -156,14 +156,13 @@ async function createAction(
     console.log('row', row);
 
     // 추가 처리
-    // const res = await api_createItem([row]);
+    const res = await api_createItem([row]);
 
-    // // 에러가 있을 경우
-    // if( res.isErr ){
-    //     setErrMsg(res.msg);
-    //     return false;
-    // }
+    // 에러가 있을 경우
+    if( res.isErr ){
+        setErrMsg(res.msg);
+        return false;
+    }
 
-    // return true;
-    return false;
+    return true;
 }

@@ -2,4 +2,24 @@
 
 .ui-alert {
     & {}
+
+    /* 에러 */
+    &[class*=ant-alert-error] [class*=ant-alert-content] {
+        @apply text-red-500;
+    }
+
+    /* 주의 */
+    &[class*=ant-alert-warning] [class*=ant-alert-content] {
+        @apply text-amber-500;
+    }
+
+    /* 정보 */
+    &[class*=ant-alert-info] [class*=ant-alert-content] {
+        @apply text-blue-600;
+    }
+
+    /* 성공 */
+    &[class*=ant-alert-success] [class*=ant-alert-content] {
+        @apply text-lime-600;
+    }
 }

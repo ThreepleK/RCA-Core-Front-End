@@ -83,6 +83,6 @@ function TitleRightSide(){
 
 //* Actions 드랍다운 메뉴
 const _ACTION_MENUS: MenuProps['items'] = [
-    { key: 'deactive', label: 'Deactive member' },
+    { key: 'inactive', label: 'Inactive member' },
     { key: 'delete',   label: 'Delete member', danger: true },
 ];

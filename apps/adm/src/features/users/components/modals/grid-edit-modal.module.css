@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+/* title */
+.edit-title {
+    @apply font-semibold text-blue-500;
+}

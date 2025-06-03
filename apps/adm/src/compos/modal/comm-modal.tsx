@@ -1,5 +1,5 @@
 import { useCommModalStore } from "./comm-modal-store";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { UI_Alert, UI_Flex, UI_LoadingOverlay, UI_Modal } from "../ui";
 
 import style from './comm-modal.module.css'
@@ -13,6 +13,8 @@ export function CommModal() {
         isLoading, errMsg,
         feedback, setOpen
     } = useCommModalStore((s) => s);
+
+    const [isShow, setIsShow] = useState(isOpen);
 
     // 하단 영역
     const bottomArea = useMemo(() => {
@@ -45,6 +47,7 @@ export function CommModal() {
         setOpen(false);
     }
 
+    // 모달 크기 설정
     const size = useMemo(() => {
         if( typeof modalSize === 'string' ){
             switch(modalSize){
@@ -59,7 +62,20 @@ export function CommModal() {
         return modalSize;
     }, [modalSize]);
 
-    return (
+    // 보임 여부 제어 (컨텐츠 클린을 위함)
+    useEffect(() => {
+        if( isOpen ){
+            setIsShow(true);
+            return;
+        }
+
+        // 애니메이션 종료 시점에 닫기 처리
+        setTimeout(() => {
+            setIsShow(false);
+        }, 350);
+    }, [isOpen]);
+
+    return (isShow &&
         <UI_Modal open={isOpen} title={title} onCancel={onClose} footer={null} width={size}>
             {/* 모달 본문 */}
             {content && content}
@@ -67,9 +83,11 @@ export function CommModal() {
             {/* 에러 메시지 */}
             {errMsg && (
                 <UI_Alert
-                    message='Please check'
+                    className={style['alert']}
+                    message={errMsg}
                     type='error'
-                    description={errMsg}
+                    showIcon
+                    // description={errMsg}
                 />
             )}
 
@@ -78,7 +96,7 @@ export function CommModal() {
 
             <UI_LoadingOverlay
                 zIndex={1000}
-                visible={isLoading}
+                isOpen={isLoading}
                 // transitionProps={{ transition: 'fade', duration: 250 }}
             />
         </UI_Modal>
