@@ -5,6 +5,7 @@ import { GridProcess } from './grid-process';
 import { useLocalSendEvent } from '../../stores';
 import { useCallback, useRef } from 'react';
 import type { AgGridReact } from 'ag-grid-react';
+import { CommModal } from '@/compos/modal/comm-modal';
 
 /**
  * 본문 컨텐츠
@@ -28,6 +29,9 @@ export function ContentArea(){
             ref={gridRef}
             onGridReady={onReady}
         />
+
+        {/* 모달 창 */}
+        <CommModal />
 
         {/* 그리드 처리 관련 */}
         <GridProcess />

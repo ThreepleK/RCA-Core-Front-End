@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useLocalSendEvent } from "../../stores";
 import type { GridApi } from "ag-grid-community";
+import { gridCreateModal } from "../modals";
 
 /**
  * 그리드 프로세스 처리
@@ -32,7 +33,9 @@ export function GridProcess(){
 
                     // 추가
                     case 'create': {
-                        console.log('create');
+                        gridCreateModal(() => {
+                            console.log('----')
+                        });
                     } break;
 
                     // 선택 항목 비활성화

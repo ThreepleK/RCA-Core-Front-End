@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+.ui-modal {
+    & {}
+
+    /* 등장 애니메이션 */
+    & div[role="dialog"][class*="ant-zoom-enter-active"] {
+        animation-duration: 0.3s !important;
+    }
+    /* 퇴장 애니메이션 */
+    & div[role="dialog"][class*="ant-zoom-leave"] {
+        animation-duration: 0.35s !important;
+    }
+}

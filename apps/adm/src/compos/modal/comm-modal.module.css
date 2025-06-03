@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+/* 하단 영역 */
+.bottom-area {
+    @apply pt-2;
+}

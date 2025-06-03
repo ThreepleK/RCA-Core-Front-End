@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+/* title */
+.create-title {
+    @apply font-semibold text-blue-500;
+}
+
+/* 더 추가하기 */
+.create-more {
+    @apply flex gap-1 items-center cursor-pointer;
+}

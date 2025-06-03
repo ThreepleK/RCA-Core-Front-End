@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+.ui-loading-overlay {
+    & {
+        @apply
+            z-[var(--lo-zIndex)]
+            absolute left-0 top-0 bottom-0 right-0 backdrop-blur-md;
+        ;
+    }
+}
