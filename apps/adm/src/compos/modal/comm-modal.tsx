@@ -87,7 +87,6 @@ export function CommModal() {
                     message={errMsg}
                     type='error'
                     showIcon
-                    // description={errMsg}
                 />
             )}
 
@@ -97,7 +96,6 @@ export function CommModal() {
             <UI_LoadingOverlay
                 zIndex={1000}
                 isOpen={isLoading}
-                // transitionProps={{ transition: 'fade', duration: 250 }}
             />
         </UI_Modal>
     );
