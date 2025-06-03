@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useLocalSendEvent } from "../../stores";
 import type { GridApi } from "ag-grid-community";
-import { gridCreateModal, gridEditModal } from "../modals";
+import { gridCreateModal, gridDeleteModal, gridEditModal, gridInactiveModal } from "../modals";
 
 /**
  * 그리드 프로세스 처리
@@ -39,27 +39,39 @@ export function GridProcess(){
                     } break;
 
                     // 선택 항목 비활성화
-                    case 'selected-deactive': {
+                    case 'selected-inactive': {
                         if( !gridApi ){ return; }
-                        console.log('gridApi', gridApi.getSelectedRows())
+
+                        // 그리드에서 선택된 row 가져오기
+                        const rows = gridApi.getSelectedRows()
+                        // 계정 비활성화 모달
+                        gridInactiveModal(rows, () => {});
                     } break;
 
                     // 선택 항목 삭제
                     case 'selected-delete': {
                         if( !gridApi ){ return; }
-                        console.log('gridApi', gridApi.getSelectedRows())
+
+                        // 그리드에서 선택된 row 가져오기
+                        const rows = gridApi.getSelectedRows()
+                        // 삭제 모달
+                        gridDeleteModal(rows, () => {})
                     } break;
 
                     // 수정
                     case 'edit': {
+                        // 그리드에서 전달한 row 데이터
                         const row = eVal as any;
+                        // 수정 모달
                         gridEditModal(row, () => {})
                     } break;
 
                     // 삭제
                     case 'delete': {
+                        // 그리드에서 전달한 row 데이터
                         const row = eVal as any;
-                        console.log('delete', eVal);
+                        // 삭제 모달
+                        gridDeleteModal([row], () => {})
                     } break;
                 }
             }

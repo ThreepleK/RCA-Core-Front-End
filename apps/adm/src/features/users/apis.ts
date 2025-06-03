@@ -158,7 +158,7 @@ export function api_updateItems(datas: any[]){
 /**
  * 아이템 삭제
  */
-export function api_removeItems(datas: any[]){
+export function api_deleteItems(datas: any[]){
     // return request({
     //     type: 'delete',
     //     url: '/admin/api/users',

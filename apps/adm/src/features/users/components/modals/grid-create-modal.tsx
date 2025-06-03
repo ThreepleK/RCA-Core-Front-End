@@ -1,9 +1,9 @@
 import { useCommModalStore } from "@/compos/modal";
-import { FormEditContent, formValidate } from "../form";
 import { UI_Button, UI_Switch } from "@/compos/ui";
+import { FormEditContent, formValidate } from "../form";
 import { api_createItem } from "../../apis";
 
-import style from './grid-create-modal.module.css'
+import style from './grid-modal.module.css'
 
 //* 컨텐츠 타입
 const _CONT_TYPE = 'new';
