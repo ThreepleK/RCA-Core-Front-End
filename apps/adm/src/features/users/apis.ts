@@ -85,7 +85,7 @@ function gridUrl(baseURL: string, opts: any){
  * @param opts.filter       컬럼 별 필터
  * @param opts.sort         컬럼 별 정렬
  */
-export async function api_list(opts: {
+export async function api_list(opts?: {
    pagination: any,
    search: string,
    filter: any[],
@@ -269,35 +269,35 @@ export function api_demo(): Promise<ApiResult>{
 const _TMP_DATA = [
     {
         id: "1323addd-a4ac-4dd2-8de2-6f934969a0f1",
-        name: "admin",
+        fullName: "admin",
         username: "admin",
         email: 'admin@bistelligence.ai',
         team: 'bistelligence',
-        org: '',
+        org: 100,
         userGroup: '',
         status: 'active',
-        createTime: '2025-05-23 15:47:00',
+        createdTime: '2025-05-23 15:47:00',
     },
     {
         id: "1323addd-a4ac-4dd1-8de2-6f934969a0f2",
-        name: "yunny",
+        fullName: "yunny",
         username: "yunny",
         email: 'yunny@bistelligence.ai',
         team: 'bistelligence',
-        org: '',
+        org: 200,
         userGroup: '',
-        status: 'active',
-        createTime: '2025-05-23 15:49:00',
+        status: 'inactive',
+        createdTime: '2025-06-10 15:49:00',
     },
     {
         id: "2343addd-a4ac-4dd1-8de2-6f934969a0f2",
-        name: "tk",
+        fullName: "tk",
         username: "tk",
         email: 'tk@bistelligence.ai',
         team: 'bistelligence',
-        org: '',
+        org: 300,
         userGroup: '',
         status: 'active',
-        createTime: '2025-05-23 16:24:00',
+        createdTime: '2025-06-23 16:24:00',
     },
 ];
