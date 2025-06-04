@@ -3,8 +3,12 @@ import type { StoreApi, UseBoundStore } from "zustand";
 import type { GridApi, GridReadyEvent } from "ag-grid-community";
 
 import { createSendAction, type useSendActionState } from "@/stores/send-event";
-import { UI_DataGrid, type ColDef } from "../ui";
+import { UI_Button, UI_DataGrid, UI_Input, type ColDef } from "../ui";
 import { CommModal } from "../modal";
+
+import style from './grid-basic.module.css'
+import { IconDeselect, IconFilterOff, IconRefresh, IconSearch } from "@tabler/icons-react";
+import { GridTop } from "./grid-top";
 
 //* 그리드 내 처리할 이벤트 전달 store
 export type UseGridEvent = UseBoundStore<StoreApi<useSendActionState>>;
@@ -18,15 +22,16 @@ export function GridBasic({ columns, processCB }: {
     columns: ColDef[];
     processCB: ( 
         api: GridApi<any>,
-        gridSendEvent: (key: string, val: any) => void,
+        gridSendEvent: (key: string, val?: any) => void,
         gridRecevieEvent: any
     ) => void;
 }){
+    const apiRef = useRef<GridApi>(null);
+    const topRef = useRef<(key: string, val?: any)=>void>(null);
+
     // row 데이터, 로딩, 페이지
     const [rowData, setRowData] = useState(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [pageIdx, setPageIdx] = useState(0);
-    const [pageSize, setPageSize] = useState(10);
 
     //* ProcessCB 사용 후 release 처리 용
     const pReleaseRef = useRef(null);
@@ -44,6 +49,8 @@ export function GridBasic({ columns, processCB }: {
             resEvent.getState().sendEvent,
             reqEvent,
         );
+
+        apiRef.current = e.api;
     }, []);
 
     //* 그리드 관련 구독 처리
@@ -61,7 +68,12 @@ export function GridBasic({ columns, processCB }: {
 
             switch(eKey){
                 // 그리드 리스트 값
-                case 'list': setRowData(eVal as any); break;
+                case 'list':
+                    // 그리드 리스트 설정
+                    setRowData(eVal as any);
+                    // Top에 리스트 이벤트 전달
+                    topRef.current('onLoad', (eVal as any[]).length);
+                break;
                 // 로딩 여부
                 case 'loading': setIsLoading(eVal as boolean); break;
             }
@@ -82,40 +94,37 @@ export function GridBasic({ columns, processCB }: {
     }, []);
 
     //* 그리드 관련 이벤트
-    const onEvent = useCallback((key: string) => {
-        reqEvent.getState().sendEvent(key);
+    const onEvent = useCallback((key: string, val?: any) => {
+        topRef.current(key);
     }, []);
 
-    //* 그리드 페이지 변경 이벤트
-    const onPageChange = useCallback((gridApi: GridApi) => {
-        // 변경된 페이지 index, size 가져오기
-        const changePage = gridApi.paginationGetCurrentPage();
-        const changeSize = gridApi.paginationGetPageSize();
-
-        // 변경된 페이지 index, size가 동일하면 변경 안됨
-        if( changePage === pageIdx && changeSize === pageSize ){ return; }
-
-        // 변경된 페이지 index, size 설정
-        setPageIdx(changePage);
-        setPageSize(changeSize);
-
-        // 페이지 변경 전달
-        onEvent('onPaginationChange');
-    }, [pageIdx, pageSize]);
+    //* 상단 컴포넌트 연결 커넥터
+    const connector = useCallback((
+        topConn: (key: string, val?: any) => void
+    ) => {
+        topRef.current = topConn;
+    }, []);
 
     return <>
-        {/* 그리드 */}
-        <UI_DataGrid
-            columnDefs={columns}
-            rowData={rowData}
-            onGridReady={onReady}
-            loading={isLoading}
-            onFilterChanged={() => { onEvent('onFilterChange'); }}
-            onSortChanged={() => { onEvent('onSortChange'); }}
-            onPaginationChanged={(e) => { onPageChange(e.api); }}
-            pagination={true}
-            paginationPageSize={pageSize}
+        {/* 상단 */}
+        <GridTop
+            getGridApi={() => apiRef.current}
+            connector={connector}
         />
+
+        {/* 그리드 */}
+        <div className={style['grid-body']}>
+            <UI_DataGrid
+                columnDefs={columns}
+                rowData={rowData}
+                onGridReady={onReady}
+                loading={isLoading}
+                onFilterChanged={() => { onEvent('onFilterChange'); }}
+                onSortChanged={() => { onEvent('onSortChange'); }}
+                onRowSelected={() => { onEvent('onRowSelected'); }}
+                pagination={true}
+            />
+        </div>
 
         {/* 모달 창 */}
         <CommModal />
