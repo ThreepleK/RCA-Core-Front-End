@@ -3,11 +3,10 @@ import type { StoreApi, UseBoundStore } from "zustand";
 import type { GridApi, GridReadyEvent } from "ag-grid-community";
 
 import { createSendAction, type useSendActionState } from "@/stores/send-event";
-import { UI_Button, UI_DataGrid, UI_Input, type ColDef } from "../ui";
+import { UI_DataGrid, type ColDef } from "../ui";
 import { CommModal } from "../modal";
 
 import style from './grid-basic.module.css'
-import { IconDeselect, IconFilterOff, IconRefresh, IconSearch } from "@tabler/icons-react";
 import { GridTop } from "./grid-top";
 
 //* 그리드 내 처리할 이벤트 전달 store

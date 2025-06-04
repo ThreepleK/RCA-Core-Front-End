@@ -13,6 +13,7 @@ export function GridTop({ getGridApi, connector }: {
     ) => void,
 }){
     const [total, setTotal] = useState(0);
+    const [selected, setSelected] = useState(0);
     const [search, setSearch] = useState('');
 
     const [isFilter, setIsFilter] = useState(true);
@@ -42,6 +43,7 @@ export function GridTop({ getGridApi, connector }: {
                 // row 선택 이벤트
                 case 'onRowSelected': {
                     const rowLen = api.getSelectedRows().length;
+                    setSelected(rowLen);
                     setIsChecked(rowLen === 0);
                 } break;
             }
@@ -96,7 +98,11 @@ export function GridTop({ getGridApi, connector }: {
         <ul className={style['grid-top']}>
             {/* 좌측 총 갯수 */}
             <li className={style['gt-left']}>
-                <span>Total: {total}</span>
+                <span>
+                    Selected:&nbsp;
+                    <b>{selected.toLocaleString('ko-KR')}</b>/
+                    <b>{total.toLocaleString('ko-KR')}</b>
+                </span>
             </li>
 
             {/* 우측 기능 버튼 */}
