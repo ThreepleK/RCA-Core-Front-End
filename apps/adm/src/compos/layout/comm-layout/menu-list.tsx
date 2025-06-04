@@ -21,12 +21,12 @@ export const MenuList: MenuItem[] = [
         label: 'System settings',
         icon: <IconFolder size={16} stroke={1.5} />,
         children: [
-            { label: 'Sidebar', key: '#/adm/sidebar-menu' },
+            { label: 'Sidebar', key: '/adm/sidebar' },
             { label: 'Application Menu', key: '#/adm/application-menu' },
             { label: 'Language', key: '#/adm/i18n' },
             { label: 'Message', key: '#/adm/message' },
             { label: 'Code', key: '#/adm/code' },
-            { label: 'Design', key: '#/adm/design' },
+            { label: 'Design', key: '/adm/design' },
             { label: 'License', key: '#/adm/license' },
         ]
     },

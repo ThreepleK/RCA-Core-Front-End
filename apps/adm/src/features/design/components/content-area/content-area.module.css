@@ -7,12 +7,12 @@
 .system-section {
     /* 영역 */
     & {
-        @apply text-2xl;
+        @apply text-lg;
     }
 
     /* 제목  */
     & > .title {
-        @apply text-md mb-2;
+        @apply mb-2;
     }
 }
 
@@ -24,9 +24,7 @@
 
     /* 제목  */
     & > .title {
-        /* @apply text-xl font-bold ;
-         */
-         @apply text-md mb-3;
+        @apply text-lg mb-3;
     }
     /* 로고 */
     & > .logo {
