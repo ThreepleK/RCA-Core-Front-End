@@ -35,7 +35,7 @@ function noDataModal(){
         ),
         // 내용
         content: (
-            <div className={style['madal-content']}>
+            <div className={style['modal-content']}>
                 Please select 1 or more items to delete.
             </div>
         ),
@@ -71,7 +71,7 @@ function deleteModal(
         ),
         // 내용
         content: (
-            <div className={style['madal-content']}>
+            <div className={style['modal-content']}>
                 Are you sure you want to delete?<br />
                 This action cannot be undone.
             </div>

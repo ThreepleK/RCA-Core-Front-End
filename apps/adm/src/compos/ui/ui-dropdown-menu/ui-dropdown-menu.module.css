@@ -10,6 +10,25 @@
     & span[class*=ant-dropdown-menu-title-content] > div {
         @apply px-2 py-1;
     }
+
+    /* 메뉴 그룹 타이틀 */
+    & div[class*=ant-dropdown-menu-item-group-title] {
+        @apply font-bold text-xs px-2! py-1!;
+    }
+
+    /* 메뉴 아이콘 svg */
+    & li[class*=ant-dropdown-menu-item] > svg {
+        @apply ml-1.5! mr-0!;
+    }
+
+    /* 메뉴 그룹 하위 리스트 */
+    & li[class*=ant-dropdown-menu-item-group] {
+        @apply mx-0!;
+    }
+    
+    & ul[class*=ant-dropdown-menu-item-group-list] {
+        @apply mx-0!;
+    }
 }
 
 .ui-dropdown-menu {

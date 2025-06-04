@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useStore } from 'zustand';
 import type { MenuProps } from 'antd';
-import { IconPlus } from '@tabler/icons-react';
+import { IconHeart, IconHeartOff, IconPlus, IconTrash, IconUserCancel, IconUserHeart, IconUserOff } from '@tabler/icons-react';
 
 import { ContentsLayout, useContsLayoutStore } from '@/compos/layout';
 import { UI_Flex, UI_Button, UI_DropdownMenu } from '@/compos/ui';
@@ -83,6 +83,9 @@ function TitleRightSide(){
 
 //* Actions 드랍다운 메뉴
 const _ACTION_MENUS: MenuProps['items'] = [
-    { key: 'inactive', label: 'Inactive member' },
-    { key: 'delete',   label: 'Delete member', danger: true },
+    { type: 'group', label: 'Selected member', children: [
+        { key: 'active',   label: 'Active',   icon: <IconHeart size={14} strokeWidth={1.25} /> },
+        { key: 'inactive', label: 'Inactive', icon: <IconHeartOff size={14} strokeWidth={1.25} /> },
+        { key: 'delete',   label: 'Delete',   icon: <IconTrash size={14} strokeWidth={1.25} />, danger: true },
+    ] }
 ];

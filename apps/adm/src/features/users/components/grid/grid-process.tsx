@@ -1,7 +1,8 @@
 import type { GridApi } from "ag-grid-community";
 import { useLocalSendEvent } from "../../stores";
-import { gridCreateModal, gridDeleteModal, gridEditModal, gridInactiveModal } from "../modals";
+import { gridCreateModal, gridDeleteModal, gridEditModal } from "../modals";
 import { api_list } from "../../apis";
+import { gridUpdateModal } from "../modals/grid-update-modal";
 
 /**
  * 그리드 프로세스 처리
@@ -61,10 +62,28 @@ export function gridProcess(
         // 이벤트 값 초기화
         clean();
 
-        switch(eKey){
+        console.log('eKey', eKey);
+
+        switch( eKey ){
             // 추가
             case 'create': {
                 gridCreateModal(onListLoad);
+            } break;
+
+            // 선택 항목 활성화
+            case 'selected-active': {
+                if( !gridApi ){ return; }
+
+                // 그리드에서 선택된 row 가져오기
+                const rows = gridApi.getSelectedRows();
+                // 계정 활성화 모달
+                gridUpdateModal({
+                    updateType: 'status-active',
+                    title: 'Active member',
+                    msg: 'Do you want to activate the selected users?',
+                    rows,
+                    callback: onListLoad
+                });
             } break;
 
             // 선택 항목 비활성화
@@ -74,7 +93,13 @@ export function gridProcess(
                 // 그리드에서 선택된 row 가져오기
                 const rows = gridApi.getSelectedRows();
                 // 계정 비활성화 모달
-                gridInactiveModal(rows, onListLoad);
+                gridUpdateModal({
+                    updateType: 'status-inactive',
+                    title: 'Inactive member',
+                    msg: 'Do you want to inactivate the selected users?',
+                    rows,
+                    callback: onListLoad
+                });
             } break;
 
             // 선택 항목 삭제
@@ -113,11 +138,11 @@ export function gridProcess(
 
     // 구독 설정 (local, grid)
     const unSubLocal = useLocalSendEvent.subscribe(s => s.eKey, onSubscribe);
-    const unSubGrid = gridRecevieEvent.subscribe(s => s.eKey, onGridSubscribe);
+    // const unSubGrid = gridRecevieEvent.subscribe(s => s.eKey, onGridSubscribe);
 
     //* UnMount 시 구독 취소
     return () => {
         unSubLocal();
-        unSubGrid();
+        // unSubGrid();
     };
 }
