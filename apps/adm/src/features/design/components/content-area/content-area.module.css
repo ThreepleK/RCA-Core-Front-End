@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+.cont-area {
+    @apply flex flex-col gap-2 px-4 py-2;
+}
+
+.system-section {
+    /* 영역 */
+    & {
+        @apply text-2xl;
+    }
+
+    /* 제목  */
+    & > .title {
+        @apply text-md mb-2;
+    }
+}
+
+.logo-section {
+    /* 영역 */
+    & {
+        @apply mt-5 text-2xl;
+    }
+
+    /* 제목  */
+    & > .title {
+        /* @apply text-xl font-bold ;
+         */
+         @apply text-md mb-3;
+    }
+    /* 로고 */
+    & > .logo {
+        @apply mt-2;
+    }
+}
+
+.favicon-section {
+    /* 영역 */
+    & {
+        @apply mt-5 text-2xl;
+    }
+
+    /* 제목  */
+    & > .title {
+        @apply text-lg mb-3;
+    }
+    
+
+    /* 본문 */
+    & > .favicon-group {
+        @apply mt-5;
+    }
+}
