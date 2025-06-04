@@ -18,23 +18,32 @@ export function GridBasic({ columns, processCB }: {
     columns: ColDef[];
     processCB: ( 
         api: GridApi<any>,
-        useGridEvent: UseGridEvent
+        gridSendEvent: (key: string, val: any) => void,
+        gridRecevieEvent: any
     ) => void;
 }){
-    // row 데이터, 로딩
+    // row 데이터, 로딩, 페이지
     const [rowData, setRowData] = useState(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [pageIdx, setPageIdx] = useState(0);
+    const [pageSize, setPageSize] = useState(10);
 
     //* ProcessCB 사용 후 release 처리 용
     const pReleaseRef = useRef(null);
 
-    //* 그리드와 수신용 이벤트
-    const useGridEvent = useMemo(() => createSendAction<any>(), []);
+    //* ProcessCB → Grid 단일 방향 수신용 이벤트
+    const resEvent = useMemo(() => createSendAction<any>(), []);
+    //* Grid → ProcessCB 단일 방향 송신용 이벤트
+    const reqEvent = useMemo(() => createSendAction<any>(), []);
 
     //* 그리드 준비 완료
     const onReady = useCallback((e: GridReadyEvent<any>) => {
         // 구독 해지를 위한 ref 등록
-        pReleaseRef.current = processCB(e.api, useGridEvent);
+        pReleaseRef.current = processCB(
+            e.api,
+            resEvent.getState().sendEvent,
+            reqEvent,
+        );
     }, []);
 
     //* 그리드 관련 구독 처리
@@ -45,7 +54,7 @@ export function GridBasic({ columns, processCB }: {
             if( eKey === null ){ return; }
 
             // 이벤트 관련 값, 함수 가져오기
-            const { eVal, clean } = useGridEvent.getState();
+            const { eVal, clean } = resEvent.getState();
 
             // 이벤트 값 초기화
             clean();
@@ -59,7 +68,7 @@ export function GridBasic({ columns, processCB }: {
         };
 
         //* 이벤트 구독 처리
-        const unSub = useGridEvent.subscribe(s => s.eKey, onSubscribe);
+        const unSub = resEvent.subscribe(s => s.eKey, onSubscribe);
 
         //* UnMount 처리리
         return () => {
@@ -72,6 +81,27 @@ export function GridBasic({ columns, processCB }: {
         };
     }, []);
 
+    //* 그리드 관련 이벤트
+    const onEvent = useCallback((key: string) => {
+        reqEvent.getState().sendEvent(key);
+    }, []);
+
+    //* 그리드 페이지 변경 이벤트
+    const onPageChange = useCallback((gridApi: GridApi) => {
+        // 변경된 페이지 index, size 가져오기
+        const changePage = gridApi.paginationGetCurrentPage();
+        const changeSize = gridApi.paginationGetPageSize();
+
+        // 변경된 페이지 index, size가 동일하면 변경 안됨
+        if( changePage === pageIdx && changeSize === pageSize ){ return; }
+
+        // 변경된 페이지 index, size 설정
+        setPageIdx(changePage);
+        setPageSize(changeSize);
+
+        // 페이지 변경 전달
+        onEvent('onPaginationChange');
+    }, [pageIdx, pageSize]);
 
     return <>
         {/* 그리드 */}
@@ -80,6 +110,11 @@ export function GridBasic({ columns, processCB }: {
             rowData={rowData}
             onGridReady={onReady}
             loading={isLoading}
+            onFilterChanged={() => { onEvent('onFilterChange'); }}
+            onSortChanged={() => { onEvent('onSortChange'); }}
+            onPaginationChanged={(e) => { onPageChange(e.api); }}
+            pagination={true}
+            paginationPageSize={pageSize}
         />
 
         {/* 모달 창 */}

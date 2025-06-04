@@ -86,10 +86,11 @@ function gridUrl(baseURL: string, opts: any){
  * @param opts.sort         컬럼 별 정렬
  */
 export async function api_list(opts?: {
-   pagination: any,
-   search: string,
-   filter: any[],
-   sort: any[],
+    pageIdx: number,
+    pageSize: number,
+    search: string,
+    filter: any,
+    sort: any,
 }): Promise<{
     data: Array<any>,
     meta: { total: number }

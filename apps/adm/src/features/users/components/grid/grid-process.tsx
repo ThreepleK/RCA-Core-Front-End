@@ -1,8 +1,7 @@
-import { useLocalSendEvent } from "../../stores";
 import type { GridApi } from "ag-grid-community";
+import { useLocalSendEvent } from "../../stores";
 import { gridCreateModal, gridDeleteModal, gridEditModal, gridInactiveModal } from "../modals";
 import { api_list } from "../../apis";
-import type { UseGridEvent } from "@/compos/grid";
 
 /**
  * 그리드 프로세스 처리
@@ -11,25 +10,55 @@ import type { UseGridEvent } from "@/compos/grid";
  */
 export function gridProcess(
     gridApi: GridApi<any>,
-    useGridEvent: UseGridEvent
+    gridSendEvent: (key: string, val: any) => void,
+    gridRecevieEvent: any,
 ){
     
     //* 리스트 불러오기
     const onListLoad = async () => {
-        // 그리드에 전달 할 이벤트 함수 가져오기
-        const { sendEvent } = useGridEvent.getState();
-
         // 로딩 시작
-        sendEvent('loading', true);
+        gridSendEvent('loading', true);
+
+        // 옵션
+        const opts = {
+            filter: gridApi.getFilterModel(),
+            pageIdx: gridApi.paginationGetCurrentPage(),
+            pageSize: gridApi.paginationGetPageSize(),
+            sort: gridApi.getState().sort,
+            search: '',
+        };
+
+        console.log( opts )
 
         // 리스트 가져오기
-        const res = await api_list();
+        const res = await api_list(opts);
 
         // 그리드에 리스트 전달
-        sendEvent('list', res.data);
+        gridSendEvent('list', res.data);
 
         // 로딩 끝
-        sendEvent('loading', false);
+        gridSendEvent('loading', false);
+    };
+
+    //* 그리드 구독 이벤트
+    const onGridSubscribe = (eKey: string) => {
+        // 이벤트 키가 초기화 상태면 처리 안함
+        if( eKey === null ){ return; }
+
+        // 이벤트 관련 값, 함수 가져오기
+        const { eVal, clean } = gridRecevieEvent.getState();
+
+        // 이벤트 값 초기화
+        clean();
+
+        switch(eKey){
+            case 'onSortChange':            // Grid 정렬 변경
+            case 'onFilterChange':          // Grid 필터 변경
+            case 'onPaginationChange': {    // Grid 페이지 변경
+                // 리스트 새로 불러오기
+                onListLoad();
+            } break;
+        }
     };
 
     //* User 구독 이벤트
@@ -93,6 +122,13 @@ export function gridProcess(
         await onListLoad();
     })();
 
-    //* 이벤트 구독 및 UnMount 시 구독 취소
-    return useLocalSendEvent.subscribe(s => s.eKey, onSubscribe);
+    // 구독 설정 (local, grid)
+    const unSubLocal = useLocalSendEvent.subscribe(s => s.eKey, onSubscribe);
+    const unSubGrid = gridRecevieEvent.subscribe(s => s.eKey, onGridSubscribe);
+
+    //* UnMount 시 구독 취소
+    return () => {
+        unSubLocal();
+        unSubGrid();
+    };
 }
