@@ -19,19 +19,8 @@ export function gridProcess(
         // 로딩 시작
         gridSendEvent('loading', true);
 
-        // 옵션
-        const opts = {
-            filter: gridApi.getFilterModel(),
-            pageIdx: gridApi.paginationGetCurrentPage(),
-            pageSize: gridApi.paginationGetPageSize(),
-            sort: gridApi.getState().sort,
-            search: '',
-        };
-
-        console.log( opts )
-
         // 리스트 가져오기
-        const res = await api_list(opts);
+        const res = await api_list();
 
         // 그리드에 리스트 전달
         gridSendEvent('list', res.data);
@@ -56,7 +45,7 @@ export function gridProcess(
             case 'onFilterChange':          // Grid 필터 변경
             case 'onPaginationChange': {    // Grid 페이지 변경
                 // 리스트 새로 불러오기
-                onListLoad();
+                // onListLoad();
             } break;
         }
     };

@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+.grid-top {
+    & { @apply flex gap-1 justify-between items-end h-[24px]; }
+
+    & .gt-left {
+        & {
+            @apply flex text-sm text-gray-800 leading-none;
+        }
+
+        & b { @apply font-semibold; }
+    }
+
+    & .gt-right {
+        & { @apply flex gap-1.5 items-center; }
+        & button { @apply py-0 px-1; }
+    }
+    
+}
+
+.grid-body {
+    & {
+        height: calc(100% - 24px - (var(--spacing) * 2));
+        @apply mt-2;
+    }
+}
