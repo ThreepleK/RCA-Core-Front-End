@@ -11,10 +11,9 @@ export const MenuList: MenuItem[] = [
         icon: <IconFolder size={16} stroke={1.5} />,
         label: 'General',
         children: [
-            { label: 'Team', key: '#/adm/team' },
             { label: 'Users', key: '/adm/users' },
             { label: 'User Group', key: '#/adm/user-group' },
-            { label: 'Permission', key: '#/adm/add-member' },
+            { label: 'Permission set', key: '#/adm/add-member' },
         ]
     },
     {
@@ -22,12 +21,13 @@ export const MenuList: MenuItem[] = [
         label: 'System settings',
         icon: <IconFolder size={16} stroke={1.5} />,
         children: [
-            { label: 'Branding', key: '#/adm/branding' },
-            { label: 'Applications', key: '#/adm/application-menu' },
-            { label: 'Sidebar menu', key: '#/adm/sidebar-menu' },
-            { label: 'Menus', key: '#/adm/menus' },
-            { label: 'Multi language', key: '#/adm/i18n' },
-            { label: 'Global configuration', key: '#/adm/g-config' },
+            { label: 'Sidebar', key: '#/adm/sidebar-menu' },
+            { label: 'Application Menu', key: '#/adm/application-menu' },
+            { label: 'Language', key: '#/adm/i18n' },
+            { label: 'Message', key: '#/adm/message' },
+            { label: 'Code', key: '#/adm/code' },
+            { label: 'Design', key: '#/adm/design' },
+            { label: 'License', key: '#/adm/license' },
         ]
     },
     {
