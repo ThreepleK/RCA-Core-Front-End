@@ -10,7 +10,7 @@ import { Main } from '@/features/main'
 import { Users } from '@/features/users'
 import { Design } from '@/features/design'
 import { Sidebar } from '@/features/sidebar'
-// import UserGroup from '@/features/user-group'
+import { UserGroup } from '@/features/user-group'
 // import Permission from '@/features/permission'
 // import Branding from '@/features/branding'
 // import SidebarMenu from '@/features/sidebar-menu'
@@ -34,7 +34,7 @@ export default {
         { path: 'users', element: wrapLayout(<Users />, 'users') },
         { path: 'design', element: wrapLayout(<Design />, 'design') },
         { path: 'sidebar', element: wrapLayout(<Sidebar />, 'sidebar') },
-        // { path: 'user-group', element: wrapLayout(<UserGroup />, 'user-group') },
+        { path: 'user-group', element: wrapLayout(<UserGroup />, 'user-group') },
         // { path: 'permission', element: wrapLayout(<Permission />, 'permission') },
         // { path: 'branding', element: wrapLayout(<Branding />, 'branding') },
         // { path: 'application-menu', element: wrapLayout(<ApplicationMenu />, 'application-menu') },

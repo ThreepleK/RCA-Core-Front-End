@@ -12,7 +12,7 @@ export const MenuList: MenuItem[] = [
         label: 'General',
         children: [
             { label: 'Users', key: '/adm/users' },
-            { label: 'User Group', key: '#/adm/user-group' },
+            { label: 'User Group', key: '/adm/user-group' },
             { label: 'Permission set', key: '#/adm/add-member' },
         ]
     },

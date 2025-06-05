@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+
+/* 수정 내역 */
+.mod-list {
+    & {
+        border-top: 1px solid #eee;
+    }
+
+    & > dl {
+        @apply grid;
+        grid-template-columns: 130px 1fr;
+        border-bottom: 1px solid #eee;
+    }
+
+    /* 라벨/내용 공통 */
+    & dl > dt, & dl > dd { @apply flex items-center h-[30px] leading-none; }
+
+    /* 라벨 */
+    & dl > dt { @apply text-xs font-semibold px-2 bg-gray-100; }
+    /* 내용 */
+    & dl > dd { @apply text-xs px-2; }
+}

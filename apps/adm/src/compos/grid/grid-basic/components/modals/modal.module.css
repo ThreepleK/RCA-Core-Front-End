@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+/* title (추가) */
+.create-title {
+    @apply font-semibold text-blue-500;
+}
+
+/* title (수정) */
+.edit-title {
+    @apply font-semibold text-blue-500;
+}
+
+/* title (삭제) */
+.delete-title {
+    @apply font-semibold text-red-500;
+}
+
+/* title (계정 비활성화) */
+.update-title {
+    @apply font-semibold text-orange-500;
+}
+
+/* 더 추가하기 */
+.create-more {
+    @apply flex gap-2 items-center cursor-pointer;
+}
+
+/* 모달 본문 */
+.modal-content {
+    @apply text-sm;
+}
+
+/* 삭제 버튼 */
+.delete-button {
+    & { @apply bg-red-500 shadow-red-300 shadow-sm; }
+    &:hover { @apply bg-red-400!; }
+}
+
+/* 주의 버튼 */
+.warning-button {
+    & { @apply bg-amber-500 shadow-amber-300 shadow-sm; }
+    &:hover { @apply bg-amber-400!; }
+}

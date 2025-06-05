@@ -1,4 +1,4 @@
-import { UI_Button, UI_Input } from '../ui';
+import { UI_Button, UI_Input } from '@/compos/ui';
 import type { GridApi } from "ag-grid-community";
 
 import { useCallback, useEffect, useState } from 'react';

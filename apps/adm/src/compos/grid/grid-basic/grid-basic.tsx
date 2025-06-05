@@ -3,8 +3,8 @@ import type { StoreApi, UseBoundStore } from "zustand";
 import type { GridApi, GridReadyEvent } from "ag-grid-community";
 
 import { createSendAction, type useSendActionState } from "@/stores/send-event";
-import { UI_DataGrid, type ColDef } from "../ui";
-import { CommModal } from "../modal";
+import { UI_DataGrid, type ColDef } from "@/compos/ui";
+import { CommModal } from "@/compos/modal";
 
 import style from './grid-basic.module.css'
 import { GridTop } from "./grid-top";

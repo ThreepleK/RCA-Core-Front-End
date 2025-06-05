@@ -1,18 +1,18 @@
 import { useEffect } from 'react';
 import { useStore } from 'zustand';
 import type { MenuProps } from 'antd';
-import { IconHeart, IconHeartOff, IconPlus, IconTrash, IconUserCancel, IconUserHeart, IconUserOff } from '@tabler/icons-react';
+import { IconCopyPlus, IconHeart, IconHeartOff, IconPlus, IconTrash } from '@tabler/icons-react';
 
 import { ContentsLayout, useContsLayoutStore } from '@/compos/layout';
 import { UI_Flex, UI_Button, UI_DropdownMenu } from '@/compos/ui';
 import { ContentArea } from './components';
-
-import style from './users.module.css'
 import { useLocalSendEvent } from './stores';
 
-export function Users(){
+import style from './user-group.module.css'
+
+export function UserGroup(){
     return <>
-        {/* 페이지 내 Action을 주고 받기 위한 SendActionProvider 추가 */}
+        {/* 페이지 컨텐츠 레이아웃 */}
         <ContentsLayout>
             {/* 초기 레이아웃 설정 */}
             <InitLayout />
@@ -36,7 +36,7 @@ function InitLayout(){
     //* 초기 설정
     useEffect(() => {
         // 타이틀 설정
-        setTitleLeft('Users');
+        setTitleLeft('User Group');
         setTitleRight(<TitleRightSide />);
 
         // 본문 클래스 설정
@@ -76,16 +76,15 @@ function TitleRightSide(){
                 iconPosition='end'
                 onClick={onCreate}
                 type="primary"
-            >Add user</UI_Button>
+            >Add user group</UI_Button>
         </UI_Flex>
     )
 }
 
 //* Actions 드랍다운 메뉴
 const _ACTION_MENUS: MenuProps['items'] = [
-    { type: 'group', label: 'Selected member', children: [
-        { key: 'active',   label: 'Active',   icon: <IconHeart size={14} strokeWidth={1.25} /> },
-        { key: 'inactive', label: 'Inactive', icon: <IconHeartOff size={14} strokeWidth={1.25} /> },
-        { key: 'delete',   label: 'Delete',   icon: <IconTrash size={14} strokeWidth={1.25} />, danger: true },
+    { type: 'group', label: 'Selected user group', children: [
+        { key: 'clone',  label: 'Clone',  icon: <IconCopyPlus size={14} strokeWidth={1.25} /> },
+        { key: 'delete', label: 'Delete', icon: <IconTrash size={14} strokeWidth={1.25} />, danger: true },
     ] }
 ];
