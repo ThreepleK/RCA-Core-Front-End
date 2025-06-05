@@ -68,10 +68,13 @@ export function GridBasic({ columns, processCB }: {
             switch(eKey){
                 // 그리드 리스트 값
                 case 'list':
+                    const list = !eVal ? [] : eval;
+
                     // 그리드 리스트 설정
-                    setRowData(eVal as any);
+                    setRowData(list);
+
                     // Top에 리스트 이벤트 전달
-                    topRef.current('onLoad', (eVal as any[]).length);
+                    topRef.current('onLoad', list.length);
                 break;
                 // 로딩 여부
                 case 'loading': setIsLoading(eVal as boolean); break;

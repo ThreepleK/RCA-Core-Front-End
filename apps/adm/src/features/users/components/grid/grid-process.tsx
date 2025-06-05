@@ -1,8 +1,8 @@
 import type { GridApi } from "ag-grid-community";
 import { useLocalSendEvent } from "../../stores";
-import { gridCreateModal, gridDeleteModal, gridEditModal } from "../modals";
-import { api_list } from "../../apis";
-import { gridUpdateModal } from "../modals/grid-update-modal";
+import { api_createItem, api_deleteItems, api_list, api_updateItems } from "../../apis";
+import { gridCreateModal, gridDeleteModal, gridEditModal, gridUpdateModal } from "@/compos/grid";
+import { FormEditContent, formValidate } from "../form";
 
 /**
  * 그리드 프로세스 처리
@@ -62,12 +62,26 @@ export function gridProcess(
         // 이벤트 값 초기화
         clean();
 
-        console.log('eKey', eKey);
-
         switch( eKey ){
             // 추가
             case 'create': {
-                gridCreateModal(onListLoad);
+                gridCreateModal({
+                    title: 'Add user',
+                    srcRow: {
+                        username: '',
+                        fullName: '',
+                        email: '',
+                        status: 'inactive',
+                        userGroup: [],
+                        permission: [],
+                    },
+                    FormCompo: (props: any) => {
+                        return <FormEditContent {...props} type='new' />;
+                    },
+                    formValidationFn: formValidate,
+                    callback: onListLoad,
+                    apiFn: api_createItem,
+                });
             } break;
 
             // 선택 항목 활성화
@@ -78,11 +92,11 @@ export function gridProcess(
                 const rows = gridApi.getSelectedRows();
                 // 계정 활성화 모달
                 gridUpdateModal({
-                    updateType: 'status-active',
                     title: 'Active member',
-                    msg: 'Do you want to activate the selected users?',
+                    content: 'Do you want to activate the selected users?',
                     rows,
-                    callback: onListLoad
+                    callback: onListLoad,
+                    apiFn: rows => api_updateItems('status-active', rows)
                 });
             } break;
 
@@ -94,11 +108,11 @@ export function gridProcess(
                 const rows = gridApi.getSelectedRows();
                 // 계정 비활성화 모달
                 gridUpdateModal({
-                    updateType: 'status-inactive',
                     title: 'Inactive member',
-                    msg: 'Do you want to inactivate the selected users?',
+                    content: 'Do you want to inactivate the selected users?',
                     rows,
-                    callback: onListLoad
+                    callback: onListLoad,
+                    apiFn: rows => api_updateItems('status-inactive', rows)
                 });
             } break;
 
@@ -109,7 +123,16 @@ export function gridProcess(
                 // 그리드에서 선택된 row 가져오기
                 const rows = gridApi.getSelectedRows();
                 // 삭제 모달
-                gridDeleteModal(rows, onListLoad);
+                gridDeleteModal({
+                    title: 'Delete',
+                    content: <>
+                        Are you sure you want to delete?<br />
+                        This action cannot be undone.
+                    </>,
+                    rows,
+                    callback: onListLoad,
+                    apiFn: api_deleteItems,
+                });
             } break;
 
             // 수정
@@ -117,7 +140,16 @@ export function gridProcess(
                 // 그리드에서 전달한 row 데이터
                 const row = eVal as any;
                 // 수정 모달
-                gridEditModal(row, onListLoad);
+                gridEditModal({
+                    title: 'Edit Details',
+                    FormCompo: (props: any) => {
+                        return <FormEditContent {...props} type='mod' />;
+                    },
+                    formValidationFn: formValidate,
+                    row,
+                    callback: onListLoad,
+                    apiFn: rows => api_updateItems('edit', rows),
+                });
             } break;
 
             // 삭제
@@ -125,7 +157,16 @@ export function gridProcess(
                 // 그리드에서 전달한 row 데이터
                 const row = eVal as any;
                 // 삭제 모달
-                gridDeleteModal([row], onListLoad);
+                gridDeleteModal({
+                    title: 'Delete',
+                    content: <>
+                        Are you sure you want to delete?<br />
+                        This action cannot be undone.
+                    </>,
+                    rows: [row],
+                    callback: onListLoad,
+                    apiFn: api_deleteItems,
+                });
             } break;
         }
     }

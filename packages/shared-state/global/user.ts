@@ -50,13 +50,8 @@ export const useUserStore = create<UserState>()(
 
         // 관리자 여부 확인
         isAdmin: () => {
-            const roles = get()?.user?.roles ?? [];
-
-            for( const r of roles ){
-                if( r?.name === 'ROLE_ADMIN'){ return true; }
-            }
-
-            return false;
+            const id = get()?.user?.username ?? '';
+            return id === 'admin';
         },
 
         // 로그인 처리

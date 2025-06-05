@@ -17,7 +17,7 @@ export function noDataModal(
     setContent({
         // 제목
         title: (
-            <div className={style['update-title']}>{title}</div>
+            <div className={style['warning-title']}>{title}</div>
         ),
         // 내용
         content: (

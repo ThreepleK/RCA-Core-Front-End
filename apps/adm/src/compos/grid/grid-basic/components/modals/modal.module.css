@@ -15,8 +15,13 @@
     @apply font-semibold text-red-500;
 }
 
-/* title (계정 비활성화) */
+/* title (업데이트) */
 .update-title {
+    @apply font-semibold text-cyan-500;
+}
+
+/* title (주의) */
+.warning-title {
     @apply font-semibold text-orange-500;
 }
 

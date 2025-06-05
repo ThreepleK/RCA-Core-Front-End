@@ -29,7 +29,8 @@ export async function api_list(): Promise<any[]>{
 /**
  * 아이템 추가
  */
-export function api_createItem(datas: any[]){
+export function api_createItem(rows: any[]){
+    
     // return request({
     //     type: 'put',
     //     url: '/admin/api/users',
@@ -43,7 +44,28 @@ export function api_createItem(datas: any[]){
 /**
  * 아이템 수정
  */
-export function api_updateItems(datas: any[]){
+export function api_updateItems(type: string, rows: any[]){
+    const reqDatas = (() => {
+        switch( type ){
+            // status 활성화
+            case 'status-active': {
+                return rows.map(r => ({
+                    ...r,
+                    status: 'active'
+                }));
+            };
+            // status 비활성화
+            case 'status-inactive': {
+                return rows.map(r => ({
+                    ...r,
+                    status: 'inactive'
+                }));
+            };
+        }
+
+        return rows;
+    })();
+
     // return request({
     //     type: 'put',
     //     url: '/admin/api/users',

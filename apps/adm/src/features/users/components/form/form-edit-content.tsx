@@ -2,11 +2,8 @@ import { useEffect, useState } from "react";
 import { UI_Flex, UI_FormRadio, UI_FormSelect, UI_TextInput } from "@/compos/ui";
 
 import style from './form-edit-content.module.css'
-import { createSendAction } from "@/stores/send-event";
 import { api_getPermission, api_getUserGroup } from "../../apis";
 import dayjs from "dayjs";
-
-const useAsyncData = createSendAction<any>();
 
 /**
  * 모달창에서
