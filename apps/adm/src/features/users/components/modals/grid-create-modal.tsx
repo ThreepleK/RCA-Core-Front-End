@@ -22,6 +22,8 @@ export function gridCreateModal(
         fullName: '',
         email: '',
         status: 'inactive',
+        userGroup: [],
+        permission: [],
     };
     let row = {...srcRow};
 

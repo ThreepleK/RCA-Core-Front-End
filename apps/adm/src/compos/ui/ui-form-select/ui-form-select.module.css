@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+.ui-form-select {
+    & { @apply w-full; }
+
+    & .label {
+        /* 라벨 */
+        & { @apply flex items-center gap-0.5 text-xs font-semibold pb-1; }
+
+        /* 라벨 우측에 보여줄 필수 '*'표기 */
+        & .required { @apply text-red-500; }
+    }
+
+    /* 메시지 */
+    & .msg {
+        & { @apply text-[12px] mt-0.5; }
+        &[class*=warning] { @apply text-amber-500; }
+        &[class*=error] { @apply text-red-500; }
+    }
+
+    & .ui-select {
+        @apply w-full;
+    }
+}

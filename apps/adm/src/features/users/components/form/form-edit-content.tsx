@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { UI_Flex, UI_FormRadio, UI_TextInput } from "@/compos/ui";
+import { UI_Flex, UI_FormRadio, UI_FormSelect, UI_TextInput } from "@/compos/ui";
+
+import style from './form-edit-content.module.css'
 
 /**
  * 모달창에서
@@ -44,7 +46,7 @@ export function FormEditContent({type, row, onSetData, errMsg, errCode}: {
         {/* 폼 */}
         <UI_Flex vertical gap='small'>
             {/* 신규 등록 폼 */}
-            {type === 'new' && 
+            {type === 'new' ? <>
                 <UI_TextInput
                     label="User ID"
                     value={r?.username ?? ''}
@@ -52,7 +54,14 @@ export function FormEditContent({type, row, onSetData, errMsg, errCode}: {
                     required
                     onChange={(e) => onData(e.currentTarget.value, 'username')}
                 />
-            }
+            </> : <>
+                <div className={style['mod-list']}>
+                    <dl>
+                        <dt>User ID</dt>
+                        <dd>{r?.username}</dd>
+                    </dl>
+                </div>
+            </>}
 
             {/* 신규/수정 등록 폼 */}
             <UI_TextInput
@@ -79,6 +88,44 @@ export function FormEditContent({type, row, onSetData, errMsg, errCode}: {
                     {value: 'inactive', label: 'Inactive'},
                 ]}
             />
+            <UI_FormSelect
+                label='User group'
+                value={r?.userGroup}
+                data={_GROUP_LIST}
+                mode='multiple'
+                onChange={(v) => onData(v, 'userGroup')}
+            />
+            <UI_FormSelect
+                label='Permission set'
+                value={r?.permission}
+                data={_PERMISSION_LIST}
+                mode='multiple'
+                onChange={(v) => onData(v, 'permission')}
+            />
+
+            {/* 수정 */}
+            {type === 'mod' && <>
+                <div className={style['mod-list']}>
+                    <dl>
+                        <dt>Latest login date</dt>
+                        <dd>{r?.latestLoginDate}</dd>
+                    </dl>
+                    <dl>
+                        <dt>Joined date</dt>
+                        <dd>{r?.createdTime}</dd>
+                    </dl>
+                </div>
+            </>}
         </UI_Flex>
     </>;
 }
+
+const _GROUP_LIST = [
+    { label: 'Group 01',  value: 'group 01' },
+    { label: 'Group 02',  value: 'group 02' },
+];
+
+const _PERMISSION_LIST = [
+    { label: 'Permission 01',  value: 'permission 01' },
+    { label: 'Permission 02',  value: 'permission 02' },
+];

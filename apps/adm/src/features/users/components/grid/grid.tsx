@@ -51,13 +51,14 @@ const _COLUMNS: ColDef[] = (() => {
 
     //* 그리드 컬럼 설정
     return [
+        { field: 'id',          headerName: 'ID', ...basicFilter },
         { field: 'fullName',    headerName: 'Name', ...basicFilter },
         { field: 'email',       headerName: 'Email', },
-        { field: 'team',        headerName: 'Team', },
-        { field: 'org',         headerName: 'Organization', ...rangeFilter},
         { field: 'userGroup',   headerName: 'User group', },
+        { field: 'permission',  headerName: 'Permission sets', ...rangeFilter},
         { field: 'status',      headerName: 'Status', ...activeFilter},
-        { field: 'createdTime', headerName: 'Created time', ...dateFilter},
+        { field: 'latestTime',  headerName: 'Latest login date', ...dateFilter},
+        { field: 'createdTime', headerName: 'Joined date', ...dateFilter},
         { field: 'actions',     headerName: 'Actions', width: 120, ...actions},
     ];
 })();

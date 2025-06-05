@@ -16,6 +16,7 @@ export * from './ui-text-input'
 export * from './ui-radio'
 export * from './ui-form-radio'
 export * from './ui-switch'
+export * from './ui-form-select'
 
 export * from './ui-data-grid'
 
