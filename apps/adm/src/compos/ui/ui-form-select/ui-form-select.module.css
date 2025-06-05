@@ -19,6 +19,6 @@
     }
 
     & .ui-select {
-        @apply w-full;
+        & { @apply w-full; }
     }
 }

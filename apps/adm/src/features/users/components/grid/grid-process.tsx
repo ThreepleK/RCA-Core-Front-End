@@ -24,7 +24,7 @@ export function gridProcess(
         const res = await api_list();
 
         // 그리드에 리스트 전달
-        gridSendEvent('list', res.data);
+        gridSendEvent('list', res);
 
         // 로딩 끝
         gridSendEvent('loading', false);

@@ -3,6 +3,7 @@ import { columnCustom, columnFilters, UI_DataGrid, type ColDef } from "@/compos/
 import { gridProcess } from "./grid-process";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
 import { GridBasic } from "@/compos/grid";
+import dayjs from "dayjs";
 
 /**
  * 그리드
@@ -58,7 +59,15 @@ const _COLUMNS: ColDef[] = (() => {
         { field: 'permission',  headerName: 'Permission sets', ...rangeFilter},
         { field: 'status',      headerName: 'Status', ...activeFilter},
         { field: 'latestTime',  headerName: 'Latest login date', ...dateFilter},
-        { field: 'createdTime', headerName: 'Joined date', ...dateFilter},
+        { field: 'createdTime', headerName: 'Joined date', ...dateFilter,
+            valueGetter: (params) => {
+                const date = params.data.createdTime;
+                return (date
+                    ? dayjs.utc(date).format('YYYY-MM-DD HH:mm:ss')
+                    : '-'
+                );
+            }
+        },
         { field: 'actions',     headerName: 'Actions', width: 120, ...actions},
     ];
 })();

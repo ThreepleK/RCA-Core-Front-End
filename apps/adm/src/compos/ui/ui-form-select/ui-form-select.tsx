@@ -14,6 +14,7 @@ export interface UiFormSelectProps {
     value?: any;                // select 선택 값
     onChange?: (e: any)=>void;  // 변경 값
     mode?: 'multiple' | 'tags'; // 모드
+    loading?: boolean;          // 로딩
 }
 
 /**
@@ -23,7 +24,7 @@ export function UI_FormSelect({
     error, warning,
     label, required, disabled,
     value, data, onChange,
-    mode,
+    mode, loading=false
 }: UiFormSelectProps){
 
    //* 메시지 상태
@@ -55,6 +56,7 @@ export function UI_FormSelect({
             onChange={onChange}
             disabled={disabled}
             mode={mode}
+            loading={loading}
         />
 
         {/* 관련 메시지 */}

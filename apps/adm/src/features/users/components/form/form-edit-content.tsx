@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 import { UI_Flex, UI_FormRadio, UI_FormSelect, UI_TextInput } from "@/compos/ui";
 
 import style from './form-edit-content.module.css'
+import { createSendAction } from "@/stores/send-event";
+import { api_getPermission, api_getUserGroup } from "../../apis";
+import dayjs from "dayjs";
+
+const useAsyncData = createSendAction<any>();
 
 /**
  * 모달창에서
@@ -22,12 +27,26 @@ export function FormEditContent({type, row, onSetData, errMsg, errCode}: {
 }){
     const [r, setRow] = useState(row);
 
+    const [groupList, setGroupList] = useState([]);
+    const [permissionList, setPermissionList] = useState([]);
+
     //* 초기 설정
     useEffect(() => {
         // 초기 데이터 전달
         for( const key in r ){
             onSetData(r[key], key);
         }
+
+        // api 전달 데이터 결과 설정
+        const onSubscribe = (key: string, data: any) => {
+            switch(key){
+                case 'userGroup': setGroupList(data); break;
+                case 'permission': setPermissionList(data); break;
+            }
+        }
+
+        // 폼에 필요한 데이터 요청
+        formAsyncDatas(onSubscribe);
     }, []);
 
     //* 데이터 설정
@@ -91,14 +110,18 @@ export function FormEditContent({type, row, onSetData, errMsg, errCode}: {
             <UI_FormSelect
                 label='User group'
                 value={r?.userGroup}
-                data={_GROUP_LIST}
+                data={groupList}
+                loading={groupList.length === 0}
+                disabled={groupList.length === 0}
                 mode='multiple'
                 onChange={(v) => onData(v, 'userGroup')}
             />
             <UI_FormSelect
                 label='Permission set'
                 value={r?.permission}
-                data={_PERMISSION_LIST}
+                data={permissionList}
+                loading={permissionList.length === 0}
+                disabled={permissionList.length === 0}
                 mode='multiple'
                 onChange={(v) => onData(v, 'permission')}
             />
@@ -108,11 +131,17 @@ export function FormEditContent({type, row, onSetData, errMsg, errCode}: {
                 <div className={style['mod-list']}>
                     <dl>
                         <dt>Latest login date</dt>
-                        <dd>{r?.latestLoginDate}</dd>
+                        <dd>{r?.latestLoginDate
+                            ? dayjs.utc(r?.latestLoginDate).format('YYYY-MM-DD HH:mm:ss')
+                            : '-'
+                        }</dd>
                     </dl>
                     <dl>
                         <dt>Joined date</dt>
-                        <dd>{r?.createdTime}</dd>
+                        <dd>{r?.createdTime
+                            ? dayjs.utc(r?.createdTime).format('YYYY-MM-DD HH:mm:ss')
+                            : '-'
+                        }</dd>
                     </dl>
                 </div>
             </>}
@@ -120,12 +149,20 @@ export function FormEditContent({type, row, onSetData, errMsg, errCode}: {
     </>;
 }
 
-const _GROUP_LIST = [
-    { label: 'Group 01',  value: 'group 01' },
-    { label: 'Group 02',  value: 'group 02' },
-];
+/**
+ * 동적으로 폼에 사용 될
+ * 데이터 가져오기
+ */
+function formAsyncDatas(
+    cb: (key: string, data: any) => void
+){
+    // User Group
+    api_getUserGroup().then(res => {
+        cb('userGroup', res.res);
+    });
 
-const _PERMISSION_LIST = [
-    { label: 'Permission 01',  value: 'permission 01' },
-    { label: 'Permission 02',  value: 'permission 02' },
-];
+    // Permission sets
+    api_getPermission().then(res => {
+        cb('permission', res.res);
+    });
+}

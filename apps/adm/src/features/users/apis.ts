@@ -9,53 +9,21 @@ export type ApiResult = {
 
 /**
  * 리스트 가져오기
- * @param opts
- * @param opts.pagination   페이지 처리 값
- * @param opts.search       검색 키워드
- * @param opts.filter       컬럼 별 필터
- * @param opts.sort         컬럼 별 정렬
  */
-export async function api_list(opts?: {
-    pageIdx: number,
-    pageSize: number,
-    search: string,
-    filter: any,
-    sort: any,
-}): Promise<{
-    data: Array<any>,
-    meta: { total: number }
-}>{
-    // const url = gridUrl('/admin/api/users', opts);
-    // console.log(url);
+export async function api_list(): Promise<any[]>{
 
-    // const res = await request({
-    //     type: 'get',
-    //     url: url
-    // });
-
-    // if( res.isErr ){
-    //     return {
-    //         data: [],
-    //         meta: { total: 0 },
-    //     };
-    // } else {
-    //     return res.res;
-    // }
-
-    // return request({
-    //     type: 'get',
-    //     url: '/admin/api/*'
-    // });
-
-    // 임시 데이터
-    return new Promise((res) => {
-        setTimeout(() => {
-            res({
-                data: JSON.parse(JSON.stringify(_TMP_DATA)),
-                meta: { total: 200 },
-            });
-        }, 1000);
+    const res = await request({
+        type: 'get',
+        url: '/admin/api/users'
     });
+
+    console.log('res', res);
+
+    if( res.isErr ){
+        return [];
+    } else {
+        return (res as any).res.data;
+    }
 }
 
 /**
@@ -196,6 +164,42 @@ export function api_demo(): Promise<ApiResult>{
     });
 }
 
+/**
+ * User Group
+ * 리스트
+ */
+export function api_getUserGroup(): Promise<ApiResult>{
+    return new Promise((resolve) => {
+        const res = {
+            isErr: false,
+            msg: '',
+            res: _GROUP_LIST,
+        };
+
+        setTimeout(() => {
+            resolve(res);
+        }, 1000);
+    });
+}
+
+/**
+ * Permission set
+ * 리스트
+ */
+export function api_getPermission(): Promise<ApiResult>{
+    return new Promise((resolve) => {
+        const res = {
+            isErr: false,
+            msg: '',
+            res: _PERMISSION_LIST,
+        };
+
+        setTimeout(() => {
+            resolve(res);
+        }, 1000);
+    });
+}
+
 // 그리드 임시 데이터
 const _TMP_DATA = [
     {
@@ -231,4 +235,15 @@ const _TMP_DATA = [
         status: 'active',
         createdTime: '2025-06-23 16:24:00',
     },
+];
+
+const _GROUP_LIST = [
+    { label: 'Group 01',  value: 'group 01' },
+    { label: 'Group 02',  value: 'group 02' },
+    { label: 'Group 03',  value: 'bistelligence' },
+];
+
+const _PERMISSION_LIST = [
+    { label: 'Permission 01',  value: 'permission 01' },
+    { label: 'Permission 02',  value: 'permission 02' },
 ];
