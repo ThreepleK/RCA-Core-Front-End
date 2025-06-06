@@ -1,11 +1,6 @@
 import { request } from '@/utils'
 import dayjs from '@/utils/dayjs';
-
-export type ApiResult = {
-    isErr: boolean;     // 에러 여부
-    res: any;           // 결과 값
-    msg: string;        // 에러 메시지
-};
+import type { ApiResult } from '.';
 
 /**
  * 리스트 가져오기

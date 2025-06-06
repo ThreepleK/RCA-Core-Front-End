@@ -2,12 +2,13 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { StoreApi, UseBoundStore } from "zustand";
 import type { GridApi, GridReadyEvent } from "ag-grid-community";
 
-import { createSendAction, type useSendActionState } from "@/stores/send-event";
+import { type useSendActionState } from "@/stores/send-event";
 import { UI_DataGrid, type ColDef } from "@/compos/ui";
 import { CommModal } from "@/compos/modal";
 
 import style from './grid-basic.module.css'
 import { GridTop } from "./grid-top";
+import { SectionStore } from "@/stores";
 
 //* 그리드 내 처리할 이벤트 전달 store
 export type UseGridEvent = UseBoundStore<StoreApi<useSendActionState>>;
@@ -21,12 +22,10 @@ export function GridBasic({ columns, processCB }: {
     columns: ColDef[];
     processCB: ( 
         api: GridApi<any>,
-        gridSendEvent: (key: string, val?: any) => void,
-        gridRecevieEvent: any
+        conn: SectionStore
     ) => void;
 }){
     const apiRef = useRef<GridApi>(null);
-    const topRef = useRef<(key: string, val?: any)=>void>(null);
 
     // row 데이터, 로딩, 페이지
     const [rowData, setRowData] = useState(null);
@@ -35,18 +34,15 @@ export function GridBasic({ columns, processCB }: {
     //* ProcessCB 사용 후 release 처리 용
     const pReleaseRef = useRef(null);
 
-    //* ProcessCB → Grid 단일 방향 수신용 이벤트
-    const resEvent = useMemo(() => createSendAction<any>(), []);
-    //* Grid → ProcessCB 단일 방향 송신용 이벤트
-    const reqEvent = useMemo(() => createSendAction<any>(), []);
+    //* ProcessCB ↔ Grid 양방향 송/수신 용 이벤트
+    let conn = useMemo(() => new SectionStore(), []);
 
     //* 그리드 준비 완료
     const onReady = useCallback((e: GridReadyEvent<any>) => {
         // 구독 해지를 위한 ref 등록
         pReleaseRef.current = processCB(
             e.api,
-            resEvent.getState().sendEvent,
-            reqEvent,
+            conn,
         );
 
         apiRef.current = e.api;
@@ -54,64 +50,45 @@ export function GridBasic({ columns, processCB }: {
 
     //* 그리드 관련 구독 처리
     useEffect(() => {
-        //* 구독 이벤트
-        const onSubscribe = (eKey: string) => {
-            // 이벤트 키가 초기화 상태면 처리 안함
-            if( eKey === null ){ return; }
 
-            // 이벤트 관련 값, 함수 가져오기
-            const { eVal, clean } = resEvent.getState();
+        //* 로딩 처리 (true: 로딩, false: 로딩 끝)
+        conn.on('loading', (is: boolean) => setIsLoading(is));
+        //* 리스트 설정
+        conn.on('list', (data: any) => {
+            const list = !data ? [] : data;
 
-            // 이벤트 값 초기화
-            clean();
+            // 그리드 리스트 설정
+            setRowData(list);
 
-            switch(eKey){
-                // 그리드 리스트 값
-                case 'list':
-                    const list = !eVal ? [] : eVal;
+            // Top에 리스트 이벤트 전달
+            conn.trigger('top-onLoad', list.length);
+        });
 
-                    // 그리드 리스트 설정
-                    setRowData(list);
-
-                    // Top에 리스트 이벤트 전달
-                    topRef.current('onLoad', list.length);
-                break;
-                // 로딩 여부
-                case 'loading': setIsLoading(eVal as boolean); break;
-            }
-        };
-
-        //* 이벤트 구독 처리
-        const unSub = resEvent.subscribe(s => s.eKey, onSubscribe);
-
-        //* UnMount 처리리
+        //* UnMount 처리
         return () => {
-            // 구독 취소
-            unSub();
             // processCB release 처리 (or 구독 취소)
             if( pReleaseRef.current ){
                 pReleaseRef.current();
             }
+
+            // 사용 된 store 제거
+            conn.destroy();
+            conn = null;
         };
     }, []);
 
     //* 그리드 관련 이벤트
     const onEvent = useCallback((key: string, val?: any) => {
-        topRef.current(key);
+        conn.trigger(key);
     }, []);
 
-    //* 상단 컴포넌트 연결 커넥터
-    const connector = useCallback((
-        topConn: (key: string, val?: any) => void
-    ) => {
-        topRef.current = topConn;
-    }, []);
+    console.log('loading', isLoading);
 
     return <>
         {/* 상단 */}
         <GridTop
             getGridApi={() => apiRef.current}
-            connector={connector}
+            conn={conn}
         />
 
         {/* 그리드 */}

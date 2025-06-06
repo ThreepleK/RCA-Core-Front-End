@@ -73,13 +73,17 @@ function EditView(){
         editViewStore.on('edit-showTab', (tab: string) => setActiveTab(tab));
 
         // unMount
-        return () => {
-            editViewStore.off('edit-showTab');
-        };
+        return () => editViewStore.off('edit-showTab');
     }, []);
 
     return <>
-        <UI_Tabs items={_TABS} activeKey={activeTab} onChange={setActiveTab} size='small' />
+        <UI_Tabs
+            items={_TABS}
+            activeKey={activeTab}
+            onChange={setActiveTab}
+            size='small'
+            rootClassName={style['tabs']}
+        />
     </>;
 }
 

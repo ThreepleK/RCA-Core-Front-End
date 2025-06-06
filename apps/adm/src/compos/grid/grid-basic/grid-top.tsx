@@ -5,12 +5,11 @@ import { useCallback, useEffect, useState } from 'react';
 import { IconDeselect, IconFilterOff, IconReorder, IconRestore, IconSearch } from '@tabler/icons-react';
 
 import style from './grid-basic.module.css'
+import type { SectionStore } from '@/stores';
 
-export function GridTop({ getGridApi, connector }: {
+export function GridTop({ getGridApi, conn }: {
     getGridApi: () => GridApi<any>,
-    connector: (
-        conn: (key: string, val?: any) => void
-    ) => void,
+    conn: SectionStore
 }){
     const [total, setTotal] = useState(0);
     const [selected, setSelected] = useState(0);
@@ -22,35 +21,31 @@ export function GridTop({ getGridApi, connector }: {
 
     //* 그리드에서 전달 받은 이벤트
     useEffect(() => {
-        const conn = (key: string, val?: any) => {
+
+        //* 로드
+        conn.on('top-onLoad', (TotalCount: number) => setTotal(TotalCount));
+
+        //* 필터 변경 이벤트
+        conn.on('onFilterChange', () => {
             const api = getGridApi();
+            const filterLen = Object.keys(api.getFilterModel()).length;
+            setIsFilter(filterLen === 0);
+        });
 
-            switch( key ){
-                // 로드
-                case 'onLoad': {
-                    setTotal(val as number);
-                } break;
-                // 필터 변경 이벤트
-                case 'onFilterChange': {
-                    const filterLen = Object.keys(api.getFilterModel()).length;
-                    setIsFilter(filterLen === 0);
-                } break;
-                // 정렬 이벤트
-                case 'onSortChange': {
-                    const sorted = api.getState().sort;
-                    setIsSort(sorted === undefined);
-                } break;
-                // row 선택 이벤트
-                case 'onRowSelected': {
-                    const rowLen = api.getSelectedRows().length;
-                    setSelected(rowLen);
-                    setIsChecked(rowLen === 0);
-                } break;
-            }
-        };
+        //* 정렬 이벤트
+        conn.on('onSortChange', () => {
+            const api = getGridApi();
+            const sorted = api.getState().sort;
+            setIsSort(sorted === undefined);
+        });
 
-        // Grid랑 연결
-        connector(conn);
+        //* row 선택 이벤트
+        conn.on('onRowSelected', () => {
+            const api = getGridApi();
+            const rowLen = api.getSelectedRows().length;
+            setSelected(rowLen);
+            setIsChecked(rowLen === 0);
+        });
     }, []);
 
     //* 초기화, 체크 해제, 필터 해제
