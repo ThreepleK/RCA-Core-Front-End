@@ -71,9 +71,9 @@ export function gridProcess(
                         username: '',
                         fullName: '',
                         email: '',
+                        userGroups: [],
+                        permissionSets: [],
                         status: 'inactive',
-                        userGroup: [],
-                        permission: [],
                     },
                     FormCompo: (props: any) => {
                         return <FormEditContent {...props} type='new' />;

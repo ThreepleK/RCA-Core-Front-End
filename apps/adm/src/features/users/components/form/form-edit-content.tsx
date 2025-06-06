@@ -106,7 +106,7 @@ export function FormEditContent({type, row, onSetData, errMsg, errCode}: {
             />
             <UI_FormSelect
                 label='User group'
-                value={r?.userGroup}
+                value={r?.userGroups?.map(r => r?.id)}
                 data={groupList}
                 loading={groupList.length === 0}
                 disabled={groupList.length === 0}
@@ -115,7 +115,7 @@ export function FormEditContent({type, row, onSetData, errMsg, errCode}: {
             />
             <UI_FormSelect
                 label='Permission set'
-                value={r?.permission}
+                value={r?.permissionSets?.map(r => r?.id)}
                 data={permissionList}
                 loading={permissionList.length === 0}
                 disabled={permissionList.length === 0}
@@ -128,8 +128,8 @@ export function FormEditContent({type, row, onSetData, errMsg, errCode}: {
                 <div className={style['mod-list']}>
                     <dl>
                         <dt>Latest login date</dt>
-                        <dd>{r?.latestLoginDate
-                            ? dayjs.utc(r?.latestLoginDate).format('YYYY-MM-DD HH:mm:ss')
+                        <dd>{r?.updatedTime
+                            ? dayjs.utc(r?.updatedTime).format('YYYY-MM-DD HH:mm:ss')
                             : '-'
                         }</dd>
                     </dl>

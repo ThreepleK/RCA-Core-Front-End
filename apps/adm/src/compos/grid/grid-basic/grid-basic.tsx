@@ -68,7 +68,7 @@ export function GridBasic({ columns, processCB }: {
             switch(eKey){
                 // 그리드 리스트 값
                 case 'list':
-                    const list = !eVal ? [] : eval;
+                    const list = !eVal ? [] : eVal;
 
                     // 그리드 리스트 설정
                     setRowData(list);

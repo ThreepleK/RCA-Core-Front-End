@@ -52,22 +52,36 @@ const _COLUMNS: ColDef[] = (() => {
 
     //* 그리드 컬럼 설정
     return [
-        { field: 'id',          headerName: 'ID', ...basicFilter },
-        { field: 'fullName',    headerName: 'Name', ...basicFilter },
-        { field: 'email',       headerName: 'Email', },
-        { field: 'userGroup',   headerName: 'User group', },
-        { field: 'permission',  headerName: 'Permission sets', ...rangeFilter},
-        { field: 'status',      headerName: 'Status', ...activeFilter},
-        { field: 'latestTime',  headerName: 'Latest login date', ...dateFilter},
-        { field: 'createdTime', headerName: 'Joined date', ...dateFilter,
-            valueGetter: (params) => {
-                const date = params.data.createdTime;
-                return (date
-                    ? dayjs.utc(date).format('YYYY-MM-DD HH:mm:ss')
+        { field: 'username',        headerName: 'ID', ...basicFilter },
+        { field: 'fullName',        headerName: 'Full name', ...basicFilter },
+        { field: 'email',           headerName: 'Email', },
+        { field: 'userGroups',      headerName: 'User group', 
+            valueGetter: ({ data: {userGroups} }) => {
+                return userGroups.map(r => r?.name).join(', ')
+            }
+        },
+        { field: 'permissionSets',  headerName: 'Permission sets', ...rangeFilter,
+            valueGetter: ({ data: {permissionSets} }) => {
+                return permissionSets.map(r => r?.name).join(', ')
+            }
+        },
+        { field: 'status',          headerName: 'Status', ...activeFilter},
+        { field: 'updatedTime',     headerName: 'Latest login date', ...dateFilter,
+            valueGetter: ({ data: {updatedTime} }) => {
+                return (updatedTime
+                    ? dayjs.utc(updatedTime).format('YYYY-MM-DD HH:mm:ss')
                     : '-'
                 );
             }
         },
-        { field: 'actions',     headerName: 'Actions', width: 120, ...actions},
+        { field: 'createdTime',     headerName: 'Joined date', ...dateFilter,
+            valueGetter: ({ data: {createdTime} }) => {
+                return (createdTime
+                    ? dayjs.utc(createdTime).format('YYYY-MM-DD HH:mm:ss')
+                    : '-'
+                );
+            }
+        },
+        { field: 'actions',         headerName: 'Actions', width: 120, ...actions},
     ];
 })();

@@ -17,12 +17,10 @@ export async function api_list(): Promise<any[]>{
         url: '/admin/api/users'
     });
 
-    console.log('res', res);
-
     if( res.isErr ){
         return [];
     } else {
-        return (res as any).res.data;
+        return (res as any).res;
     }
 }
 
