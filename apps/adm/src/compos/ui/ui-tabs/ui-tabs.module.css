@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+.ui-tabs {
+    & {}
+
+    /* 탭 네비 */
+    div[class*=ant-tabs-nav] {
+        @apply m-0;
+    }
+
+    /* 탭 리스트 */
+    & div[class*=ant-tabs-tab] {
+        @apply m-0!;
+    }
+
+    /* 탭 */
+    & div[class*=ant-tabs-tab] {
+        @apply m-0! px-1.5! py-1!;
+    }
+
+    /* 탭 버튼 */
+    & div[class*=ant-tabs-tab-btn] {
+        & { @apply flex gap-x-1.5 items-center; }
+
+        /* 아이콘 */
+        & span[class*=ant-tabs-tab-icon] {
+            @apply m-0!;
+        }
+    }
+}

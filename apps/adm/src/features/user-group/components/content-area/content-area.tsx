@@ -1,5 +1,7 @@
 import { Grid } from '../grid';
 
+// import style from './content-area.module.css'
+
 /**
  * 본문 컨텐츠
  */

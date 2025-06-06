@@ -17,6 +17,7 @@ export * from './ui-radio'
 export * from './ui-form-radio'
 export * from './ui-switch'
 export * from './ui-form-select'
+export * from './ui-tabs'
 
 export * from './ui-data-grid'
 

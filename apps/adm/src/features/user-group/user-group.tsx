@@ -1,14 +1,15 @@
 import { useEffect } from 'react';
 import { useStore } from 'zustand';
 import type { MenuProps } from 'antd';
-import { IconCopyPlus, IconHeart, IconHeartOff, IconPlus, IconTrash } from '@tabler/icons-react';
+import { IconCopyPlus, IconPlus, IconTrash } from '@tabler/icons-react';
 
 import { ContentsLayout, useContsLayoutStore } from '@/compos/layout';
 import { UI_Flex, UI_Button, UI_DropdownMenu } from '@/compos/ui';
 import { ContentArea } from './components';
-import { useLocalSendEvent } from './stores';
+import { editViewStore, useLocalSendEvent } from './stores';
 
 import style from './user-group.module.css'
+import { EditArea } from './components/edit-area';
 
 export function UserGroup(){
     return <>
@@ -19,6 +20,9 @@ export function UserGroup(){
             {/* 컨텐츠 */}
             <ContentArea />
         </ContentsLayout>
+
+        {/* Edit 페이지 */}
+        <EditArea />
     </>;
 }
 
@@ -41,6 +45,11 @@ function InitLayout(){
 
         // 본문 클래스 설정
         setContClass(style.content);
+
+        return () => {
+            // Edit 관련 Drawer 스토어 제거
+            editViewStore.destroy();
+        };
     }, []);
 
     return <></>;
