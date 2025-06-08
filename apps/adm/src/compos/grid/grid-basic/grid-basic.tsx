@@ -1,17 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { StoreApi, UseBoundStore } from "zustand";
 import type { GridApi, GridReadyEvent } from "ag-grid-community";
 
-import { type useSendActionState } from "@/stores/send-event";
 import { UI_DataGrid, type ColDef } from "@/compos/ui";
-import { CommModal } from "@/compos/modal";
-
-import style from './grid-basic.module.css'
-import { GridTop } from "./grid-top";
 import { SectionStore } from "@/stores";
 
-//* 그리드 내 처리할 이벤트 전달 store
-export type UseGridEvent = UseBoundStore<StoreApi<useSendActionState>>;
+import { GridTop } from "./grid-top";
+import type { GridCreateParams, GridEditParams, GridDeleteParams, GridUpdateParams } from "./components";
+import { BaseModal, girdNodata, gridCreate, gridEdit, gridDelete, gridUpdate } from "./components";
+
+import style from './grid-basic.module.css'
 
 /**
  * Grid (기본 타입)
@@ -64,6 +61,17 @@ export function GridBasic({ columns, processCB }: {
             conn.trigger('top-onLoad', list.length);
         });
 
+        //* 데이터가 없을 때 모달
+        conn.on('nodata-modal', (title: string) => girdNodata(conn, title));
+        //* 생성 관련 모달 처리
+        conn.on('create-modal', (props: GridCreateParams) => gridCreate({conn, ...props}));
+        //* 편집 관련 모달 처리
+        conn.on('edit-modal', (props: GridEditParams) => gridEdit({conn, ...props}));
+        //* 삭제 관련 모달 처리
+        conn.on('delete-modal', (props: GridDeleteParams) => gridDelete({conn, ...props}));
+        //* 업데이트 관련 모달 처리
+        conn.on('update-modal', (props: GridUpdateParams) => gridUpdate({conn, ...props}));
+
         //* UnMount 처리
         return () => {
             // processCB release 처리 (or 구독 취소)
@@ -81,8 +89,6 @@ export function GridBasic({ columns, processCB }: {
     const onEvent = useCallback((key: string, val?: any) => {
         conn.trigger(key);
     }, []);
-
-    console.log('loading', isLoading);
 
     return <>
         {/* 상단 */}
@@ -106,6 +112,6 @@ export function GridBasic({ columns, processCB }: {
         </div>
 
         {/* 모달 창 */}
-        <CommModal />
+        <BaseModal conn={conn} />
     </>;
 }

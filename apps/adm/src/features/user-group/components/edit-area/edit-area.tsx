@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import type { TabsProps } from 'antd';
 
 import { UI_Button, UI_DropdownMenu, UI_Flex, UI_Tabs, UI_Title } from '@/compos/ui';
-import { IconCopyPlus, IconLicense, IconPlus, IconSettings, IconUserOff, IconUsers, IconX } from '@tabler/icons-react';
+import { IconLicense, IconPlus, IconSettings, IconUserOff, IconUsers, IconX } from '@tabler/icons-react';
 import { TabMembers, TabPermissionSets, TabSettings } from './tabs';
 import { editViewStore } from '../../stores';
 

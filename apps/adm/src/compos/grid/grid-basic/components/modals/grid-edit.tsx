@@ -1,26 +1,23 @@
-import { useCommModalStore } from "@/compos/modal";
 import { UI_Button } from "@/compos/ui";
 import type { FormComponent, FormValidationFn, GridModalCommParams, RowItem } from ".";
 
 import style from './modal.module.css'
 
-//* 컨텐츠 타입
-const _CONT_TYPE = 'mod';
-
-export interface GridEditModalParams extends GridModalCommParams {
+export interface GridEditParams extends GridModalCommParams {
     row: RowItem;                           // 관련 row
     FormCompo: FormComponent;               // form 컴포넌트
     formValidationFn: FormValidationFn,     // 데이터 검증 함수
 }
 
+//* 컨텐츠 타입
+const _CONT_TYPE = 'mod';
+
 /**
  * 편집 관련 모달
  */
-export function gridEditModal({
-    title, row, callback, formValidationFn, FormCompo, apiFn
-}: GridEditModalParams){
-    const { setOpen, setContent, setLoading, setOnlyContent, setErrMsg } = useCommModalStore.getState();
-
+export function gridEdit({
+    conn, title, row, callback, formValidationFn, FormCompo, apiFn
+}: GridEditParams){
     //* 편집 데이터
     const editDatas = {...row};
 
@@ -31,48 +28,41 @@ export function gridEditModal({
 
     // 에러 메시지 전달
     const formErrSend = (msg: string, code: string) => {
-        setOnlyContent(
+        conn.trigger('modal-content', (
             <FormCompo
                 row={row} onSetData={onSetData}
                 errMsg={msg} errCode={code}
             />
-        );
+        ));
     }
 
-    //* 모달 설정
-    setContent({
+    // 모달 설정
+    conn.triggers({
         // 제목
-        title: (
-            <div className={style['edit-title']}>{title}</div>
-        ),
+        'modal-title': <div className={style['edit-title']}>{title}</div>,
         // 내용
-        content: (
-            <FormCompo row={row} onSetData={onSetData} />
-        ),
-        // 버튼 표기
-        buttons: {
-            cancel: <UI_Button>Cancel</UI_Button>,
-            ok: <UI_Button type='primary'>Save</UI_Button>,
-        },
-        // 피드백
-        feedback: async (key: string) => {
+        'modal-content': <FormCompo row={row} onSetData={onSetData} />,
+        // 모달 크기
+        'modal-size': 'xl',
+        // 모달 버튼 피드백
+        'modal-feedback': async (key: string) => {
             // 에러 메시지 초기화
-            setErrMsg('');
+            conn.trigger('modal-errMsg', '');
 
             // Cancel 버튼
             if( key === 'cancel' ){
-                setOpen(false);
+                conn.trigger('modal-open', false);
                 return false;
             }
 
             // Save 버튼이 아니면 건너 뜀
             if( key !== 'ok' ){
-                setErrMsg('Not processed.');
+                conn.trigger('modal-errMsg', 'Not processed.');
                 return false;
             }
 
             // 로딩표기
-            setLoading(true);
+            conn.trigger('modal-loading', true);
 
             // 처리 결과
             const result = await (async() => {
@@ -90,7 +80,7 @@ export function gridEditModal({
 
                 // 에러가 있을 경우
                 if( res.isErr ){
-                    setErrMsg(res.msg);
+                    conn.trigger('modal-errMsg', res.msg);
                     return false;
                 }
 
@@ -100,15 +90,20 @@ export function gridEditModal({
             //* 정상처리 되었을 때
             if( result ){
                 callback();
-                setOpen(false);
+                conn.trigger('modal-open', false);
             }
 
             // 로딩 숨기기
-            setLoading(false);
+            conn.trigger('modal-loading', false);
         },
-        size: 'xl',
+        // 모달 하단 좌측 영역
+        'modal-btmLeftSection': null,
+        // 모달 버튼
+        'modal-btns': {
+            cancel: <UI_Button>Cancel</UI_Button>,
+            ok: <UI_Button type='primary'>Save</UI_Button>,
+        },
+        // 모달 열기
+        'modal-open': true
     });
-
-    //* 모달 열기
-    setOpen(true);
 }

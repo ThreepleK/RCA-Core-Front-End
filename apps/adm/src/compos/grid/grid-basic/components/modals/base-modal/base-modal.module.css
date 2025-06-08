@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+/* 하단 영역 */
+.bottom-area {
+    @apply pt-3;
+}
+
+/* 에러 관련 */
+.alert {
+    @apply mt-3;
+}

@@ -41,6 +41,12 @@
     &:hover { @apply bg-red-400!; }
 }
 
+/* 업데이트 버튼 */
+.update-button {
+    & { @apply bg-cyan-500 shadow-cyan-300 shadow-sm; }
+    &:hover { @apply bg-cyan-400!; }
+}
+
 /* 주의 버튼 */
 .warning-button {
     & { @apply bg-amber-500 shadow-amber-300 shadow-sm; }
