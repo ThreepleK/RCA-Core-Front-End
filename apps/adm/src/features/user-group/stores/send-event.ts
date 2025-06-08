@@ -34,3 +34,23 @@ export const useLocalSendEvent = createSendAction<any>();
  * save-settings: 저장 버튼
  */
 export const editViewStore = new SectionStore();
+
+/**
+ * UserGroup 편집 Drawer 열기
+ * @param title 타이틀에 보여줄 내용
+ * @param row 그리드에서 전달 한 row 값
+ */
+export function openEditDrawer({title, row}: {
+    title: string,
+    row: any,
+}){
+    // 순차 처리
+    editViewStore.triggers({
+        'edit-title': title,            // 제목 설정
+        'edit-showTab': 'members',      // 처음 보여줄 탭 key
+        'tab-members': {...row},        // Members 탭에 보낼 데이터
+        'tab-permission': {...row},     // Permission Sets 탭에 보낼 데이터
+        'tab-settings': {...row},       // Settings 탭에 보낼 데이터
+        'edit-open': true,              // drawer 열기
+    });
+}

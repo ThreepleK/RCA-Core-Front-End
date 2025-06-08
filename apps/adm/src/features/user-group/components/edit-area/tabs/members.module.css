@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+.search {
+    & {}
+
+    & input {
+        @apply w-full;
+    }
+    & > button {
+        @apply p-1;
+    }
+}
+
+.grid {
+    & { @apply block h-[400px] mt-2; }
+
+    /* 그드 상단 우측 상단 옵션 숨김 */
+    & > ul > li:nth-last-of-type(1){
+        @apply hidden;
+    }
+}

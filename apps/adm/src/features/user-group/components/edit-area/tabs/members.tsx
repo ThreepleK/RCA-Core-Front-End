@@ -1,9 +1,10 @@
 import type { ColDef, GridApi } from "ag-grid-community";
 
-import { GridBasic } from "@/compos/grid";
+import type { SectionStore } from "@/stores";
+import { GridBasic, type GridDeleteParams } from "@/compos/grid";
 import { api_tabsMemberList } from "@/features/user-group/apis";
 import { editViewStore } from "@/features/user-group/stores";
-import type { SectionStore } from "@/stores";
+import { addMemberProcess } from "./members-add";
 
 /**
  * [User Group > Edit]
@@ -52,9 +53,32 @@ function gridProcess(
         });
         editViewStore.on('add-members', async () => {
             console.log('Members 추가');
+            addMemberProcess();
         });
+
+        // Members 선택 삭제
         editViewStore.on('remove-members', async () => {
-            console.log('Members 선택 삭제');
+            // 그리드에서 선택된 row 가져오기
+            const rows = gridApi.getSelectedRows();
+            // 계정 삭제 모달
+            gridConn.trigger('delete-modal', {
+                title: 'Remove member',
+                content: 'Do you want to remove the selected users?',
+                rows,
+                callback: onListLoad,
+                apiFn: rows => {
+                    // 삭제 임시처리
+                    return new Promise(resolve => {
+                        setTimeout(() => {
+                            resolve({
+                                isErr: false,
+                                msg: '',
+                                res: null,
+                            })
+                        }, 1000);
+                    });
+                }
+            } as GridDeleteParams);
         });
     })();
 

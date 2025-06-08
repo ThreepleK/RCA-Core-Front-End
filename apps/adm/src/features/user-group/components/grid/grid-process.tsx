@@ -1,5 +1,5 @@
 import type { GridApi } from "ag-grid-community";
-import { editViewStore, useLocalSendEvent } from "../../stores";
+import { editViewStore, openEditDrawer, useLocalSendEvent } from "../../stores";
 import { api_createItem, api_deleteItems, api_list, api_updateItems } from "../../apis";
 import type { GridCreateParams, GridDeleteParams, GridUpdateParams } from "@/compos/grid";
 import { FormCreateContent, formValidate } from "../form";
@@ -113,14 +113,10 @@ export function gridProcess(
                 // 그리드에서 전달한 row 데이터
                 const row = eVal as any;
                 
-                // (순차 처리) 수정 화면 drawer
-                editViewStore.triggers({
-                    'edit-title': row?.groupName,   // 제목 설정
-                    'edit-showTab': 'members',      // 처음 보여줄 탭 key
-                    'tab-members': {...row},        // Members 탭에 보낼 데이터
-                    'tab-permission': {...row},     // Permission Sets 탭에 보낼 데이터
-                    'tab-settings': {...row},       // Settings 탭에 보낼 데이터
-                    'edit-open': true,              // drawer 열기
+                // 수정 화면 drawer 열기
+                openEditDrawer({
+                    title: row?.groupName,
+                    row,
                 });
             } break;
 
