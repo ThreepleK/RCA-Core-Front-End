@@ -19,7 +19,7 @@
     .edit-view {
         @apply
             absolute w-[800px] top-0 right-0 bottom-0 z-50 
-            bg-white border-l-gray-300 border-l-[1px] shadow-xl
+            bg-white border-l-gray-300 border-l-[1px] shadow-2xl
         ;
         transition: transform 0.3s ease-in-out;
     }
@@ -55,5 +55,9 @@
     & > [class*=ant-tabs-content-holder] > div {
         & { @apply h-full; }
         & > div { @apply h-full; }
+    }
+
+    [class*=ant-tabs-extra-content] {
+        @apply px-2;
     }
 }

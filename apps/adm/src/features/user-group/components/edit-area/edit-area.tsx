@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { TabsProps } from 'antd';
 
-import { UI_Button, UI_Tabs, UI_Title } from '@/compos/ui';
-import { IconLicense, IconSettings, IconUsers, IconX } from '@tabler/icons-react';
+import { UI_Button, UI_DropdownMenu, UI_Flex, UI_Tabs, UI_Title } from '@/compos/ui';
+import { IconCopyPlus, IconLicense, IconPlus, IconSettings, IconUserOff, IconUsers, IconX } from '@tabler/icons-react';
 import { TabMembers, TabPermissionSets, TabSettings } from './tabs';
 import { editViewStore } from '../../stores';
 
@@ -76,6 +76,11 @@ function EditView(){
         return () => editViewStore.off('edit-showTab');
     }, []);
 
+    // 탭 사이트 버튼
+    const extra = useMemo(() => ({
+        right: _EXTRA_BTN[activeTab]
+    }), [activeTab]);
+
     return <>
         <UI_Tabs
             items={_TABS}
@@ -83,13 +88,67 @@ function EditView(){
             onChange={setActiveTab}
             size='small'
             rootClassName={style['tabs']}
+            tabBarExtraContent={extra}
         />
     </>;
+}
+
+/**
+ * Members 버튼
+ */
+function BtnMember(){
+    const onClick = (key: string) => editViewStore.trigger(`${key}-members`);
+
+    return <UI_Flex gap='small'>
+        <UI_DropdownMenu
+            menu={{ items: [{
+                type: 'group',
+                label: 'Members',
+                children: [
+                    { key: 'add',    label: 'Add',    icon: <IconPlus size={14} strokeWidth={1.25} /> },
+                    { key: 'remove', label: 'Remove', icon: <IconUserOff size={14} strokeWidth={1.25} />, danger: true },
+                ]
+            }] }}
+            size='small'
+            trigger={['click']}
+            onClick={onClick}
+        >Actions</UI_DropdownMenu>
+        <UI_Button size='small' type='primary' onClick={()=>onClick('save')}>Save member</UI_Button>
+    </UI_Flex>
+}
+
+/**
+ * Perssion sets 버튼
+ */
+function BtnPermission(){
+    const onClick = (key: string) => editViewStore.trigger(`${key}-permission`);
+
+    return <UI_Flex>
+        <UI_Button size='small' type='primary' onClick={()=>onClick('save')}>Save permission</UI_Button>
+    </UI_Flex>
+}
+
+/**
+ * Settings 버튼
+ */
+function BtnSettings(){
+    const onClick = (key: string) => editViewStore.trigger(`${key}-settings`);
+
+    return <UI_Flex>
+        <UI_Button size='small' type='primary' onClick={()=>onClick('save')}>Save settings</UI_Button>
+    </UI_Flex>
 }
 
 // 탭 메뉴
 const _TABS: TabsProps['items'] = [
     { key: 'members',            label: 'Members',          icon: <IconUsers size={14} strokeWidth={1.75} />,    forceRender: true, children: <TabMembers /> },
-    { key: 'permission_sets',    label: 'Permission sets',  icon: <IconLicense size={14} strokeWidth={1.75} />,  forceRender: true, children: <TabPermissionSets /> },
+    { key: 'permission',         label: 'Permission sets',  icon: <IconLicense size={14} strokeWidth={1.75} />,  forceRender: true, children: <TabPermissionSets /> },
     { key: 'settings',           label: 'Settings',         icon: <IconSettings size={14} strokeWidth={1.75} />, forceRender: true, children: <TabSettings /> },
 ]
+
+// 탭 우측 버튼
+const _EXTRA_BTN = {
+    members:    <BtnMember />,
+    permission: <BtnPermission />,
+    settings:   <BtnSettings />,
+}

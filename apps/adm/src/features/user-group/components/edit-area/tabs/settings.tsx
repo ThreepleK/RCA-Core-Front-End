@@ -1,8 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { editViewStore } from "@/features/user-group/stores";
 import { FormCreateContent, formValidate } from "../../form";
-import { UI_Button } from "@/compos/ui";
-import { data } from "react-router";
 
 /**
  * [User Group > Edit]
@@ -16,40 +14,45 @@ export function TabSettings(){
     const [errCode, setErrCode] = useState('');
 
     useEffect(() => {
-        // 데이터 이벤트
+        //* 그리드 -> 데이터 전달 이벤트
         editViewStore.on('tab-settings', (row) => {
             dataRef.current = {...row};
             setRaw(row);
             setFormKey(reRenderKey());
         });
 
+        //* 저장 처리
+        editViewStore.on('save-settings', async () => {
+            setErrCode('');
+            setErrMsg('');
+
+            // 입력 값 검증
+            const res = await formValidate('mod', dataRef.current);
+            
+            // 검증 에러
+            if( res.isErr ){
+                setErrCode(res.code);
+                setErrMsg(res.msg);
+                return;
+            }
+
+            // Todo.. 저장
+
+            // 저장 이후 Settings에서 저장 신호 전달
+            editViewStore.trigger('tab-settings-update');
+        });
+
         // unMount
-        return () => editViewStore.off('tab-settings');
+        return () => editViewStore.offs([
+            'tab-settings',
+            'save-settings',
+        ]);
     }, []);
 
     //* 데이터 설정
     const onSetData = (value: any, key: string) =>{
         dataRef.current[key] = value;
     };
-
-    const onSave = async () => {
-        setErrCode('');
-        setErrMsg('');
-        setFormKey(reRenderKey());
-
-        // 입력 값 검증
-        const res = await formValidate('mod', dataRef.current);
-        
-        // 검증 에러
-        if( res.isErr ){
-            setErrCode(res.code);
-            setErrMsg(res.msg);
-            setFormKey(reRenderKey());
-            return;
-        }
-
-        // Todo.. 저장
-    }
 
     return <>
         <FormCreateContent
@@ -59,10 +62,6 @@ export function TabSettings(){
             errCode={errCode}
             key={formKey}
         />
-
-        <div style={{marginTop: '10px'}}>
-            <UI_Button type='primary' onClick={onSave}>Save</UI_Button>
-        </div>
     </>;
 }
 

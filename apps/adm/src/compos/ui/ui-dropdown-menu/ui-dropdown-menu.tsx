@@ -5,10 +5,12 @@ import { IconChevronDown } from '@tabler/icons-react';
 
 import style from './ui-dropdown-menu.module.css'
 import type { MenuItemType } from 'antd/es/menu/interface';
+import type { SizeType } from 'antd/es/config-provider/SizeContext';
 
 // 추가 기능 속성
 export interface UiDropdownMenuProps extends DropdownProps {
     onClick?: (key: string) => void;        // 클릭 이벤트
+    size?: SizeType;                        // 버튼 크기
 }
 
 /**
@@ -66,6 +68,7 @@ export function UI_DropdownMenu(props: UiDropdownMenuProps){
             <UI_Button
                 icon={<IconChevronDown size={14} />}
                 iconPosition='end'
+                size={props.size}
             >{props.children}</UI_Button>
         </UI_Dropdown>
     );

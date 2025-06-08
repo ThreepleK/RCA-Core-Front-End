@@ -1,8 +1,9 @@
+import type { ColDef, GridApi } from "ag-grid-community";
+
 import { GridBasic } from "@/compos/grid";
 import { api_tabsMemberList } from "@/features/user-group/apis";
 import { editViewStore } from "@/features/user-group/stores";
 import type { SectionStore } from "@/stores";
-import type { ColDef, GridApi } from "ag-grid-community";
 
 /**
  * [User Group > Edit]
@@ -46,12 +47,24 @@ function gridProcess(
             console.log('row', row);
             await onListLoad();
         });
+        editViewStore.on('save-members', async () => {
+            console.log('Members 저장');
+        });
+        editViewStore.on('add-members', async () => {
+            console.log('Members 추가');
+        });
+        editViewStore.on('remove-members', async () => {
+            console.log('Members 선택 삭제');
+        });
     })();
 
     // unMount
-    return () => {
-        editViewStore.off('tab-members');
-    };
+    return () => editViewStore.offs([
+        'tab-members',
+        'save-members',
+        'add-members',
+        'remove-members'
+    ]);
 }
 
 // 그리드 컬럼 설정

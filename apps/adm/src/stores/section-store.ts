@@ -24,6 +24,16 @@ export class SectionStore {
         this.evList[key] = null;
         delete this.evList[key];
     }
+    
+    /**
+     * 제거 이벤트
+     * @param keyList 제거 이벤트 리스트트
+     */
+    offs( keyList: string[] ){
+        for( const key in keyList ){
+            this.off(keyList[key]);
+        }
+    }
 
     /**
      * 이벤트 전달

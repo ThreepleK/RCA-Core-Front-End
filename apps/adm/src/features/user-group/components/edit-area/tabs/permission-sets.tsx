@@ -1,5 +1,6 @@
-import { editViewStore } from "@/features/user-group/stores";
 import type { ColDef, GridApi } from "ag-grid-community";
+
+import { editViewStore } from "@/features/user-group/stores";
 import { GridBasic } from "@/compos/grid";
 import type { SectionStore } from "@/stores";
 import { api_tabsPermissionList } from "@/features/user-group/apis";
@@ -46,12 +47,16 @@ function gridProcess(
             console.log('row', row);
             await onListLoad();
         });
+        editViewStore.on('save-permission', async () => {
+            console.log('Permission 저장');
+        });
     })();
 
     // unMount
-    return () => {
-        editViewStore.off('tab-permission');
-    };
+    return () => editViewStore.offs([
+        'tab-permission',
+        'save-permission',
+    ]);
 }
 
 // 그리드 컬럼 설정

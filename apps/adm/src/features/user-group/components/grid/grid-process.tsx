@@ -147,6 +147,12 @@ export function gridProcess(
     (async() => {
         // 리스트 가져오기
         await onListLoad();
+
+        // Edit > Settings에서 저장 이후
+        editViewStore.on('tab-settings-update', async () => {
+            // 리스트 불러오기
+            await onListLoad();
+        });
     })();
 
     // 구독 설정 (local, grid)
@@ -155,5 +161,8 @@ export function gridProcess(
     //* UnMount 시 구독 취소
     return () => {
         unSubLocal();
+
+        // 이벤트 제거
+        editViewStore.off('tab-settings-update');
     };
 }
