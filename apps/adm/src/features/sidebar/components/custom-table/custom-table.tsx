@@ -9,8 +9,9 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import style from "./custom-table.module.css";
 import { UI_Input, UI_Switch } from "@/compos/ui";
-import { useLocalSendEvent } from "../../stores";
+import { useEventStore, useLocalSendEvent } from "../../stores";
 import { UI_Table } from "@/compos/ui/ui-table";
+import { cloneDeep } from "lodash";
 import {
   arrayMove,
   SortableContext,
@@ -77,15 +78,21 @@ export function CustomTable({
   
   const [data, setData] = useState<IFetchSidebarMenuItem[]>([]);
   const sensors = useSensors(useSensor(PointerSensor));
-
+  const { eKey, sendEvent } = useEventStore();
 
   useEffect(() => {
-    if (!dataSource) return;
+      if (!dataSource) return;
+      const clonedData = cloneDeep(dataSource);
+      setData(clonedData);
+    }, [dataSource]);
 
-    setData(dataSource);
-  }, [dataSource]);
-
-  const { eKey, eVal, clean } = useLocalSendEvent.getState();
+  useEffect(() => {
+      // cancel 버튼 클릭 시
+      if(eKey === "cancel") {
+        setData(dataSource);
+        sendEvent(null);
+      }
+    }, [eKey]);
 
   const handleToggleChange = (id: string, checked: boolean) => {
     // const stringId = id.toString();

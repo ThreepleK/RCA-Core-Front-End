@@ -6,7 +6,7 @@ import { UI_Flex, UI_Button } from '@/compos/ui';
 
 import ContentArea from './components/content-area/content-area';
 import style from './sidebar.module.css'
-import { useLocalSendEvent } from './stores';
+import { useEventStore, useLocalSendEvent } from './stores';
 import { IconPlus } from '@tabler/icons-react';
 
 export function Sidebar(){
@@ -61,7 +61,9 @@ function InitLayout(){
 function TitleRightSide(){
     // 이벤트 가져오기
     // const sendEvent = useLocalSendEvent(s => s.sendEvent);
-    const { sendEvent } = useLocalSendEvent.getState();
+    // const { sendEvent } = useLocalSendEvent.getState();
+    const { sendEvent } = useEventStore();
+
 
     //* 저장    
     const onCreate = () => {

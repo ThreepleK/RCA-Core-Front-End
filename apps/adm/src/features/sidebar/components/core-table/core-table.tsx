@@ -1,9 +1,10 @@
 import { useEffect, useState, type ReactElement } from "react";
 import style from "./core-table.module.css";
 import { UI_Input, UI_Switch } from "@/compos/ui";
-import { useLocalSendEvent } from "../../stores";
+import { useEventStore, useLocalSendEvent } from "../../stores";
 import { UI_Table } from "@/compos/ui/ui-table";
 import type { IFetchSidebarMenuItem } from "../../models";
+import { cloneDeep } from "lodash";
 
 export function CoreTable({
   dataSource,
@@ -12,15 +13,22 @@ export function CoreTable({
 }): ReactElement {
   const [data, setData] = useState<IFetchSidebarMenuItem[]>([]);
 
-  const { eKey, eVal, clean } = useLocalSendEvent.getState();
-  console.log('eVal', eVal)
-  console.log('eKey', eKey)
+//   const { eKey, eVal, clean } = useLocalSendEvent.getState();
+  const { eKey, sendEvent } = useEventStore();
 
   useEffect(() => {
     if (!dataSource) return;
-
-    setData(dataSource);
+    const clonedData = cloneDeep(dataSource);
+    setData(clonedData);
   }, [dataSource]);
+
+  useEffect(() => {
+    // cancel 버튼 클릭 시
+    if(eKey === "cancel") {
+      setData(dataSource);
+      sendEvent(null);
+    }
+  }, [eKey]);
 
   const handleToggleChange = (id: string, checked: boolean) => {
     setData((prev) =>

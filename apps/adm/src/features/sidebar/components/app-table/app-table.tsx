@@ -8,7 +8,7 @@ import {
 } from "@dnd-kit/core";
 import style from "./app-table.module.css";
 import { UI_Input, UI_Switch } from "@/compos/ui";
-import { useLocalSendEvent } from "../../stores";
+import { useEventStore, useLocalSendEvent } from "../../stores";
 import { UI_Table } from "@/compos/ui/ui-table";
 import {
   arrayMove,
@@ -16,6 +16,7 @@ import {
   useSortable,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import { cloneDeep } from "lodash";
 import { CSS } from "@dnd-kit/utilities";
 import { MenuOutlined } from "@ant-design/icons";
 import type {
@@ -76,15 +77,21 @@ export function AppTable({
   
   const [data, setData] = useState<IFetchSidebarMenuItem[]>([]);
   const sensors = useSensors(useSensor(PointerSensor));
-
+  const { eKey, sendEvent } = useEventStore();
 
   useEffect(() => {
-    if (!dataSource) return;
+      if (!dataSource) return;
+      const clonedData = cloneDeep(dataSource);
+      setData(clonedData);
+    }, [dataSource]);
 
-    setData(dataSource);
-  }, [dataSource]);
-
-  const { eKey, eVal, clean } = useLocalSendEvent.getState();
+  useEffect(() => {
+      // cancel 버튼 클릭 시
+      if(eKey === "cancel") {
+        setData(dataSource);
+        sendEvent(null);
+      }
+    }, [eKey]);
 
   const handleToggleChange = (id: string, checked: boolean) => {
     // const stringId = id.toString();

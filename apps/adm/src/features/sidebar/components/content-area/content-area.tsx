@@ -7,7 +7,7 @@ import {
 import style from "./content-area.module.css";
 import { v4 as uuidv4 } from "uuid";
 import { UI_Button, UI_Title } from "@/compos/ui";
-import { useLocalSendEvent } from "../../stores";
+import { useEventStore, useLocalSendEvent } from "../../stores";
 import type {
   IFetchSidebarMenu,
   IFetchSidebarMenuItem,
@@ -25,8 +25,8 @@ export function ContentArea() {
   const [customData, setCustomData] = useState<IFetchSidebarMenuItem[]>([]);
   const sensors = useSensors(useSensor(PointerSensor));
 
-  const { eKey, eVal, clean } = useLocalSendEvent.getState();
-    console.log("eKey", eKey);
+  // const { eKey, eVal, clean } = useLocalSendEvent.getState();
+  const { eKey, sendEvent } = useEventStore();
 
 
   /*
