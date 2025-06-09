@@ -9,12 +9,20 @@ import type { SectionStore } from "@/stores";
 
 import style from "./members.module.css";
 
+type ProcessCBMap = {
+    /**
+     * 그리드 사용자 검색
+     * @param search string
+     */
+    'grid-userSearch': string;
+}
+
 /**
  * 맴버 추가 컴포넌트
  */
 function AddMember({}: {}){
     const [inputVal, setInputVal] = useState<string>('');
-    const [processConn, setProcessConn] = useState<SectionStore>(null);
+    const [processConn, setProcessConn] = useState<SectionStore<ProcessCBMap>>(null);
 
     //* 사용자 검색
     const onSearch = () => {
@@ -48,8 +56,8 @@ function AddMember({}: {}){
  */
 function gridProcess(
     gridApi: GridApi<any>,
-    gridConn: SectionStore,
-    pConn: SectionStore
+    gridConn: SectionStore<any>,
+    pConn: SectionStore<ProcessCBMap>
 ){
     // 초기 로딩 끄기
     gridConn.trigger('loading', false);

@@ -4,7 +4,7 @@ import type { TabsProps } from 'antd';
 import { UI_Button, UI_DropdownMenu, UI_Flex, UI_Tabs, UI_Title } from '@/compos/ui';
 import { IconLicense, IconPlus, IconSettings, IconUserOff, IconUsers, IconX } from '@tabler/icons-react';
 import { TabMembers, TabPermissionSets, TabSettings } from './tabs';
-import { editViewStore } from '../../stores';
+import { editViewStore, type EditViewKey } from '../../stores';
 
 import style from './edit-area.module.css'
 
@@ -13,14 +13,10 @@ export function EditArea(){
 
     useEffect(() => {
         // open/close 이벤트
-        editViewStore.on('edit-open', () => setIsOpen(true));
-        editViewStore.on('edit-close', () => setIsOpen(false));
+        editViewStore.on('edit-open', (is: boolean) => setIsOpen(is));
 
         // unMount
-        return () => {
-            editViewStore.off('edit-open');
-            editViewStore.off('edit-close');
-        };
+        return () => editViewStore.off('edit-open');
     }, []);
 
     return <>
@@ -97,7 +93,7 @@ function EditView(){
  * Members 버튼
  */
 function BtnMember(){
-    const onClick = (key: string) => editViewStore.trigger(`${key}-members`);
+    const onClick = (key: string) => editViewStore.trigger(`${key}-members` as EditViewKey);
 
     return <UI_Flex gap='small'>
         <UI_DropdownMenu
@@ -121,7 +117,7 @@ function BtnMember(){
  * Perssion sets 버튼
  */
 function BtnPermission(){
-    const onClick = (key: string) => editViewStore.trigger(`${key}-permission`);
+    const onClick = (key: string) => editViewStore.trigger(`${key}-permission` as EditViewKey);
 
     return <UI_Flex>
         <UI_Button size='small' type='primary' onClick={()=>onClick('save')}>Save permission</UI_Button>
@@ -132,7 +128,7 @@ function BtnPermission(){
  * Settings 버튼
  */
 function BtnSettings(){
-    const onClick = (key: string) => editViewStore.trigger(`${key}-settings`);
+    const onClick = (key: string) => editViewStore.trigger(`${key}-settings` as EditViewKey);
 
     return <UI_Flex>
         <UI_Button size='small' type='primary' onClick={()=>onClick('save')}>Save settings</UI_Button>

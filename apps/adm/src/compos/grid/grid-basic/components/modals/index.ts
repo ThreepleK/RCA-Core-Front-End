@@ -1,12 +1,13 @@
 import type { SectionStore } from "@/stores";
 import type { ComponentType, ReactNode } from "react";
+import type { GridConnMap } from "../../grid-conn-types";
 
 // 그리드 row 아이템
 export type RowItem = {[key: string]: any};
 
 //* 모달에서 사용되는 공통 params
 export type GridModalCommParams = {
-    conn?: SectionStore;                    // Grid 연결
+    conn?: SectionStore<GridConnMap>;       // Grid 연결
     title?: string|ReactNode,               // 모달에 보여줄 타이틀
     callback: () => void;                   // 확인 콜백
     apiFn: (rows: any) => ResponseResult,   // 관련 api 함수

@@ -6,10 +6,11 @@ import { IconDeselect, IconFilterOff, IconReorder, IconRestore, IconSearch } fro
 
 import style from './grid-basic.module.css'
 import type { SectionStore } from '@/stores';
+import type { GridConnMap } from './grid-conn-types';
 
 export function GridTop({ getGridApi, conn }: {
     getGridApi: () => GridApi<any>,
-    conn: SectionStore
+    conn: SectionStore<GridConnMap>
 }){
     const [total, setTotal] = useState(0);
     const [selected, setSelected] = useState(0);
@@ -23,24 +24,24 @@ export function GridTop({ getGridApi, conn }: {
     useEffect(() => {
 
         //* 로드
-        conn.on('top-onLoad', (TotalCount: number) => setTotal(TotalCount));
+        conn.on('top-onLoad', (totalCount: number) => setTotal(totalCount));
 
         //* 필터 변경 이벤트
-        conn.on('onFilterChange', () => {
+        conn.on('top-onFilterChange', () => {
             const api = getGridApi();
             const filterLen = Object.keys(api.getFilterModel()).length;
             setIsFilter(filterLen === 0);
         });
 
         //* 정렬 이벤트
-        conn.on('onSortChange', () => {
+        conn.on('top-onSortChange', () => {
             const api = getGridApi();
             const sorted = api.getState().sort;
             setIsSort(sorted === undefined);
         });
 
         //* row 선택 이벤트
-        conn.on('onRowSelected', () => {
+        conn.on('top-onRowSelected', () => {
             const api = getGridApi();
             const rowLen = api.getSelectedRows().length;
             setSelected(rowLen);

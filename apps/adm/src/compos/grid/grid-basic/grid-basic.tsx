@@ -7,6 +7,7 @@ import { SectionStore } from "@/stores";
 import { GridTop } from "./grid-top";
 import type { GridCreateParams, GridEditParams, GridDeleteParams, GridUpdateParams } from "./components";
 import { BaseModal, girdNodata, gridCreate, gridEdit, gridDelete, gridUpdate } from "./components";
+import type { GridConnKey, GridConnMap } from "./";
 
 import style from './grid-basic.module.css'
 
@@ -21,9 +22,9 @@ export function GridBasic({
 }: {
     columns: ColDef[];
     processCB: ( 
-        api: GridApi<any>,      // Ag Grid Api
-        conn: SectionStore,     // 현재 GridBasic과 통신을 위한 Connector
-        pConn?: SectionStore,   // 외부와 ProcessCB과 통신을 위한 Connector
+        api: GridApi<any>,                  // Ag Grid Api
+        conn: SectionStore<GridConnMap>,   // 현재 GridBasic과 통신을 위한 Connector
+        pConn?: SectionStore,               // 외부와 ProcessCB과 통신을 위한 Connector
     ) => void;
     processConn?: (pConn: SectionStore) => void;
 }){
@@ -43,7 +44,7 @@ export function GridBasic({
     const pReleaseRef = useRef(null);
 
     //* ProcessCB ↔ Grid 양방향 통신용 이벤트
-    let conn = useMemo(() => new SectionStore(), []);
+    let conn = useMemo(() => new SectionStore(), []) as SectionStore<GridConnMap>;
 
     //* 외부에서 ProcessCB 양방향 통신용 이벤트
     let onlyProcessConn = useMemo(() => new SectionStore(), []);
@@ -112,8 +113,8 @@ export function GridBasic({
     }, []);
 
     //* 그리드 관련 이벤트
-    const onEvent = useCallback((key: string, val?: any) => {
-        conn.trigger(key);
+    const onTopEvent = useCallback((key: string, val?: any) => {
+        conn.trigger('top-'+key as GridConnKey);
     }, []);
 
     return <>
@@ -130,9 +131,9 @@ export function GridBasic({
                 rowData={rowData}
                 onGridReady={onReady}
                 loading={isLoading}
-                onFilterChanged={() => { onEvent('onFilterChange'); }}
-                onSortChanged={() => { onEvent('onSortChange'); }}
-                onRowSelected={() => { onEvent('onRowSelected'); }}
+                onFilterChanged={() => { onTopEvent('onFilterChange'); }}
+                onSortChanged={() => { onTopEvent('onSortChange'); }}
+                onRowSelected={() => { onTopEvent('onRowSelected'); }}
                 pagination={true}
 
                 headerHeight={headerCellH}

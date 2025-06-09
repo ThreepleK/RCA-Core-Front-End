@@ -1,15 +1,19 @@
+type Callbacks<M extends Record<string, any>> = {
+    [K in keyof M]?: (arg: M[K]) => void;
+};
+
 /**
  * 구간 store
  */
-export class SectionStore {
-    evList = {};
+export class SectionStore<M extends Record<string, any> = any> {
+    evList: Callbacks<M> = {};
 
     /**
      * 등록 이벤트
      * @param key 등록 이벤트 키
      * @param callback 전달 받을 함수
      */
-    on( key: string, callback: (args: any) => void ){
+    on<K extends keyof M>( key: K, callback: (args: M[K]) => void ){
         if( key in this.evList ){ return; }
         this.evList[key] = callback;
     }
@@ -18,7 +22,7 @@ export class SectionStore {
      * 제거 이벤트
      * @param key 제거 이벤트 키
      */
-    off( key: string ){
+    off<K extends keyof M>( key: K ){
         if( !(key in this.evList) ){ return; }
 
         this.evList[key] = null;
@@ -29,7 +33,7 @@ export class SectionStore {
      * 제거 이벤트
      * @param keyList 제거 이벤트 리스트트
      */
-    offs( keyList: string[] ){
+    offs<K extends keyof M>( keyList: K[] ){
         for( const key in keyList ){
             this.off(keyList[key]);
         }
@@ -40,7 +44,7 @@ export class SectionStore {
      * @param key 이벤트 키
      * @param data 전달 데이터
      */
-    trigger( key: string, data?: any ){
+    trigger<K extends keyof M>( key: K, data?: M[K] ){
         if( !(key in this.evList) ){ return; }
         this.evList[key](data);
     }
@@ -49,7 +53,7 @@ export class SectionStore {
      * 동시 이벤트 전달
      * @param tList 트리거 리스트
      */
-    triggers(tList: {[key: string]: any} ){
+    triggers<K extends keyof M>(tList: {[P in K]: M[P]} ){
         for( const key in tList ){
             this.trigger(key, tList[key]);
         }
@@ -61,7 +65,7 @@ export class SectionStore {
      * @param data 전달 데이터
      * @return 콜백 된 데이터
      */
-    feedback( key: string, data: any ): any {
+    feedback<K extends keyof M>( key: K, data: M[K] ): any {
         if( !(key in this.evList) ){ return null; }
         return this.evList[key](data);
     }

@@ -3,17 +3,18 @@ import { UI_Alert, UI_Flex, UI_LoadingOverlay, UI_Modal } from "@/compos/ui";
 
 import style from './base-modal.module.css'
 import type { SectionStore } from "@/stores";
+import type { GridConnMap } from "../../../";
 
 // 보여줄 컨텐츠
-type ShowCont = string | ReactNode | null;
-type ButtonItem = {[key: string]: ShowCont};
-type FeedbackCB = (key: string) => void;
+export type ShowCont = string | ReactNode | null;
+export type ButtonItem = {[key: string]: ShowCont};
+export type FeedbackCB = (key: string) => void;
 
 /**
  * 공용 모달
  */
 export function BaseModal({ conn }: {
-    conn: SectionStore
+    conn: SectionStore<GridConnMap>
 }) {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [isShow, setIsShow] = useState<boolean>(isOpen);
@@ -23,7 +24,7 @@ export function BaseModal({ conn }: {
 
     const [modalSize, setModalSize] = useState<string>('md');
 
-    const [title, setTitle] = useState<string>('');
+    const [title, setTitle] = useState<ShowCont>('');
     const [content, setContent] = useState<ShowCont>('');
     const [buttons, setButtons] = useState<ButtonItem>({});
     const [bottomLeftSection, setBottomLeftSection] = useState<ShowCont>(null);
@@ -40,7 +41,7 @@ export function BaseModal({ conn }: {
         for( const key in buttons){
             const btn = buttons[key];
             rightArea.push(
-                <div key={key} onClick={() => { console.log('클릭', key); feedback(key) }}>{btn}</div>
+                <div key={key} onClick={() => feedback(key)}>{btn}</div>
             );
         }
 
@@ -95,7 +96,7 @@ export function BaseModal({ conn }: {
         // 모달 Open/Close
         conn.on('modal-open', (is: boolean) => setIsOpen(is));
         // 모달 타이틀
-        conn.on('modal-title', (title: string) => setTitle(title));
+        conn.on('modal-title', (title: ShowCont) => setTitle(title));
         // 모달 본문
         conn.on('modal-content', (content: ShowCont) => setContent(content));
         // 모달 버튼
