@@ -26,7 +26,7 @@ export function Sidebar(){
             {/* 초기 레이아웃 설정 */}
             <InitLayout />
             {/* 컨텐츠 */}
-            <ContentArea isCancel={isCancel} onChangeCancel={setIsCancel}/>
+            <ContentArea />
         </ContentsLayout>
     </>;
 }
@@ -60,21 +60,36 @@ function InitLayout(){
  */
 function TitleRightSide(){
     // 이벤트 가져오기
-    const sendEvent = useLocalSendEvent(s => s.sendEvent);
+    // const sendEvent = useLocalSendEvent(s => s.sendEvent);
+    const { sendEvent } = useLocalSendEvent.getState();
 
     //* 저장    
     const onCreate = () => {
         sendEvent('save');
     };
 
+    //* 취소        
+    const onCancel = () => {
+        console.log('onCancel');
+        sendEvent('cancel');
+    };
+
+
     return (
         <UI_Flex justify='flex-end' align='center' gap='small' className={style['top-right']}>
             <UI_Button
                 icon={<IconPlus size={14} />}
-                iconPosition='end'
+                iconPosition='start'
                 onClick={onCreate}
                 type="primary"
             >Add license</UI_Button>
+            <UI_Button
+                onClick={onCancel}
+            >Cancel</UI_Button>
+            <UI_Button
+                onClick={onCreate}
+                type="primary"
+            >Save</UI_Button>
         </UI_Flex>
     )
 }

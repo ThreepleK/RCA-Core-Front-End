@@ -60,13 +60,13 @@ export function ContentArea({ isCancel, onChangeCancel }: {
       <div className={style['logo-section']}>
         <UI_Title order={2} className={style.title}>Logo</UI_Title>
           <UI_Image className={style.logo} width="auto" src={logo} />
-          <div style={{ marginTop: '10px', display: 'flex', gap: '8px' }}>
+          <div className={style.upload}>
             <UI_Upload beforeUpload={() => false} fileList={logoList} onChange={handleLogoUpload}>
               <UI_Button type="primary" onClick={handleLogoUpload}>Upload</UI_Button>
             </UI_Upload>
             <UI_Button onClick={handleLogoReset}>Reset</UI_Button>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', marginTop: '10px' }}>
+          <div className={style['sub-text']}>
           <Text>
             300x200px is recommended
           </Text>
@@ -78,13 +78,13 @@ export function ContentArea({ isCancel, onChangeCancel }: {
       <div className={style['favicon-section']} style={{ marginTop: '20px' }}>
         <UI_Title order={2} className={style.title}>Favicon</UI_Title>
           <UI_Image width="auto" src={logo} />
-          <div style={{ marginTop: '10px', display: 'flex', gap: '8px' }}>
+          <div className={style.upload}>
             <UI_Upload beforeUpload={() => false} fileList={faviconList} onChange={handleFaviconUpload}>
-              <UI_Button type="primary" >Upload</UI_Button>
+              <UI_Button type="primary">Upload</UI_Button>
             </UI_Upload>
             <UI_Button onClick={handleFaviconReset}>Reset</UI_Button>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', marginTop: '10px' }}>
+          <div className={style['sub-text']}>
           <Text>
             200x200px is recommended
           </Text>
