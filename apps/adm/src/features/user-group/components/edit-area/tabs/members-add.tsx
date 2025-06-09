@@ -111,12 +111,7 @@ export function addMemberProcess(){
 const _COLUMNS: ColDef[] = (() => {
     //* 그리드 컬럼 설정
     return [
-        { field: 'fullName',    headerName: 'User name',
-            valueGetter: ({ data: { fullName } }) => {
-                return fullName;
-            }
-        },
+        { field: 'fullName',    headerName: 'User name'},
         { field: 'email',       headerName: 'Email' },
-        { field: 'department',  headerName: 'Department', },
     ];
 })();

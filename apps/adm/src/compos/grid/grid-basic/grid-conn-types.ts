@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { ButtonItem, FeedbackCB, GridCreateParams, GridDeleteParams, GridEditParams, GridUpdateParams, ShowCont } from "./components";
+import type { ButtonItem, FeedbackCB, GridCreateParams, GridDeleteParams, GridEditParams, GridNodataParams, GridUpdateParams, ShowCont } from "./components";
 
 export interface GridConnMap {
     // ---- [Grid 기능] ---- //
@@ -56,10 +56,10 @@ export interface GridConnMap {
     // ---- [Modal 기능] ---- //
     /**
      * [Modal 기능]
-     * @param title string
+     * @param props GridNodataParams
      * @description 데이터가 없을 때 모달
      */
-    'nodata-modal': string,
+    'nodata-modal': GridNodataParams,
     /**
      * [Modal 기능]
      * @param props GridCreateParams

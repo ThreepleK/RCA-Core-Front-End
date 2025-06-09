@@ -16,7 +16,7 @@ const _CONT_TYPE = 'mod';
  * 편집 관련 모달
  */
 export function gridEdit({
-    conn, title, row, callback, formValidationFn, FormCompo, apiFn
+    conn, title, row, callback, formValidationFn, FormCompo, apiFn, size
 }: GridEditParams){
     //* 편집 데이터
     const editDatas = {...row};
@@ -43,7 +43,7 @@ export function gridEdit({
         // 내용
         'modal-content': <FormCompo row={row} onSetData={onSetData} />,
         // 모달 크기
-        'modal-size': 'xl',
+        'modal-size': size ?? 'xl',
         // 모달 버튼 피드백
         'modal-feedback': async (key: string) => {
             // 에러 메시지 초기화
@@ -67,7 +67,7 @@ export function gridEdit({
             // 처리 결과
             const result = await (async() => {
                 // 데이터 검증
-                const validate = await formValidationFn(_CONT_TYPE, row);
+                const validate = await formValidationFn(_CONT_TYPE, editDatas);
 
                 // 검증 에러가 있을 경우
                 if( validate.isErr ){
@@ -76,7 +76,7 @@ export function gridEdit({
                 }
                 
                 // 추가 처리
-                const res = await apiFn([row]);
+                const res = await apiFn([editDatas]);
 
                 // 에러가 있을 경우
                 if( res.isErr ){

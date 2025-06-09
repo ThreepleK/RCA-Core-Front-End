@@ -3,14 +3,18 @@ import { UI_Button } from '@/compos/ui';
 
 import style from './modal.module.css'
 import type { SectionStore } from '@/stores';
+import type { GridConnMap } from '../../grid-conn-types';
+
+export interface GridNodataParams {
+    conn?: SectionStore<GridConnMap>;       // Grid 연결
+    title: string | ReactNode;              // 모달 제목
+    content?: string | ReactNode;           // 모달 내용
+}
 
 /**
  * [모달] 처리 할 아이템이 없을 때
  */
-export function girdNodata(
-    conn: SectionStore,
-    title: string | ReactNode,
-){
+export function girdNodata({conn, title, content}: GridNodataParams){
     //* 모달 설정
     conn.triggers({
         // 제목
@@ -18,7 +22,7 @@ export function girdNodata(
         // 내용
         'modal-content': (
             <div className={style['modal-content']}>
-                Please select one or more items.
+                {content ?? `Please select one or more items.`}
             </div>
         ),
         // 모달 크기
