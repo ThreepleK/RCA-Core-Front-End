@@ -106,21 +106,27 @@ export function FormEditContent({type, row, onSetData, errMsg, errCode}: {
             />
             <UI_FormSelect
                 label='User group'
-                value={r?.userGroups?.map(r => r?.id)}
+                value={r?.userGroups}
                 data={groupList}
                 loading={groupList.length === 0}
                 disabled={groupList.length === 0}
                 mode='multiple'
-                onChange={(v) => onData(v, 'userGroup')}
+                onChange={(v) => {
+                    console.log('userGroup', v)
+                    onData(v, 'userGroups')
+                }}
             />
             <UI_FormSelect
                 label='Permission set'
-                value={r?.permissionSets?.map(r => r?.id)}
+                value={r?.permissionSets}
                 data={permissionList}
                 loading={permissionList.length === 0}
                 disabled={permissionList.length === 0}
                 mode='multiple'
-                onChange={(v) => onData(v, 'permission')}
+                onChange={(v) => {
+                    console.log('Permission', v)
+                    onData(v, 'permissionSets')
+                }}
             />
 
             {/* 수정 */}
@@ -154,12 +160,22 @@ function formAsyncDatas(
     cb: (key: string, data: any) => void
 ){
     // User Group
-    api_getUserGroup().then(res => {
-        cb('userGroup', res.res);
+    api_getUserGroup().then(({res}) => {
+        const list = res.map(r => ({
+            label: r.name,
+            value: r.id,
+        }));
+
+        cb('userGroup', list);
     });
 
     // Permission sets
-    api_getPermission().then(res => {
-        cb('permission', res.res);
+    api_getPermission().then(({res}) => {
+        const list = res.map(r => ({
+            label: r.name,
+            value: r.id,
+        }));
+
+        cb('permission', list);
     });
 }

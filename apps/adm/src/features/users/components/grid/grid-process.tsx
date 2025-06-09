@@ -118,11 +118,19 @@ export function gridProcess(
             case 'edit': {
                 // 그리드에서 전달한 row 데이터
                 const row = eVal as any;
+
                 // 수정 모달
                 gridConn.trigger('edit-modal', {
                     title: 'Edit Details',
                     FormCompo: (props: any) => {
-                        return <FormEditContent {...props} type='mod' />;
+                        const {permissionSets, userGroups} = props.row;
+                        const row = {
+                            ...props.row,
+                            permissionSets: !permissionSets ? [] : permissionSets.map(r => r.id),
+                            userGroups: userGroups.map(r => r.id),
+                        };
+
+                        return <FormEditContent {...props} row={row} type='mod' />;
                     },
                     formValidationFn: formValidate,
                     row,
