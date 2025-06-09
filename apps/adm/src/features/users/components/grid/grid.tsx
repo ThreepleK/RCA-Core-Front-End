@@ -62,7 +62,10 @@ const _COLUMNS: ColDef[] = (() => {
         },
         { field: 'permissionSets',  headerName: 'Permission sets', ...rangeFilter,
             valueGetter: ({ data: {permissionSets} }) => {
-                return permissionSets.map(r => r?.name).join(', ')
+                return !permissionSets
+                    ? ''
+                    : permissionSets.map(r => r?.name).join(', ')
+                ;
             }
         },
         { field: 'status',          headerName: 'Status', ...activeFilter},
