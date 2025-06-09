@@ -1,0 +1,11 @@
+/* .table {
+    @apply min-w-full text-sm text-gray-700;
+
+    & > .head {
+        @apply bg-gray-100 px-4 py-2 text-left;
+    }
+
+    & > .drag {
+        @apply pl-4 pr-2 py-2 w-10;
+    }
+} */

@@ -30,6 +30,14 @@
     & > .logo {
         @apply mt-2;
     }
+
+    & > .upload {
+        @apply mt-5 gap-8 flex
+    }
+
+    & > .sub-text {
+        @apply mt-5 flex flex-col;
+    }
 }
 
 .favicon-section {
@@ -42,8 +50,15 @@
     & > .title {
         @apply text-lg mb-3;
     }
-    
 
+    & > .upload {
+        @apply mt-5 gap-8 flex
+    }
+    
+    & > .sub-text {
+        @apply mt-5 flex flex-col;
+    }
+    
     /* 본문 */
     & > .favicon-group {
         @apply mt-5;
