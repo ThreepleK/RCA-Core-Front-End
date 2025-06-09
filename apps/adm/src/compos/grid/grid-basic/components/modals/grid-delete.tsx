@@ -15,7 +15,9 @@ export interface GridDeleteParams extends GridModalCommParams {
 export function gridDelete(params: GridDeleteParams) {
     // 처리할 아이템이 1개도 없을 때
     if( params.rows === null || (Array.isArray(params.rows) && params.rows.length === 0) ){
-        params.conn.trigger('nodata-modal', params.title);
+        params.conn.trigger('nodata-modal', {
+            title: params.title
+        });
         return;
     }
 

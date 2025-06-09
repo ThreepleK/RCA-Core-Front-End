@@ -1,9 +1,11 @@
 import type { GridApi } from "ag-grid-community";
 import { editViewStore, openEditDrawer, useLocalSendEvent } from "../../stores";
 import { api_createItem, api_deleteItems, api_list, api_updateItems } from "../../apis";
-import type { GridCreateParams, GridDeleteParams, GridUpdateParams } from "@/compos/grid";
-import { FormCreateContent, formValidate } from "../form";
+import type { GridConnMap, GridCreateParams, GridDeleteParams, GridEditParams, GridUpdateParams } from "@/compos/grid";
+import { FormClone, formCloneValidate, FormCreateContent, formValidate } from "../form";
 import type { SectionStore } from "@/stores";
+import { useEffect, useState } from "react";
+import { UI_Flex, UI_TextInput } from "@/compos/ui";
 
 /**
  * 그리드 프로세스 처리
@@ -12,7 +14,7 @@ import type { SectionStore } from "@/stores";
  */
 export function gridProcess(
     gridApi: GridApi<any>,
-    gridConn: SectionStore
+    gridConn: SectionStore<GridConnMap>
 ){
     
     //* 리스트 불러오기
@@ -57,36 +59,47 @@ export function gridProcess(
                 } as GridCreateParams);
             } break;
 
-            // 선택 항목 활성화
-            case 'selected-active': {
+            // 선택 항목 복제
+            case 'selected-clone': {
                 if( !gridApi ){ return; }
 
                 // 그리드에서 선택된 row 가져오기
                 const rows = gridApi.getSelectedRows();
-                // 계정 활성화 모달
-                gridConn.trigger('update-modal', {
-                    title: 'Active member',
-                    content: 'Do you want to activate the selected users?',
-                    rows,
-                    callback: onListLoad,
-                    apiFn: rows => api_updateItems('status-active', rows)
-                } as GridUpdateParams);
-            } break;
 
-            // 선택 항목 비활성화
-            case 'selected-inactive': {
-                if( !gridApi ){ return; }
+                // 선택 항목 0 or 2개 이상일 경우, 경고 메시지
+                if( rows.length === 0 || rows.length >= 2 ){
+                    gridConn.trigger('nodata-modal', {
+                        title: 'Clone user group',
+                        content: 'Please select only one item to clone.'
+                    });
+                    return;
+                }
 
-                // 그리드에서 선택된 row 가져오기
-                const rows = gridApi.getSelectedRows();
-                // 계정 비활성화 모달
-                gridConn.trigger('update-modal', {
-                    title: 'Inactive member',
-                    content: 'Do you want to inactivate the selected users?',
-                    rows,
+                // 그룹 복제 편집 모달
+                gridConn.trigger('edit-modal', {
+                    title: 'Clone user group',
+                    row: {
+                        groupName: rows[0].groupName,
+                    },
+                    FormCompo: FormClone,
+                    formValidationFn: formCloneValidate,
                     callback: onListLoad,
-                    apiFn: rows => api_updateItems('status-inactive', rows)
-                } as GridUpdateParams);
+                    apiFn: async editRows => {
+                        const resRow = {...rows[0], ...editRows[0]};
+                        console.log('resRow', resRow);
+
+                        return new Promise(resolve => {
+                            const res = {
+                                isErr: false,
+                                msg: '',
+                                res: null,
+                            };
+
+                            resolve(res);
+                        });
+                    },
+                    size: 'sm'
+                } as GridEditParams);
             } break;
 
             // 선택 항목 삭제

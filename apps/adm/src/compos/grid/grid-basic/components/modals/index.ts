@@ -11,6 +11,7 @@ export type GridModalCommParams = {
     title?: string|ReactNode,               // 모달에 보여줄 타이틀
     callback: () => void;                   // 확인 콜백
     apiFn: (rows: any) => ResponseResult,   // 관련 api 함수
+    size?: string;                          // 컴포넌트 크기
 }
 
 /**

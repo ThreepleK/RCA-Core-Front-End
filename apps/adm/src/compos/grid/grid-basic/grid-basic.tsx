@@ -5,7 +5,7 @@ import { UI_DataGrid, type ColDef } from "@/compos/ui";
 import { SectionStore } from "@/stores";
 
 import { GridTop } from "./grid-top";
-import type { GridCreateParams, GridEditParams, GridDeleteParams, GridUpdateParams } from "./components";
+import type { GridCreateParams, GridEditParams, GridDeleteParams, GridUpdateParams, GridNodataParams } from "./components";
 import { BaseModal, girdNodata, gridCreate, gridEdit, gridDelete, gridUpdate } from "./components";
 import type { GridConnKey, GridConnMap } from "./";
 
@@ -85,7 +85,7 @@ export function GridBasic({
         });
 
         //* 데이터가 없을 때 모달
-        conn.on('nodata-modal', (title: string) => girdNodata(conn, title));
+        conn.on('nodata-modal', (props: GridNodataParams) => girdNodata({conn, ...props}));
         //* 생성 관련 모달 처리
         conn.on('create-modal', (props: GridCreateParams) => gridCreate({conn, ...props}));
         //* 편집 관련 모달 처리
