@@ -132,16 +132,12 @@ export function AppTable({
       title: "Display Name",
       dataIndex: "displayName",
       render: (text, record) => {
-        return text === "" ? (
-          <UI_Input
-            value={text}
-            onChange={(e) => {
-              handleDisplayNameChange(record.id, text);
-            }}
-          />
-        ) : (
-          text
-        );
+        return <UI_Input
+        value={text}
+        onChange={(e) => {
+          handleDisplayNameChange(record.id, text);
+        }}
+      />
       },
     },
     {

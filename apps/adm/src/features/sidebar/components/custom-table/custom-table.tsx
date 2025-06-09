@@ -140,25 +140,7 @@ export function CustomTable({
         );
       }
     };
-  
-    const handleAddLevel = () => {
-      const newSortOrder = data?.length;
-      const newRow = {
-        id: uuidv4(), // 고유 id (간단한 예시)
-        name: "",
-        displayName: "",
-        url: "",
-        level: 1,
-        sortOrder: newSortOrder + 1,
-        isVisible: true,
-        isActive: true,
-        licenseId: "2",
-        openInNewTab: false,
-        menuGroupId: "3", // 메뉴 그룹 ID (나중에 빠질 내용)
-        itemType: "new",
-      };
-      setData((prev) => [...prev, newRow]);
-    };
+
 
   const handleDelete = (id: string) => {
     setData((prev) => prev.filter((row) => row.id !== id));
