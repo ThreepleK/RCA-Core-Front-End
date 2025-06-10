@@ -1,21 +1,14 @@
 import { useEffect, useState } from "react";
-import {
-  PointerSensor,
-  useSensor,
-  useSensors,
-} from "@dnd-kit/core";
 import style from "./content-area.module.css";
 import { v4 as uuidv4 } from "uuid";
-import { UI_Button, UI_Title } from "@/compos/ui";
-import { useEventStore, useLocalSendEvent } from "../../stores";
-import type {
-  IFetchSidebarMenu,
-  IFetchSidebarMenuItem,
-} from "../../models";
+import { UI_Button, UI_Input, UI_Title } from "@/compos/ui";
+import { useDataStore, useEventStore } from "../../stores";
+import type { IFetchSidebarMenu, IFetchSidebarMenuItem } from "../../models";
 import { api_getSidebarMenuData } from "../../apis";
-import CoreTable from "../core-table/core-table";
-import AppTable from "../app-table/app-table";
-import CustomTable from "../custom-table/custom-table";
+import CoreTable from "../table/core-table";
+import AppTable from "../table/app-table";
+import CustomTable from "../table/custom-table";
+import { CommModal, useCommModalStore } from "@/compos/modal";
 
 export function ContentArea() {
   const [reloadFlag, setReloadFlag] = useState(false);
@@ -23,11 +16,14 @@ export function ContentArea() {
   const [coreData, setCoreData] = useState<IFetchSidebarMenuItem[]>([]);
   const [appData, setAppData] = useState<IFetchSidebarMenuItem[]>([]);
   const [customData, setCustomData] = useState<IFetchSidebarMenuItem[]>([]);
-  const sensors = useSensors(useSensor(PointerSensor));
+  const [addCustomData, setAddCustomData] = useState<IFetchSidebarMenuItem[]>([]);
+  // const [isOpen, setIsOpen] = useState(false);
 
   // const { eKey, eVal, clean } = useLocalSendEvent.getState();
   const { eKey, sendEvent } = useEventStore();
+  const { sendData } = useDataStore();
 
+  const { setOpen, setContent } = useCommModalStore((s) => s);
 
   /*
    * 사이드바 메뉴 API 호출
@@ -42,11 +38,20 @@ export function ContentArea() {
   }, [reloadFlag]);
 
   useEffect(() => {
+    if (eKey === "save") {
+      setReloadFlag(!reloadFlag);
+    }
+  }, [eKey]);
+
+  useEffect(() => {
     if (!data) return;
 
     setCoreData(data[0]?.menus);
     setAppData(data[1]?.menus);
     setCustomData(data[2]?.menus);
+    setAddCustomData(data[2]?.menus);
+
+    sendData(data);
   }, [data]);
 
   const handleAddLevel = () => {
@@ -65,7 +70,12 @@ export function ContentArea() {
       menuGroupId: "3", // 메뉴 그룹 ID (나중에 빠질 내용)
       itemType: "new",
     };
-    setCustomData((prev) => [...prev, newRow]);
+    setAddCustomData((prev) => [...prev, newRow]);
+  };
+
+  const handleAddCustomLink = () => {
+    // setOpen(true);
+    AddCustomLink();
   };
 
   return (
@@ -89,12 +99,41 @@ export function ContentArea() {
           </UI_Title>
           <div className={style["button-div"]}>
             <UI_Button onClick={handleAddLevel}>Add level 1 menu</UI_Button>
+            <UI_Button type="primary" onClick={handleAddCustomLink}>Add custom link</UI_Button>
           </div>
         </div>
-        <CustomTable dataSource={customData} />
+        <CustomTable dataSource={customData} addLevelData={addCustomData} />
+        <CommModal />
       </div>
     </div>
   );
 }
 
 export default ContentArea;
+
+/**
+ * custom link 편집 모달
+ * @returns {void}
+ */
+export function AddCustomLink(){
+    const {setContent, setOpen} = useCommModalStore.getState();
+
+    setContent({
+        title: 'Add custom link',
+        content: <UI_Input />,
+        buttons: {
+            'cancel': <UI_Button>Cancel</UI_Button>,
+            'add': <UI_Button type='primary'>OK</UI_Button>,
+        },
+        feedback: (key: string) => {
+            // 닫기
+            if( key === 'cancel' ){
+                setOpen(false);
+                return;
+            }
+        },
+        size: 'lg'
+    });
+
+    setOpen(true);
+}

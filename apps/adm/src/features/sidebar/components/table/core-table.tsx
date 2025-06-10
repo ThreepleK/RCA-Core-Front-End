@@ -1,7 +1,6 @@
 import { useEffect, useState, type ReactElement } from "react";
-import style from "./core-table.module.css";
 import { UI_Input, UI_Switch } from "@/compos/ui";
-import { useEventStore, useLocalSendEvent } from "../../stores";
+import { useDataStore, useEventStore } from "../../stores";
 import { UI_Table } from "@/compos/ui/ui-table";
 import type { IFetchSidebarMenuItem } from "../../models";
 import { cloneDeep } from "lodash";
@@ -15,12 +14,18 @@ export function CoreTable({
 
 //   const { eKey, eVal, clean } = useLocalSendEvent.getState();
   const { eKey, sendEvent } = useEventStore();
-
+   const { sendCore } = useDataStore();
+   
   useEffect(() => {
     if (!dataSource) return;
     const clonedData = cloneDeep(dataSource);
     setData(clonedData);
   }, [dataSource]);
+
+  useEffect(() => {
+    if (!data) return;
+    sendCore(data);
+  }, [data]);
 
   useEffect(() => {
     // cancel 버튼 클릭 시
@@ -58,7 +63,7 @@ export function CoreTable({
         return <UI_Input
         value={text}
         onChange={(e) => {
-          handleDisplayNameChange(record.id, text);
+          handleDisplayNameChange(record.id, e.currentTarget.value);
         }}
       />
       },
@@ -77,7 +82,6 @@ export function CoreTable({
 
   return (
     <UI_Table
-      className={style.table}
       columns={columns}
       dataSource={data}
       pagination={false}

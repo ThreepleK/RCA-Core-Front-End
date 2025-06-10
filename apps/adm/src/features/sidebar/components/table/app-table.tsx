@@ -6,9 +6,8 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import style from "./app-table.module.css";
 import { UI_Input, UI_Switch } from "@/compos/ui";
-import { useEventStore, useLocalSendEvent } from "../../stores";
+import { useDataStore, useEventStore } from "../../stores";
 import { UI_Table } from "@/compos/ui/ui-table";
 import {
   arrayMove,
@@ -78,12 +77,18 @@ export function AppTable({
   const [data, setData] = useState<IFetchSidebarMenuItem[]>([]);
   const sensors = useSensors(useSensor(PointerSensor));
   const { eKey, sendEvent } = useEventStore();
+  const { sendApp } = useDataStore();
 
   useEffect(() => {
       if (!dataSource) return;
       const clonedData = cloneDeep(dataSource);
       setData(clonedData);
     }, [dataSource]);
+
+    useEffect(() => {
+      if (!data) return;
+      sendApp(data);
+    }, [data]);
 
   useEffect(() => {
       // cancel 버튼 클릭 시
@@ -135,7 +140,7 @@ export function AppTable({
         return <UI_Input
         value={text}
         onChange={(e) => {
-          handleDisplayNameChange(record.id, text);
+          handleDisplayNameChange(record.id, e.currentTarget.value);
         }}
       />
       },
@@ -180,7 +185,6 @@ export function AppTable({
             strategy={verticalListSortingStrategy}
           >
             <UI_Table
-              className={style.table}
               columns={columns}
               dataSource={data}
               rowKey="id"
