@@ -9,6 +9,7 @@ import CoreTable from "../table/core-table";
 import AppTable from "../table/app-table";
 import CustomTable from "../table/custom-table";
 import { CommModal, useCommModalStore } from "@/compos/modal";
+import AddCustomModal from "../modal-content/add-custom-modal";
 
 export function ContentArea() {
   const [reloadFlag, setReloadFlag] = useState(false);
@@ -120,7 +121,7 @@ export function AddCustomLink(){
 
     setContent({
         title: 'Add custom link',
-        content: <UI_Input />,
+        content: <AddCustomModal type='new'/>,
         buttons: {
             'cancel': <UI_Button>Cancel</UI_Button>,
             'add': <UI_Button type='primary'>OK</UI_Button>,

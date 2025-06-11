@@ -10,6 +10,7 @@ import { useDataStore, useEventStore } from "./stores";
 import { IconPlus } from "@tabler/icons-react";
 import { api_setSidebarMenuData } from "./apis";
 import { useCommModalStore } from "@/compos/modal";
+import AddLicenseModal from "./components/modal-content/add-license-modal";
 
 export function Sidebar() {
 
@@ -149,7 +150,7 @@ export function AddLicense(){
 
     setContent({
         title: 'Add license',
-        content: <UI_Input />,
+        content: <AddLicenseModal type='mod' />,
         buttons: {
             'cancel': <UI_Button>Cancel</UI_Button>,
             'add': <UI_Button type='primary'>Next</UI_Button>,

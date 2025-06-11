@@ -11,7 +11,7 @@ import { UI_Image } from '@/compos/ui/ui-image';
 import { UI_Upload } from '@/compos/ui/ui-upload';
 import { Typography } from 'antd';
 import { useLocalSendEvent } from '../../stores';
-import { UI_Text } from '@/compos/ui/ui-text';
+import { UI_Typography } from '@/compos/ui/ui-typography';
 
 export function ContentArea({ isCancel, onChangeCancel }: {
     isCancel: boolean,
@@ -68,8 +68,8 @@ export function ContentArea({ isCancel, onChangeCancel }: {
             <UI_Button onClick={handleLogoReset}>Reset</UI_Button>
           </div>
           <div className={style['sub-text']}>
-          <UI_Text text={'200x200px is recommended'} />
-          <UI_Text type="secondary" text={'Allowed JPG, PNG, GIF. Max size of 800K'} />
+          <UI_Typography typoType={'Text'} text={'200x200px is recommended'} />
+          <UI_Typography typoType={'Text'} type="secondary" text={'Allowed JPG, PNG, GIF. Max size of 800K'} />
           </div>
       </div>
       <div className={style['favicon-section']} style={{ marginTop: '20px' }}>
@@ -82,8 +82,8 @@ export function ContentArea({ isCancel, onChangeCancel }: {
             <UI_Button onClick={handleFaviconReset}>Reset</UI_Button>
           </div>
           <div className={style['sub-text']}>
-          <UI_Text text={'200x200px is recommended'} />
-          <UI_Text type="secondary" text={'Allowed JPG, PNG, GIF. Max size of 800K'} />
+          <UI_Typography typoType={'Text'} text={'200x200px is recommended'} />
+          <UI_Typography typoType={'Text'} type="secondary" text={'Allowed JPG, PNG, GIF. Max size of 800K'} />
           </div>
       </div>
     </div>;

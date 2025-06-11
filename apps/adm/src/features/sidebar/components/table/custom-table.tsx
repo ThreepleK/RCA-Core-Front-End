@@ -20,6 +20,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { MenuOutlined } from "@ant-design/icons";
 import type { IFetchSidebarMenuItem } from "../../models";
 import { useCommModalStore } from "@/compos/modal";
+import EditCustomModal from "../modal-content/edit-custom-modal";
 
 const DragHandle = () => (
   <MenuOutlined style={{ cursor: "grab", color: "#999" }} />
@@ -139,8 +140,8 @@ export function CustomTable({
     }
   };
 
-  const handleEdit = (id: string) => {
-    editCustomLink();
+  const handleEdit = (record: any) => {
+    editCustomLink(record);
   };
 
   const handleDelete = (id: string) => {
@@ -201,7 +202,7 @@ export function CustomTable({
         <>
           <a
             style={{ marginRight: "10px" }}
-            onClick={() => handleEdit(record.id)}
+            onClick={() => handleEdit(record)}
           >
             Edit
           </a>
@@ -258,12 +259,12 @@ export default CustomTable;
  * custom link 편집 모달
  * @returns {void}
  */
-export function editCustomLink(){
+export function editCustomLink(row: any){
     const {setContent, setOpen} = useCommModalStore.getState();
 
     setContent({
         title: 'Edit custom menu information',
-        content: <UI_Input />,
+        content: <EditCustomModal row={row} type='mod'/>,
         buttons: {
             'cancel': <UI_Button>Cancel</UI_Button>,
             'add': <UI_Button type='primary'>OK</UI_Button>,
