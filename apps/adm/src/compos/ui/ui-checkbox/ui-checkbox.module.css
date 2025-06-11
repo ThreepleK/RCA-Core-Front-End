@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+.ui-checkbox-root {
+    & {}
+}
+
+.ui-checkbox {
+    & {}
+}

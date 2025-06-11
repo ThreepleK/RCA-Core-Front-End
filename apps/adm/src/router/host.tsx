@@ -11,7 +11,7 @@ import { Users } from '@/features/users'
 import { Design } from '@/features/design'
 import { Sidebar } from '@/features/sidebar'
 import { UserGroup } from '@/features/user-group'
-// import Permission from '@/features/permission'
+import { PermissionSet } from '@/features/permission-set'
 // import Branding from '@/features/branding'
 // import SidebarMenu from '@/features/sidebar-menu'
 // import ApplicationMenu from '@/features/application-menu'
@@ -35,7 +35,7 @@ export default {
         { path: 'design', element: wrapLayout(<Design />, 'design') },
         { path: 'sidebar', element: wrapLayout(<Sidebar />, 'sidebar') },
         { path: 'user-group', element: wrapLayout(<UserGroup />, 'user-group') },
-        // { path: 'permission', element: wrapLayout(<Permission />, 'permission') },
+        { path: 'permission-set', element: wrapLayout(<PermissionSet />, 'permission-set') },
         // { path: 'branding', element: wrapLayout(<Branding />, 'branding') },
         // { path: 'application-menu', element: wrapLayout(<ApplicationMenu />, 'application-menu') },
         // { path: 'sidebar-menu', element: wrapLayout(<SidebarMenu />, 'sidebar-menu') },

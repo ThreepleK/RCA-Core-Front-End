@@ -10,7 +10,7 @@ export interface UiTextInputProps {
     required?: boolean;         // 필수 여부
     disabled?: boolean;         // 비활성화 여부
     value?: string;             // input 값
-    onChange: (e: any)=>void;   // 변경 값
+    onChange?: (e: any)=>void;   // 변경 값
 }
 
 

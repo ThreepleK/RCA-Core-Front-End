@@ -15,7 +15,7 @@ const _CONT_TYPE = 'new';
  * 추가 관련 모달
  */
 export function gridCreate({
-    conn, title, srcRow, callback, formValidationFn, FormCompo, apiFn
+    conn, title, srcRow, callback, formValidationFn, FormCompo, apiFn, size
 }: GridCreateParams){
     //* 추가 할 row 기본 값 데이터
     let row = {...srcRow};
@@ -53,7 +53,7 @@ export function gridCreate({
         // 내용
         'modal-content': <FormCompo key={nodeKey} row={row} onSetData={onSetData} />,
         // 모달 크기
-        'modal-size': 'sm',
+        'modal-size': size ?? 'sm',
         // 모달 버튼 피드백
         'modal-feedback': async (key: string) => {
             // 에러 메시지 초기화

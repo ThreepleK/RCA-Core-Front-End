@@ -18,6 +18,8 @@ export * from './ui-form-radio'
 export * from './ui-switch'
 export * from './ui-form-select'
 export * from './ui-tabs'
+export * from './ui-table'
+export * from './ui-checkbox'
 
 export * from './ui-data-grid'
 
