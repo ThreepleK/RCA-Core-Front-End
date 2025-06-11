@@ -61,7 +61,7 @@ function confirmModal({
 
                 // 에러가 있을 경우
                 if( res.isErr ){
-                    conn.trigger('modal-errMsg', res.msg); 
+                    conn.trigger('modal-errMsg', res.msg as string); 
                     return false;
                 }
 

@@ -52,7 +52,7 @@ export function gridProcess(
                         email: '',
                         userGroups: [],
                         permissionSets: [],
-                        status: 'inactive',
+                        status: 'INACTIVE',
                     },
                     FormCompo: (props: any) => {
                         return <FormEditContent {...props} type='new' />;

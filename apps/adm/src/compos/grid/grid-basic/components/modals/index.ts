@@ -28,6 +28,12 @@ export type FormComponent = ComponentType<{
     errCode?: string;
 }>;
 
+export type ValidateItem = {
+    isErr: boolean;     // 에러 여부
+    msg: string;        // 관련 메시지
+    code: string;       // 관련 코드드
+};
+
 /**
  * 데이터 검증
  * @param type 신규/수정
@@ -36,16 +42,35 @@ export type FormComponent = ComponentType<{
 export type FormValidationFn = (
     type: 'new'|'mod',
     row: RowItem,
-) => ResponseResult;
+) => Promise<ValidateItem>;
 
 /**
  * 응답 결과
- * @param isErr 에러 여부
- * @param code  문제가 되는 코드
- * @param msg   에러 메시지
+ * @param isErr       에러 여부
+ * @param isErrJSON   에러 메시지가 json 포맷일 경우
+ * @param code        문제가 되는 코드
+ * @param msg         에러 메시지
+ * @param res         결과 값
  */
-export type ResponseResult = Promise<{
-    isErr: boolean;
+export type ResponseResult = Promise<
+{
+    isErr: false;
+    isErrJSON?: false;
+    code?: string;
+    msg: string;
+    res?: any;
+} | {
+    isErr: true;
+    isErrJSON?: true;
+    code?: string;
+    msg: {
+        code: string;
+        message: string;
+    };
+    res?: any;
+} | {
+    isErr: true;
+    isErrJSON?: false;
     code?: string;
     msg: string;
     res?: any;

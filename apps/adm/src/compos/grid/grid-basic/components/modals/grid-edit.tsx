@@ -80,7 +80,14 @@ export function gridEdit({
 
                 // 에러가 있을 경우
                 if( res.isErr ){
-                    conn.trigger('modal-errMsg', res.msg);
+                    // JSON포맷의 에러일 경우
+                    if( res.isErrJSON ){
+                        formErrSend(res.msg.message, res.msg.code);
+                    }
+                    // 일반 문자열 에러일 경우
+                    else {
+                        conn.trigger('modal-errMsg', res.msg as string);
+                    }
                     return false;
                 }
 

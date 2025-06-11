@@ -31,7 +31,12 @@ export async function request({ type, url, params={}, datas={} }: {
         }
   
     } catch( err: any ){
-        console.log('err', err);
+        // 500 에러일 때
+        if ( err.status === 500 ){
+            const jsonMsg = err?.response?.data ?? {};
+            return {isErr: true, msg: jsonMsg, res: null, isErrJSON: true};
+        }
+
         // 에러
         const errMsg = err?.response?.statusText ?? 'request failed.';
         return {isErr: true, msg: errMsg, res: null};

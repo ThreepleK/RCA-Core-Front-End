@@ -28,8 +28,8 @@ const _COLUMNS: ColDef[] = (() => {
     const basicFilter = text();
     const activeFilter = multiSelect({
         data: [
-            {label: 'Active', value: 'active'},
-            {label: 'Inactive', value: 'inactive'},
+            {label: 'Active', value: 'ACTIVE'},
+            {label: 'Inactive', value: 'INACTIVE'},
         ]
     });
     const rangeFilter = range(100, 300);

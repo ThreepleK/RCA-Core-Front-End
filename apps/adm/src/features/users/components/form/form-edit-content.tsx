@@ -100,8 +100,8 @@ export function FormEditContent({type, row, onSetData, errMsg, errCode}: {
                 value={r?.status}
                 onChange={(e) => onData(e.nativeEvent.target.value, 'status')}
                 data={[
-                    {value: 'active', label: 'Active'},
-                    {value: 'inactive', label: 'Inactive'},
+                    {value: 'ACTIVE', label: 'Active'},
+                    {value: 'INACTIVE', label: 'Inactive'},
                 ]}
             />
             <UI_FormSelect
@@ -111,10 +111,7 @@ export function FormEditContent({type, row, onSetData, errMsg, errCode}: {
                 loading={groupList.length === 0}
                 disabled={groupList.length === 0}
                 mode='multiple'
-                onChange={(v) => {
-                    console.log('userGroup', v)
-                    onData(v, 'userGroups')
-                }}
+                onChange={(v) => onData(v, 'userGroups')}
             />
             <UI_FormSelect
                 label='Permission set'
@@ -123,10 +120,7 @@ export function FormEditContent({type, row, onSetData, errMsg, errCode}: {
                 loading={permissionList.length === 0}
                 disabled={permissionList.length === 0}
                 mode='multiple'
-                onChange={(v) => {
-                    console.log('Permission', v)
-                    onData(v, 'permissionSets')
-                }}
+                onChange={(v) => onData(v, 'permissionSets')}
             />
 
             {/* 수정 */}

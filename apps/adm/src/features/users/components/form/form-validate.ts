@@ -1,10 +1,4 @@
-// import { api_chkDupleEmail, api_chkDupleID, ApiResult } from "../../apis";
-
-type ValidateItem = {
-    isErr: boolean;     // 에러 여부
-    msg: string;        // 관련 메시지
-    code: string;       // 관련 코드드
-};
+import type { ValidateItem } from "@/compos/grid";
 
 /**
  * 폼 데이터 검증
@@ -31,18 +25,6 @@ export async function formValidate(
 
             return res;
         }
-        //* 아이디 중복확인
-        // else {
-        //     const {isErr, msg} = await api_chkDupleID(
-        //         r.username, r?.id
-        //     ) as ApiResult;
-
-        //     res.code = 'username';
-        //     res.isErr = isErr;
-        //     res.msg = msg;
-
-        //     return res;
-        // }
     }
 
     //* 이름
@@ -62,18 +44,6 @@ export async function formValidate(
 
         return res;
     }
-    //* 이메일 중복 확인
-    // else {
-    //     const {isErr, msg} = await api_chkDupleEmail(
-    //         r.email, r?.id
-    //     ) as ApiResult;
-
-    //     res.code = 'email';
-    //     res.isErr = isErr;
-    //     res.msg = msg;
-
-    //     return res;
-    // }
 
     return res;
 }
