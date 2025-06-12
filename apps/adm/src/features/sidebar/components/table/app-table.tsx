@@ -17,13 +17,13 @@ import {
 } from "@dnd-kit/sortable";
 import { cloneDeep } from "lodash";
 import { CSS } from "@dnd-kit/utilities";
-import { MenuOutlined } from "@ant-design/icons";
 import type {
   IFetchSidebarMenuItem,
 } from "../../models";
+import { IconMenu2 } from "@tabler/icons-react";
 
 const DragHandle = () => (
-  <MenuOutlined style={{ cursor: "grab", color: "#999" }} />
+  <IconMenu2 style={{ cursor: "grab", color: "#999" }} />
 );
 
 const DraggableRow = ({ children, ...props }: any) => {

@@ -17,13 +17,13 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { MenuOutlined } from "@ant-design/icons";
 import type { IFetchSidebarMenuItem } from "../../models";
 import { useCommModalStore } from "@/compos/modal";
 import EditCustomModal from "../modal-content/edit-custom-modal";
+import { IconMenu2 } from "@tabler/icons-react";
 
 const DragHandle = () => (
-  <MenuOutlined style={{ cursor: "grab", color: "#999" }} />
+  <IconMenu2 style={{ cursor: "grab", color: "#999" }} />
 );
 
 const DraggableRow = ({ children, ...props }: any) => {
