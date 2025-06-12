@@ -29,6 +29,12 @@ export interface GridConnMap {
     'list': any[],
     /**
      * [Grid]
+     * @param type singleRow, multiRow
+     * @description 그리드 row 데이터 업데이트 이벤트
+     */
+    'rowSelectionType': 'singleRow'|'multiRow',
+    /**
+     * [Grid]
      * @param data null
      * @description 그리드 row 데이터 업데이트 이벤트
      */

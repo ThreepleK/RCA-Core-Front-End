@@ -40,6 +40,9 @@ export function GridBasic({
     // 그리드 헤더 높이
     const [headerCellH, setHeaderCellH] = useState<number>(48);
 
+    // 그리드 row 선택 타입
+    const [rSelection, setRSelection] = useState<'singleRow'|'multiRow'>('multiRow');
+
     //* ProcessCB 사용 후 release 처리 용
     const pReleaseRef = useRef(null);
 
@@ -73,6 +76,8 @@ export function GridBasic({
         conn.on('noDataMsg', (msg: string|ReactNode) => setNoDataMsg(msg));
         //* 그리드 헤더 높이 설정
         conn.on('headerCellHeight', (h: number) => setHeaderCellH(h));
+        //* 그리드 rowSelection 설정
+        conn.on('rowSelectionType', (type: 'singleRow'|'multiRow') => setRSelection(type));
         //* 리스트 설정
         conn.on('list', (data: any) => {
             const list = !data ? [] : data;
@@ -131,6 +136,10 @@ export function GridBasic({
                 rowData={rowData}
                 onGridReady={onReady}
                 loading={isLoading}
+                rowSelection={{
+                    mode: rSelection
+                }}
+
                 onRowDataUpdated={() => conn.trigger('onRowDataUpdate', null) }
                 onFilterChanged={() => { onTopEvent('onFilterChange'); }}
                 onSortChanged={() => { onTopEvent('onSortChange'); }}

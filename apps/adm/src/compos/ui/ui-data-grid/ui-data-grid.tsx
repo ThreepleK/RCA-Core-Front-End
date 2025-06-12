@@ -29,10 +29,6 @@ export const UI_DataGrid = forwardRef((
     // 속성 재설정
     const reProps = useMemo(() => {
         return {
-            rowSelection: {                             // row 선택
-                mode: 'multiRow'                        // -- 멀티 모드
-            },
-
             loadingOverlayComponent: CustomLoading,     // 커스텀 로딩
             loadingOverlayComponentParams: {},          // 커스텀 로딩 컴포넌트 props
             

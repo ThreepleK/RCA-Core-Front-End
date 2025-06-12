@@ -84,8 +84,8 @@ function TitleRightSide(){
 //* Actions 드랍다운 메뉴
 const _ACTION_MENUS: MenuProps['items'] = [
     { type: 'group', label: 'Selected member', children: [
-        { key: 'active',   label: 'Active',   icon: <IconHeart size={14} strokeWidth={1.25} /> },
-        { key: 'inactive', label: 'Inactive', icon: <IconHeartOff size={14} strokeWidth={1.25} /> },
-        { key: 'delete',   label: 'Delete',   icon: <IconTrash size={14} strokeWidth={1.25} />, danger: true },
+        { key: 'active',   label: 'Activate',   icon: <IconHeart size={14} strokeWidth={1.25} /> },
+        { key: 'inactive', label: 'Deactivate', icon: <IconHeartOff size={14} strokeWidth={1.25} /> },
+        { key: 'delete',   label: 'Delete',     icon: <IconTrash size={14} strokeWidth={1.25} />, danger: true },
     ] }
 ];

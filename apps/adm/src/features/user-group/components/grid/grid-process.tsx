@@ -139,6 +139,9 @@ export function gridProcess(
 
     //* init
     (async() => {
+        // 그리드 row 선택 타입 설정
+        gridConn.trigger('rowSelectionType', 'singleRow');
+
         // 리스트 가져오기
         await onListLoad();
 

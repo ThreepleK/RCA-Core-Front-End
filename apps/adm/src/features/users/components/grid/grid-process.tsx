@@ -71,7 +71,7 @@ export function gridProcess(
                 const rows = gridApi.getSelectedRows();
                 // 계정 활성화 모달
                 gridConn.trigger('update-modal', {
-                    title: 'Active member',
+                    title: 'Activate member',
                     content: 'Do you want to activate the selected users?',
                     rows,
                     callback: onListLoad,
@@ -87,8 +87,8 @@ export function gridProcess(
                 const rows = gridApi.getSelectedRows();
                 // 계정 비활성화 모달
                 gridConn.trigger('update-modal', {
-                    title: 'Inactive member',
-                    content: 'Do you want to inactivate the selected users?',
+                    title: 'Deactivate member',
+                    content: 'Do you want to deactivate the selected users?',
                     rows,
                     callback: onListLoad,
                     apiFn: rows => api_updateItems('status-inactive', rows)
