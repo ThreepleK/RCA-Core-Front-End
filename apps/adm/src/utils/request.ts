@@ -1,6 +1,33 @@
 import axios from 'axios'
 import { useUserStore } from '@repo/shared-state'
 
+interface ApiResultDefault {
+    isErr: boolean;
+    msg: string;
+    res?: any;
+}
+
+export type ApiResult = 
+    | ({
+        isErr: false;
+        isErrJSON?: false;
+        msg: string;
+    } & ApiResultDefault )  // 에러가 없을 때
+    | ({
+        isErr: true;
+        isErrJSON?: false;
+        msg: string;
+    } & ApiResultDefault )  // 에러가 있을 때 (기본)
+    | ({
+        isErr: true;
+        isErrJSON?: true;
+        msg: {
+            code: string;
+            message: string;
+        };
+    } & ApiResultDefault )  // 에러 메시지가 json 포맷일 때
+;
+
 export async function request({ type, url, params={}, datas={} }: {
     type: 'get'|'post'|'put'|'delete';     // 요청 타입
     url: string;            // 요청 주소
@@ -34,7 +61,9 @@ export async function request({ type, url, params={}, datas={} }: {
         // 500 에러일 때
         if ( err.status === 500 ){
             const jsonMsg = err?.response?.data ?? {};
-            return {isErr: true, msg: jsonMsg, res: null, isErrJSON: true};
+            const isErrJSON = typeof jsonMsg === 'object';
+
+            return {isErr: true, msg: jsonMsg, res: null, isErrJSON: isErrJSON};
         }
 
         // 에러

@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-
 /* 수정 내역 */
 .mod-list {
     & {
@@ -20,4 +19,9 @@
     & dl > dt { @apply text-xs font-semibold px-2 bg-gray-100; }
     /* 내용 */
     & dl > dd { @apply text-xs px-2; }
+}
+
+/* 에러 관련 */
+.alert {
+    @apply mt-3;
 }

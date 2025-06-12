@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { editViewStore } from "@/features/user-group/stores";
 import { FormCreateContent, formValidate } from "../../form";
+import { api_updateItem } from "@/features/user-group/apis";
+import type { ApiResult } from "@/utils";
 
 /**
  * [User Group > Edit]
@@ -37,6 +39,23 @@ export function TabSettings(){
             }
 
             // Todo.. 저장
+            const apiRes = await api_updateItem(dataRef.current) as ApiResult;
+
+            // 에러가 있을 경우
+            if( apiRes.isErr ){
+                // JSON포맷의 에러일 경우
+                if( apiRes.isErrJSON ){
+                    setErrCode(apiRes.msg.code);
+                    setErrMsg(apiRes.msg.message);
+                }
+                // 일반 문자열 에러일 경우
+                else {
+                    setErrCode('server-error');
+                    setErrMsg(apiRes.msg);
+                }
+
+                return false;
+            }
 
             // 저장 이후 Settings에서 저장 신호 전달
             editViewStore.trigger('tab-settings-update');
@@ -56,6 +75,7 @@ export function TabSettings(){
 
     return <>
         <FormCreateContent
+            type='mod'
             row={raw}
             onSetData={onSetData}
             errMsg={errMsg}

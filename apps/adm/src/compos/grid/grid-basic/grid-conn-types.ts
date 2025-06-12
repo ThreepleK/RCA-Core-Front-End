@@ -27,6 +27,12 @@ export interface GridConnMap {
      * @description 그리드에 보여질 row 리스트
      */
     'list': any[],
+    /**
+     * [Grid]
+     * @param data null
+     * @description 그리드 row 데이터 업데이트 이벤트
+     */
+    'onRowDataUpdate': null,
 
 
     // ---- [Grid Top 기능] ---- //

@@ -37,10 +37,10 @@ export function FormClone({row, onSetData, errMsg, errCode}: {
             {/* 신규 등록 폼 */}
             <UI_TextInput
                 label="Group name"
-                value={r?.groupName}
-                error={errCode === 'groupName' && errMsg}
+                value={r?.name}
+                error={errCode === 'name' && errMsg}
                 required
-                onChange={(e) => onData(e.currentTarget.value, 'groupName')}
+                onChange={(e) => onData(e.currentTarget.value, 'name')}
             />
         </UI_Flex>
     </>;

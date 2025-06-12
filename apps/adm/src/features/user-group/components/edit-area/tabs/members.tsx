@@ -26,18 +26,16 @@ function gridProcess(
     gridApi: GridApi<any>,
     gridConn: SectionStore
 ){
+    // 그리드에 보여줄 리스트
+    const list = [];
 
     //* 리스트 불러오기
     const onListLoad = async () => {
-        // 로딩 시작
-        gridConn.trigger('loading', true);
-
-        // 리스트 가져오기
-        const res = await api_tabsMemberList();
+        console.log('list', list);
 
         // 그리드에 리스트 전달 후 로딩 끝
         gridConn.triggers({
-            'list': res,
+            'list': list,
             'loading': false
         });
     };
@@ -45,7 +43,11 @@ function gridProcess(
     //* init
     (async () => {
         editViewStore.on('tab-members', async (row) => {
-            console.log('row', row);
+            // 로딩 시작
+            gridConn.trigger('loading', true);
+
+            // 리스트 설정
+            list.push( ...row.users );
             await onListLoad();
         });
         editViewStore.on('save-members', async () => {
@@ -96,7 +98,7 @@ const _COLUMNS: ColDef[] = (() => {
     
     //* 그리드 컬럼 설정
     return [
-        { field: 'userName',    headerName: 'ID' },
+        { field: 'username',    headerName: 'ID' },
         { field: 'fullName',    headerName: 'Full name' },
         { field: 'email',       headerName: 'Email', },
         { field: 'status',      headerName: 'Status',       width: 100},

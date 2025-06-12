@@ -25,7 +25,7 @@ const _COLUMNS: ColDef[] = (() => {
     const { actionBtns } = columnCustom;
 
     //* 컬럼에 사용될 필터
-    const rangeFilter = range(100, 300);
+    const rangeFilter = range(0, 200);
     
     //* 액션 버튼 제어
     const actions = actionBtns({
@@ -44,10 +44,27 @@ const _COLUMNS: ColDef[] = (() => {
 
     //* 그리드 컬럼 설정
     return [
-        { field: 'groupName',   headerName: 'Group name' },
-        { field: 'description', headerName: 'Description' },
-        { field: 'users',       headerName: 'Users', },
-        { field: 'permission',  headerName: 'Permission sets', ...rangeFilter},
-        { field: 'actions',     headerName: 'Actions', width: 120, ...actions},
+        { field: 'name',            headerName: 'Group name' },
+        { field: 'predefined',      headerName: 'Pre-defined', width: 130,
+            valueGetter: ({ data: {predefined} }) => {
+                return (predefined ? 'Y' : 'N');
+            }
+        },
+        { field: 'description',     headerName: 'Description', width: 400, },
+        { field: 'users',           headerName: 'Users',  ...rangeFilter,
+            valueGetter: ({ data: {users} }) => {
+                return Array.isArray(users) ? users.length : 0;
+            },
+        },
+        { field: 'status',          headerName: 'Status', width: 120, },
+        { field: 'permissionSets',  headerName: 'Permission sets', width: 300,
+            valueGetter: ({ data: {permissionSets} }) => {
+                return (permissionSets && permissionSets.length > 0
+                    ? permissionSets.map(r => r.name).join(', ')
+                    : '-'
+                );
+            }
+        },
+        { field: 'actions',         headerName: 'Actions', width: 120, ...actions},
     ];
 })();

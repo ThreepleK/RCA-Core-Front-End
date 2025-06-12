@@ -1,11 +1,9 @@
 import type { GridApi } from "ag-grid-community";
 import { editViewStore, openEditDrawer, useLocalSendEvent } from "../../stores";
-import { api_createItem, api_deleteItems, api_list, api_updateItems } from "../../apis";
-import type { GridConnMap, GridCreateParams, GridDeleteParams, GridEditParams, GridUpdateParams } from "@/compos/grid";
+import { api_cloneItem, api_createItem, api_deleteItems, api_list } from "../../apis";
+import type { GridConnMap, GridCreateParams, GridDeleteParams, GridEditParams } from "@/compos/grid";
 import { FormClone, formCloneValidate, FormCreateContent, formValidate } from "../form";
 import type { SectionStore } from "@/stores";
-import { useEffect, useState } from "react";
-import { UI_Flex, UI_TextInput } from "@/compos/ui";
 
 /**
  * 그리드 프로세스 처리
@@ -49,10 +47,10 @@ export function gridProcess(
                 gridConn.trigger('create-modal', {
                     title: 'Add user group',
                     srcRow: {
-                        groupName: '',
+                        name: '',
                         description: '',
                     },
-                    FormCompo: FormCreateContent,
+                    FormCompo: (props) => <FormCreateContent {...props} type='new' />,
                     formValidationFn: formValidate,
                     apiFn: api_createItem,
                     callback: onListLoad,
@@ -65,7 +63,7 @@ export function gridProcess(
 
                 // 그리드에서 선택된 row 가져오기
                 const rows = gridApi.getSelectedRows();
-
+                
                 // 선택 항목 0 or 2개 이상일 경우, 경고 메시지
                 if( rows.length === 0 || rows.length >= 2 ){
                     gridConn.trigger('nodata-modal', {
@@ -79,25 +77,12 @@ export function gridProcess(
                 gridConn.trigger('edit-modal', {
                     title: 'Clone user group',
                     row: {
-                        groupName: rows[0].groupName,
+                        name: rows[0].name,
                     },
                     FormCompo: FormClone,
                     formValidationFn: formCloneValidate,
                     callback: onListLoad,
-                    apiFn: async editRows => {
-                        const resRow = {...rows[0], ...editRows[0]};
-                        console.log('resRow', resRow);
-
-                        return new Promise(resolve => {
-                            const res = {
-                                isErr: false,
-                                msg: '',
-                                res: null,
-                            };
-
-                            resolve(res);
-                        });
-                    },
+                    apiFn: editRows => api_cloneItem(rows, editRows),
                     size: 'sm'
                 } as GridEditParams);
             } break;
@@ -128,7 +113,7 @@ export function gridProcess(
                 
                 // 수정 화면 drawer 열기
                 openEditDrawer({
-                    title: row?.groupName,
+                    title: row?.name,
                     row,
                 });
             } break;

@@ -8,24 +8,18 @@ import type { ApiResult } from '.';
  */
 export async function api_tabsMemberList(): Promise<any[]>{
 
-    // const res = await request({
-    //     type: 'get',
-    //     url: '/admin/api/users'
-    // });
-
-    // console.log('res', res);
-
-    // if( res.isErr ){
-    //     return [];
-    // } else {
-    //     return (res as any).res.data;
-    // }
-
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve(_TMP_DATA);
-        }, 1000);
+    const res = await request({
+        type: 'get',
+        url: '/admin/api/users'
     });
+
+    console.log('res', res);
+
+    if( res.isErr ){
+        return [];
+    } else {
+        return (res as any).res;
+    }
 }
 
 

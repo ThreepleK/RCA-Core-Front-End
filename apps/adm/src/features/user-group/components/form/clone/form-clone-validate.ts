@@ -16,8 +16,8 @@ export async function formCloneValidate(
     };
 
     //* 그룹명
-    if( r.groupName === '' ){
-        res.code = 'groupName';
+    if( r.name === '' ){
+        res.code = 'name';
         res.isErr = true;
         res.msg = '복제 할 그룹명을 입력해주세요.';
 

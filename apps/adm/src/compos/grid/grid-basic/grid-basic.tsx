@@ -131,6 +131,7 @@ export function GridBasic({
                 rowData={rowData}
                 onGridReady={onReady}
                 loading={isLoading}
+                onRowDataUpdated={() => conn.trigger('onRowDataUpdate', null) }
                 onFilterChanged={() => { onTopEvent('onFilterChange'); }}
                 onSortChanged={() => { onTopEvent('onSortChange'); }}
                 onRowSelected={() => { onTopEvent('onRowSelected'); }}
