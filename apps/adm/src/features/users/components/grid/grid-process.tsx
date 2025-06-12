@@ -101,14 +101,27 @@ export function gridProcess(
 
                 // 그리드에서 선택된 row 가져오기
                 const rows = gridApi.getSelectedRows();
+
+                // 실제 삭제 가능한 사용자만 inactive 
+                const rmRows = rows.filter(r => r.status === 'INACTIVE');
+
+                // 메시지 
+                const msg = rows.length === rmRows.length
+                    ? <>
+                        Are you sure you want to delete?<br />
+                        This action cannot be undone.
+                    </>
+                    : <>
+                        You can only delete <b>{rmRows.length}</b> inactive users out of a total of {rows.length} users.<br />
+                        Do you want to delete them?
+                    </>
+                ;
+
                 // 삭제 모달
                 gridConn.trigger('delete-modal', {
                     title: 'Delete',
-                    content: <>
-                        Are you sure you want to delete?<br />
-                        This action cannot be undone.
-                    </>,
-                    rows,
+                    content: msg,
+                    rows: rmRows,
                     callback: onListLoad,
                     apiFn: api_deleteItems,
                 } as GridDeleteParams);
