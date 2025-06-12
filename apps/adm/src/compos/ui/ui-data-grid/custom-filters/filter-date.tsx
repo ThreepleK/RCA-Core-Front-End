@@ -17,11 +17,18 @@ export function FilterDate(props: FilterDate){
 
     //* 제어할 필드명 설정
     const field = useMemo(() => props.colDef.field, [props.colDef.field]);
+    //* valueGetter 설정
+    const valueGetter = useMemo(() => {
+        return (props.colDef.valueGetter
+            ? props.colDef.valueGetter as any
+            : (params: any) => params.data[field]
+        );
+    }, [props.colDef.valueGetter]);
 
     //* 그리드 필터 처리
     const doesFilterPass = useCallback((params) => {
         // 날짜까지만 같은지 확인
-        return date.isSame(params.data[field], 'day');
+        return date.isSame(valueGetter(params), 'day');
     }, [props.model]);
 
     //* 필터가 닫힐 때 이벤트

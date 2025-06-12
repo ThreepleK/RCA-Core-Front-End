@@ -23,10 +23,17 @@ export function FilterSelect(props: FilterSelect){
 
     //* 제어할 필드명 설정
     const field = useMemo(() => props.colDef.field, [props.colDef.field]);
+    //* valueGetter 설정
+    const valueGetter = useMemo(() => {
+        return (props.colDef.valueGetter
+            ? props.colDef.valueGetter as any
+            : (params: any) => params.data[field]
+        );
+    }, [props.colDef.valueGetter]);
 
     //* 그리드 필터 처리
     const doesFilterPass = useCallback((params) => {
-        return params.data[field] === select;
+        return valueGetter(params) === select;
     }, [props.model]);
 
     //* 필터가 닫힐 때 이벤트

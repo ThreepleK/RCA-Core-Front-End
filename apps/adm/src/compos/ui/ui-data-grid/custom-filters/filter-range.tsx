@@ -3,6 +3,7 @@ import { useCallback, useMemo, useState } from "react";
 import { UI_Button, UI_Flex, UI_Slider } from "../..";
 
 import style from "./filter-range.module.css";
+import type { ValueGetterFunc } from "ag-grid-community";
 
 export interface FilterRange extends CustomFilterProps {
     min: number,    // 최소 범위
@@ -27,13 +28,18 @@ export function FilterRange(props: FilterRange){
 
     //* 제어할 필드명 설정
     const field = useMemo(() => props.colDef.field, [props.colDef.field]);
+    //* valueGetter 설정
+    const valueGetter = useMemo(() => {
+        return (props.colDef.valueGetter
+            ? props.colDef.valueGetter as any
+            : (params: any) => params.data[field]
+        );
+    }, [props.colDef.valueGetter]);
 
     //* 그리드 필터 처리
     const doesFilterPass = useCallback((params) => {
-        return (
-            params.data[field] >= range[0] &&
-            params.data[field] <= range[1]
-        );
+        const v = valueGetter(params);
+        return (v >= range[0] && v <= range[1]);
     }, [props.model]);
 
     //* 그리드 필터 관련 설정

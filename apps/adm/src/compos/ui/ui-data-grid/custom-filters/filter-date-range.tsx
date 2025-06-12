@@ -18,10 +18,18 @@ export function FilterDateRange(props: FilterDateRange){
 
     //* 제어할 필드명 설정
     const field = useMemo(() => props.colDef.field, [props.colDef.field]);
+    //* valueGetter 설정
+    const valueGetter = useMemo(() => {
+        return (props.colDef.valueGetter
+            ? props.colDef.valueGetter as any
+            : (params: any) => params.data[field]
+        );
+    }, [props.colDef.valueGetter]);
 
     //* 그리드 필터 처리
     const doesFilterPass = useCallback((params) => {
-        const target = dayjs(params.data[field]).startOf('day');    // 시,분,초 제거
+        const v = valueGetter(params);
+        const target = dayjs(v).startOf('day');    // 시,분,초 제거
 
         // 해당 범위의 날짜인지 확인
         return target.isBetween(dates[0], dates[1], null, '[]');
