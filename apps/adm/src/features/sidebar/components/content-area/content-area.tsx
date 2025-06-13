@@ -94,7 +94,7 @@ export function ContentArea() {
         <div className={style["custom-table"]}>
             <div className={style["title-div"]}>
                 <UI_Title order={2} className={style.title}>
-                    Custom Level1
+                    Custom Link
                 </UI_Title>
                 <div className={style["button-div"]}>
                     {/* <UI_Button onClick={handleAddLevel}>Add level 1 menu</UI_Button> */}

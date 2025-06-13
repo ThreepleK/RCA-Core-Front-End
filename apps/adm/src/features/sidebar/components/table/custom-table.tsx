@@ -102,62 +102,61 @@ export function CustomTable({
     const handleToggleChange = (id: string, checked: boolean) => {
         // const stringId = id.toString();
         setData((prev) =>
-        prev.map((row) =>
-            row.id === id ? { ...row, isVisible: checked, itemType: "update" } : row
-        )
+            prev.map((row) =>
+                row.id === id ? { ...row, isVisible: checked, itemType: "update" } : row
+            )
         );
     };
 
     const handleDisplayNameChange = (id: string, value: string, rowData: any) => {
         if (rowData.itemType === "new") {
-        const name = value.replace(/\s+/g, "_").toLowerCase(); // 공백을 '-'로 변환
-        setData((prev) =>
-            prev.map((row) =>
-            row.id === id
-                ? { ...row, name: name, displayName: value, itemType: "new" }
-                : row
-            )
-        );
+            const name = value.replace(/\s+/g, "_").toLowerCase(); // 공백을 '-'로 변환
+            setData((prev) =>
+                prev.map((row) =>
+                    row.id === id
+                        ? { ...row, displayName: name, itemType: "new" }
+                        : row
+                )
+            );
         } else {
-        setData((prev) =>
-            prev.map((row) =>
-            row.id === id
-                ? { ...row, displayName: value, itemType: "update" }
-                : row
-            )
-        );
+            setData((prev) =>
+                prev.map((row) =>
+                    row.id === id
+                        ? { ...row, displayName: value, itemType: "update" }
+                        : row
+                )
+            );
         }
     };
 
     const handleUrlChange = (id: string, value: string, rowData: any) => {
         if (rowData.itemType === "new") {
-        const name = value.replace(/\s+/g, "_").toLowerCase(); // 공백을 '-'로 변환
-        setData((prev) =>
-            prev.map((row) =>
-            row.id === id
-                ? { ...row, name: name, url: value, itemType: "new" }
-                : row
-            )
-        );
+            setData((prev) =>
+                prev.map((row) =>
+                    row.id === id
+                        ? { ...row, url: value, itemType: "new" }
+                        : row
+                    )
+            );
         } else {
-        setData((prev) =>
-            prev.map((row) =>
-            row.id === id
-                ? { ...row, url: value, itemType: "update" }
-                : row
-            )
-        );
+            setData((prev) =>
+                prev.map((row) =>
+                    row.id === id
+                        ? { ...row, url: value, itemType: "update" }
+                        : row
+                )
+            );
         }
     };
 
     const handleCustomNameChange = (id: string, value: string, rowData: any) => {
         if (rowData.itemType === "new") {
-        const name = value.replace(/\s+/g, "_").toLowerCase(); // 공백을 '-'로 변환
-        setData((prev) =>
-            prev.map((row) =>
-                row.id === id ? { ...row, name: name, itemType: "new" } : row
-            )
-        );
+            const name = value.replace(/\s+/g, "_").toLowerCase(); // 공백을 '-'로 변환
+            setData((prev) =>
+                prev.map((row) =>
+                    row.id === id ? { ...row, name: name, itemType: "new" } : row
+                )
+            );
         }
     };
 
@@ -182,7 +181,7 @@ export function CustomTable({
             dataIndex: "name",
             width: '20%',
             render: (text, record) => {
-                return text === "" ? (
+                return record.name === "" || record.itemType === 'new' ? (
                 <UI_Input
                     value={text}
                     onChange={(e) => {
