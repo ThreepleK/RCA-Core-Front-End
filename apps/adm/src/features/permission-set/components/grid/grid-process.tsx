@@ -1,6 +1,6 @@
 import type { GridApi } from "ag-grid-community";
 import { useLocalSendEvent } from "../../stores";
-import { api_createItem, api_deleteItems, api_list } from "../../apis";
+import { api_createItem, api_deleteItems, api_list, api_updateItems } from "../../apis";
 import type { GridConnMap, GridCreateParams, GridDeleteParams, GridEditParams } from "@/compos/grid";
 import { FormClone, formCloneValidate, FormCreateContent, formValidate } from "../form";
 import type { SectionStore } from "@/stores";
@@ -47,18 +47,13 @@ export function gridProcess(
                     title: 'Add permission set',
                     srcRow: {
                         name: '',
-                        predefined: 'N',
-                        assignedApps: [],
-                        userGroups: 0,
-                        users: 0,
                         description: '',
-                        permissionList: {
-                            systemAdmin: [],
-                            meta: []
-                        }
+                        predefined: false,
+                        permissions: []
                     },
                     size: 'xl',
-                    FormCompo: FormCreateContent,
+                    FormCompo: (props) =>
+                        <FormCreateContent {...props} type='new' />,
                     formValidationFn: formValidate,
                     apiFn: api_createItem,
                     callback: onListLoad,
@@ -132,6 +127,16 @@ export function gridProcess(
                 // 그리드에서 전달한 row 데이터
                 const row = eVal as any;
                 
+                gridConn.trigger('edit-modal', {
+                    title: 'Edit permission set',
+                    row,
+                    size: 'xl',
+                    FormCompo: (props) =>
+                        <FormCreateContent {...props} type='mod' />,
+                    formValidationFn: formValidate,
+                    apiFn: rows => api_updateItems('single', rows),
+                    callback: onListLoad,
+                } as GridEditParams);
             } break;
 
             // 삭제
@@ -155,6 +160,9 @@ export function gridProcess(
 
     //* init
     (async() => {
+        // 그리드 row 선택 타입 설정
+        gridConn.trigger('rowSelectionType', 'singleRow');
+        
         // 리스트 가져오기
         await onListLoad();
     })();

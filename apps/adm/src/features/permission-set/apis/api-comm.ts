@@ -23,30 +23,61 @@ export async function api_list(): Promise<any[]>{
  * 아이템 추가
  */
 export function api_createItem(datas: any[]){
-    console.log('datas', datas)
-    // return request({
-    //     type: 'put',
-    //     url: '/admin/api/users',
-    //     datas: datas
-    // });
+    // 1개 밖에 없음
+    const row = datas[0];
 
-    // 임시 시연용 api
-    return api_demo();
+    // 서버에 전달 할 내용으로 가공
+    const item = {
+        name: row.name,
+        description: row.description,
+        permissions: row.permissionEditList.map(r => ({
+            menuId: r.id,
+            readable: r.readable,
+            creatable: r.creatable,
+            deletable: r.deletable,
+            updatable: r.updatable,
+        })),
+    };
+
+    console.log('item', item);
+
+    // 전달
+    return request({
+        type: 'post',
+        url: '/admin/api/permission-sets',
+        datas: item
+    });
 }
 
 /**
  * 아이템 수정
  */
 export function api_updateItems(type: string, rows: any[]){
+    const items = [];
 
-    // return request({
-    //     type: 'put',
-    //     url: '/admin/api/users',
-    //     datas: reqDatas
-    // });
+    // 그리드 row 1줄
+    if( type === 'single' ){
+        const row = rows[0];
+        const item = {
+            id: row.id,
+            name: row.name,
+            description: row.description,
+            permissions: row.permissionEditList.map(r => ({
+                menuId: r.id,
+                readable: r.readable,
+                creatable: r.creatable,
+                deletable: r.deletable,
+                updatable: r.updatable,
+            })),
+        };
+        items.push(item);
+    }
 
-    // 임시 시연용 api
-    return api_demo();
+    return request({
+        type: 'post',
+        url: '/admin/api/permission-sets',
+        datas: items[0]
+    });
 }
 
 /**
