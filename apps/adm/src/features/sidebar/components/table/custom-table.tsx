@@ -129,6 +129,27 @@ export function CustomTable({
         }
     };
 
+    const handleUrlChange = (id: string, value: string, rowData: any) => {
+        if (rowData.itemType === "new") {
+        const name = value.replace(/\s+/g, "_").toLowerCase(); // 공백을 '-'로 변환
+        setData((prev) =>
+            prev.map((row) =>
+            row.id === id
+                ? { ...row, name: name, url: value, itemType: "new" }
+                : row
+            )
+        );
+        } else {
+        setData((prev) =>
+            prev.map((row) =>
+            row.id === id
+                ? { ...row, url: value, itemType: "update" }
+                : row
+            )
+        );
+        }
+    };
+
     const handleCustomNameChange = (id: string, value: string, rowData: any) => {
         if (rowData.itemType === "new") {
         const name = value.replace(/\s+/g, "_").toLowerCase(); // 공백을 '-'로 변환
@@ -197,7 +218,7 @@ export function CustomTable({
                 <UI_Input
                     value={text}
                     onChange={(e) => {
-                    handleDisplayNameChange(record.id, e.currentTarget.value, record);
+                        handleUrlChange(record.id, e.currentTarget.value, record);
                     }}
                 />
                 );
