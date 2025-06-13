@@ -4,6 +4,7 @@ import { PermissionTable } from "./permission-table";
 
 import style from './form-create-content.module.css'
 import dayjs from "dayjs";
+import { api_getMenuData } from "../../apis";
 
 /**
  * 모달창에서
@@ -21,6 +22,7 @@ export function FormCreateContent({row, onSetData, errMsg, errCode}: {
     errCode?: string;
 }){
     const [r, setRow] = useState(row);
+    const [list, setList] = useState([]);
 
     //* 초기 설정
     useEffect(() => {
@@ -28,6 +30,9 @@ export function FormCreateContent({row, onSetData, errMsg, errCode}: {
         for( const key in r ){
             onSetData(r[key], key);
         }
+
+        // 메뉴 가져오기
+        getMenuData(list => setList(list));
     }, []);
 
     //* 데이터 설정
@@ -70,4 +75,11 @@ export function FormCreateContent({row, onSetData, errMsg, errCode}: {
             <PermissionTable title={'Meta'} datas={r?.permissionList?.meta}/>
         </UI_Flex>
     </>;
+}
+
+/**
+ * 메뉴 데이터 가져오기
+ */
+async function getMenuData(cb: (list: any) => void){
+    api_getMenuData().then(cb);
 }

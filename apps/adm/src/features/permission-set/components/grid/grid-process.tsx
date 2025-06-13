@@ -1,5 +1,5 @@
 import type { GridApi } from "ag-grid-community";
-import { editViewStore, openEditDrawer, useLocalSendEvent } from "../../stores";
+import { useLocalSendEvent } from "../../stores";
 import { api_createItem, api_deleteItems, api_list } from "../../apis";
 import type { GridConnMap, GridCreateParams, GridDeleteParams, GridEditParams } from "@/compos/grid";
 import { FormClone, formCloneValidate, FormCreateContent, formValidate } from "../form";
@@ -53,45 +53,8 @@ export function gridProcess(
                         users: 0,
                         description: '',
                         permissionList: {
-                            systemAdmin: [
-                                {
-                                    item: 'User',
-                                    view: false,
-                                    create: false,
-                                    edit: false,
-                                    delete: false,
-                                },
-                                {
-                                    item: 'User group',
-                                    view: false,
-                                    create: false,
-                                    edit: false,
-                                    delete: false,
-                                },
-                                {
-                                    item: 'Permission set',
-                                    view: false,
-                                    create: false,
-                                    edit: false,
-                                    delete: false,
-                                }
-                            ],
-                            meta: [
-                                {
-                                    item: 'Location',
-                                    view: false,
-                                    create: false,
-                                    edit: false,
-                                    delete: false,
-                                },
-                                {
-                                    item: 'Area',
-                                    view: false,
-                                    create: false,
-                                    edit: false,
-                                    delete: false,
-                                }
-                            ]
+                            systemAdmin: [],
+                            meta: []
                         }
                     },
                     size: 'xl',
@@ -138,7 +101,7 @@ export function gridProcess(
                                 res: null,
                             };
 
-                            resolve(res);
+                            resolve(res as any);
                         });
                     },
                     size: 'sm'
@@ -169,11 +132,6 @@ export function gridProcess(
                 // 그리드에서 전달한 row 데이터
                 const row = eVal as any;
                 
-                // 수정 화면 drawer 열기
-                openEditDrawer({
-                    title: row?.groupName,
-                    row,
-                });
             } break;
 
             // 삭제
@@ -199,12 +157,6 @@ export function gridProcess(
     (async() => {
         // 리스트 가져오기
         await onListLoad();
-
-        // Edit > Settings에서 저장 이후
-        editViewStore.on('tab-settings-update', async () => {
-            // 리스트 불러오기
-            await onListLoad();
-        });
     })();
 
     // 구독 설정 (local, grid)
@@ -213,8 +165,5 @@ export function gridProcess(
     //* UnMount 시 구독 취소
     return () => {
         unSubLocal();
-
-        // 이벤트 제거
-        editViewStore.off('tab-settings-update');
     };
 }

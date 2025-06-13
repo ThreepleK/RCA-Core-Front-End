@@ -42,14 +42,26 @@ const _COLUMNS: ColDef[] = (() => {
     //* 그리드 컬럼 설정
     return [
         { field: 'name',            headerName: 'Permission set' },
-        { field: 'predefined',      headerName: 'Predefined' },
-        { field: 'assignedApps',    headerName: 'Assigned Apps',
-            valueGetter: ({ data: {assignedApps} }) => {
-                return assignedApps.join(', ')
+        { field: 'predefined',      headerName: 'Predefined',
+            valueGetter: ({ data: {predefined} }) => {
+                return predefined ? 'Y' : 'N';
             }
         },
-        { field: 'userGroups',      headerName: 'User groups' },
-        { field: 'users',           headerName: 'Users', },
+        { field: 'assignedApps',    headerName: 'Assigned Apps',
+            valueGetter: ({ data: {menus} }) => {
+                return menus.map(r => r.displayName).join(', ');
+            }
+        },
+        { field: 'userGroups',      headerName: 'User groups',
+            valueGetter: ({ data: {userGroups} }) => {
+                return userGroups.map(r => r.name).join(', ');
+            }
+        },
+        { field: 'users',           headerName: 'Users',
+            valueGetter: ({ data: {users} }) => {
+                return users.map(r => r.username).join(', ');
+            }
+        },
         { field: 'description',     headerName: 'Description' },
         { field: 'actions',         headerName: 'Actions', width: 120, ...actions},
     ];

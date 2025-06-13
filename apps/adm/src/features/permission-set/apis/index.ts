@@ -1,6 +1,4 @@
-export * from './api-permission-set'
-export * from './api-tabs-members'
-export * from './api-tabs-permission'
+export * from './api-comm'
 
 export type ApiResult = {
     isErr: boolean;     // 에러 여부

@@ -4,7 +4,7 @@ import { UI_Checkbox, UI_Table, UI_Title } from "@/compos/ui";
 
 import { SectionStore } from '@/stores';
 
-let pDataStore = new SectionStore<any>();
+let _pDataStore: SectionStore<any> = null;
 
 /**
  * 권한 테이블
@@ -20,7 +20,10 @@ export function PermissionTable({ title, datas }: {
     const [src, setSrc] = useState(!datas ? [] : [...datas]);
 
     useEffect(() => {
-        pDataStore.on('row-update', ({key, idx, value}) => {
+        if( !_pDataStore ){
+            _pDataStore = new SectionStore<any>()
+        }
+        _pDataStore.on('row-update', ({key, idx, value}) => {
             setSrc(prevSrc => prevSrc.map((r, i) => {
                 if( idx === i ){
                     r[key] = value;
@@ -30,8 +33,10 @@ export function PermissionTable({ title, datas }: {
         });
 
         return () => {
-            pDataStore.destroy();
-            pDataStore = null;
+            if( _pDataStore ){
+                _pDataStore.destroy();
+                _pDataStore = null;
+            }
         }
     }, []);
 
@@ -61,7 +66,7 @@ function Chkbox({ row, rowKey, rowIdx }: {
         row[rowKey] = changeValue;
         setValue(changeValue);
 
-        pDataStore.trigger('row-update', {
+        _pDataStore.trigger('row-update', {
             key: rowKey,
             idx: rowIdx,
             value: changeValue

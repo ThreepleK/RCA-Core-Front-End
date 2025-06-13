@@ -9,7 +9,6 @@ import { ContentArea } from './components';
 import { editViewStore, useLocalSendEvent } from './stores';
 
 import style from './permission-set.module.css'
-import { EditArea } from './components/edit-area';
 
 export function PermissionSet(){
     return <>
@@ -20,9 +19,6 @@ export function PermissionSet(){
             {/* 컨텐츠 */}
             <ContentArea />
         </ContentsLayout>
-
-        {/* Edit 페이지 */}
-        <EditArea />
     </>;
 }
 
