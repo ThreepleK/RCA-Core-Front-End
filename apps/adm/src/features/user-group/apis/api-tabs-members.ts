@@ -1,19 +1,16 @@
 import { request } from '@/utils'
-import dayjs from '@/utils/dayjs';
-import type { ApiResult } from '.';
+import { api_updateItem } from './api-comm';
 
 /**
- * [Edit > Tabs > Members]
+ * [Edit > Tabs > Members > add]
  * 리스트 가져오기
  */
-export async function api_tabsMemberList(): Promise<any[]>{
+export async function api_tabsAddMemberList(): Promise<any[]>{
 
     const res = await request({
         type: 'get',
         url: '/admin/api/users'
     });
-
-    console.log('res', res);
 
     if( res.isErr ){
         return [];
@@ -22,14 +19,24 @@ export async function api_tabsMemberList(): Promise<any[]>{
     }
 }
 
+/**
+ * [Edit > Tabs > Members]
+ * 저장
+ */
+export async function api_tabsMemberSave(
+    membersIds: string[],
+    row: any
+): Promise<any>{
 
-// 그리드 임시 데이터
-const _TMP_DATA = [
-    {
-        id: 'woenfoewin200-2342348234-34323311',
-        fullName: 'Portal Admin',
-        userName: 'admin',
-        email: 'admin@admin.com',
-        status: 'active'
+    // 저장 데이터 설정
+    const saveData = {
+        id: row.id,
+        name: row.name,
+        description: row.description,
+        status: row.status,
+        userIds: membersIds,
+        permissionSetIds: !row.permissionSets ? [] : row.permissionSets.map(r => r.id),
     }
-];
+
+    return api_updateItem(saveData);
+}

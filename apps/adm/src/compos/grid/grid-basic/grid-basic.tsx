@@ -83,7 +83,7 @@ export function GridBasic({
             const list = !data ? [] : data;
 
             // 그리드 리스트 설정
-            setRowData(list);
+            setRowData(oldList => [...list]);
 
             // Top에 리스트 이벤트 전달
             conn.trigger('top-onLoad', list.length);
