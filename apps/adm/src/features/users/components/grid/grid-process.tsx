@@ -1,7 +1,7 @@
 import type { GridApi } from "ag-grid-community";
 import { useLocalSendEvent } from "../../stores";
 import { api_createItem, api_deleteItems, api_list, api_updateItems } from "../../apis";
-import type { GridCreateParams, GridDeleteParams, GridEditParams, GridUpdateParams } from "@/compos/grid";
+import type { GridCreateParams, GridDeleteParams, GridEditParams, GridNodataParams, GridUpdateParams } from "@/compos/grid";
 import { FormEditContent, formValidate } from "../form";
 import type { SectionStore } from "@/stores";
 
@@ -105,17 +105,29 @@ export function gridProcess(
                 // 실제 삭제 가능한 사용자만 inactive 
                 const rmRows = rows.filter(r => r.status === 'INACTIVE');
 
-                // 메시지 
-                const msg = rows.length === rmRows.length
+                // 삭제 가능한 사용자가 0명일 경우
+                if( rmRows.length === 0 ){
+                    // 경고 모달
+                    gridConn.trigger('nodata-modal', {
+                        title: 'Delete',
+                        content: <>Only inactive users can be deleted.</>,
+                    } as GridNodataParams);
+                    return;
+                }
+
+                // 메시지 (실제 삭제 가능한 사용자와 선택 )
+                const msg = (rows.length === rmRows.length
+                    // 삭제할 사용자와 선택 사용자가 같을 경우
                     ? <>
                         Are you sure you want to delete?<br />
                         This action cannot be undone.
                     </>
+                    // 삭제할 사용자와 선택 사용자가 다를 경우
                     : <>
                         You can only delete <b>{rmRows.length}</b> inactive users out of a total of {rows.length} users.<br />
                         Do you want to delete them?
                     </>
-                ;
+                );
 
                 // 삭제 모달
                 gridConn.trigger('delete-modal', {
@@ -156,6 +168,17 @@ export function gridProcess(
             case 'delete': {
                 // 그리드에서 전달한 row 데이터
                 const row = eVal as any;
+
+                // 삭제할 사용자가 inactive 상태가 아닐 경우
+                if( row.status !== 'INACTIVE' ){
+                    // 경고 모달
+                    gridConn.trigger('nodata-modal', {
+                        title: 'Delete',
+                        content: <>Only inactive users can be deleted.</>,
+                    } as GridNodataParams);
+                    return;
+                }
+
                 // 삭제 모달
                 gridConn.trigger('delete-modal', {
                     title: 'Delete',
