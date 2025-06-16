@@ -5,8 +5,10 @@ import type { GridModalCommParams, RowItem } from ".";
 import style from './modal.module.css'
 
 export interface GridUpdateParams extends GridModalCommParams {
-    rows: RowItem[];            // 관련 row
-    content: string|ReactNode;  // 모달에 보여줄 내용
+    /** 그리드에서 넘겨준 row 리스트 */
+    rows: RowItem[];
+    /** 모달에 보여줄 내용 */
+    content: string|ReactNode;
 }
 
 /**
@@ -29,7 +31,7 @@ export function gridUpdate(params: GridUpdateParams) {
  * [모달] 처리 할 아이템이 있을 때
  */
 function confirmModal({
-    conn, title, content, callback, apiFn, rows
+    conn, title, content, callback, apiFn, rows, size
 }: GridUpdateParams) {
 
     //* 모달 설정
@@ -39,7 +41,7 @@ function confirmModal({
         // 내용
         'modal-content': <div className={style['modal-content']}>{content}</div>,
         // 모달 크기
-        'modal-size': 'md',
+        'modal-size': size ?? 'md',
         // 모달 버튼 피드백
         'modal-feedback': async (key: string) => {
             // 에러 메시지 초기화

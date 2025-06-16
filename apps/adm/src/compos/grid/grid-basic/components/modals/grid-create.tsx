@@ -3,9 +3,12 @@ import { UI_Button, UI_Switch } from "@/compos/ui";
 import type { FormComponent, FormValidationFn, GridModalCommParams, ResponseResult, RowItem } from ".";
 
 export interface GridCreateParams extends GridModalCommParams {
-    srcRow: RowItem;                        // 관련 row
-    FormCompo: FormComponent;               // 폼 컨포넌트
-    formValidationFn: FormValidationFn,     // 데이터 검증 함수
+    /** 추가 시 필요한 row 데이터 포맷 (기본 값) */
+    srcRow: RowItem;
+    /** 추가에 사용되는 폼 컨포넌트 */
+    FormCompo: FormComponent;
+    /** 폼 컴포넌트에서 기입 된 검증 함수 */
+    formValidationFn: FormValidationFn,
 }
 
 //* 컨텐츠 타입

@@ -1,7 +1,7 @@
 import type { ColDef, GridApi } from "ag-grid-community";
 
 import { editViewStore } from "@/features/user-group/stores";
-import { GridBasic } from "@/compos/grid";
+import { GridBasic, GridConnPublic } from "@/compos/grid";
 import type { SectionStore } from "@/stores";
 import { api_tabsPermissionList, api_tabsPermissionSave } from "@/features/user-group/apis";
 
@@ -23,7 +23,7 @@ export function TabPermissionSets(){
  */
 function gridProcess(
     gridApi: GridApi<any>,
-    gridConn: SectionStore
+    gridConn: GridConnPublic
 ){
     let isLoaded: boolean = false;      // User group에서 row가 불러온 뒤 여부
     let permissionIds: any = [];        // row에서 permission set의 id만 추림
@@ -32,22 +32,22 @@ function gridProcess(
     //* 리스트 불러오기
     const onListLoad = async () => {
         // 로딩 시작
-        gridConn.trigger('loading', true);
+        gridConn.setLoading(true);
 
         // 리스트 가져오기
         const res = await api_tabsPermissionList();
 
-        // 그리드에 리스트 전달 후 로딩 끝
-        gridConn.triggers({
-            'list': res,
-            'loading': false
-        });
+        // 그리드에 리스트 전달
+        gridConn.setList(res);
+
+        // 로딩 끝
+        gridConn.setLoading(false);
     };
 
     //* init
     (async () => {
         //* 리스트 로드 → AgGrid row 업데이트
-        gridConn.on('onRowDataUpdate', () => {
+        gridConn.onRowDataUpdate(() => {
             // 준비가 되지 않았거나, 이미 한 경우
             if( !isLoaded ){ return; }
             isLoaded = false;
@@ -86,7 +86,7 @@ function gridProcess(
                 const msg = res.isErrJSON ? res.msg.message : 'request failed';
 
                 // 에러 메시지 모달 표기
-                gridConn.trigger('nodata-modal', {
+                gridConn.openWarningModal({
                     title: 'Save Error',
                     content: <>{msg}</>
                 });

@@ -1,7 +1,6 @@
 import type { ColDef, GridApi } from "ag-grid-community";
 
-import type { SectionStore } from "@/stores";
-import { GridBasic, type GridDeleteParams } from "@/compos/grid";
+import { GridBasic, GridConnPublic, type GridDeleteParams } from "@/compos/grid";
 import { editViewStore } from "@/features/user-group/stores";
 import { addMemberProcess } from "./members-add";
 import { api_tabsMemberSave } from "@/features/user-group/apis";
@@ -24,7 +23,7 @@ export function TabMembers(){
  */
 function gridProcess(
     gridApi: GridApi<any>,
-    gridConn: SectionStore
+    gridConn: GridConnPublic
 ){
     // 원본 row
     let srcRow = {};
@@ -33,20 +32,17 @@ function gridProcess(
 
     //* 리스트 불러오기
     const onListLoad = async () => {
-        console.log('list', list);
-
-        // 그리드에 리스트 전달 후 로딩 끝
-        gridConn.triggers({
-            'list': list,
-            'loading': false
-        });
+        // 그리드에 리스트 전달
+        gridConn.setList(list);
+        // 로딩 끝
+        gridConn.setLoading(false);
     };
 
     //* init
     (async () => {
         editViewStore.on('tab-members', async (row) => {
             // 로딩 시작
-            gridConn.trigger('loading', true);
+            gridConn.setLoading(true);
 
             // 저장시 필요한 데이터
             srcRow = null;
@@ -108,7 +104,7 @@ function gridProcess(
             const rows = gridApi.getSelectedRows();
             
             // 계정 삭제 모달
-            gridConn.trigger('delete-modal', {
+            gridConn.openDeleteModal({
                 title: 'Remove member',
                 content: 'Do you want to remove the selected users?',
                 rows,

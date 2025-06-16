@@ -1,6 +1,6 @@
 import { useCommModalStore } from "@/compos/modal";
 import { UI_Button, type ColDef } from "@/compos/ui";
-import { GridBasic } from "@/compos/grid";
+import { GridBasic, GridConnPublic } from "@/compos/grid";
 import type { GridApi } from "ag-grid-community";
 import { SectionStore } from "@/stores";
 import { api_tabsAddMemberList } from "@/features/user-group/apis";
@@ -119,7 +119,7 @@ function AddMember({}: {}){
  */
 function gridProcess(
     gridApi: GridApi<any>,
-    gridConn: SectionStore<any>,
+    gridConn: GridConnPublic,
 ){ 
     /**
      * 리스트 가져오기
@@ -128,11 +128,11 @@ function gridProcess(
         // 등록된 사용자 리스트 가져오기
         const memberList = await api_tabsAddMemberList();
 
-        // 그리드에 리스트 전달, 로딩 끝
-        gridConn.triggers({
-            'list': memberList,
-            'loading': false,
-        });
+        // 그리드에 리스트 전달
+        gridConn.setList(memberList);
+
+        // 로딩 끝
+        gridConn.setLoading(false);
     };
 
     // init
@@ -140,10 +140,10 @@ function gridProcess(
         _agGridApi = gridApi;
 
         // 그리드 헤더 셀 높이 설정
-        gridConn.trigger('headerCellHeight', 40);
+        gridConn.setHeaderCellHeight(40);
 
         // 데이터 없을 시 메시지
-        gridConn.trigger('noDataMsg', <>
+        gridConn.setNoDataMsg(<>
             Please search for the users you want to assign to a group.
         </>);
 

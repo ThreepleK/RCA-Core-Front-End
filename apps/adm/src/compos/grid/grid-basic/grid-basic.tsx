@@ -7,7 +7,7 @@ import { SectionStore } from "@/stores";
 import { GridTop } from "./grid-top";
 import type { GridCreateParams, GridEditParams, GridDeleteParams, GridUpdateParams, GridNodataParams } from "./components";
 import { BaseModal, girdNodata, gridCreate, gridEdit, gridDelete, gridUpdate } from "./components";
-import type { GridConnKey, GridConnMap } from "./";
+import { GridConnPublic, type GridConnKey, type GridConnMap } from "./";
 
 import style from './grid-basic.module.css'
 
@@ -22,9 +22,9 @@ export function GridBasic({
 }: {
     columns: ColDef[];
     processCB: ( 
-        api: GridApi<any>,                  // Ag Grid Api
-        conn: SectionStore<GridConnMap>,   // 현재 GridBasic과 통신을 위한 Connector
-        pConn?: SectionStore,               // 외부와 ProcessCB과 통신을 위한 Connector
+        api: GridApi<any>,     // Ag Grid Api
+        conn: GridConnPublic,  // 현재 GridBasic과 통신을 위한 Connector
+        pConn?: SectionStore,  // 외부와 ProcessCB과 통신을 위한 Connector
     ) => void;
     processConn?: (pConn: SectionStore) => void;
 }){
@@ -48,16 +48,19 @@ export function GridBasic({
 
     //* ProcessCB ↔ Grid 양방향 통신용 이벤트
     let conn = useMemo(() => new SectionStore(), []) as SectionStore<GridConnMap>;
+    //* 외부에서 사용가능한 형태로 변환
+    let connPublic = useMemo(() => new GridConnPublic(conn), []);
 
     //* 외부에서 ProcessCB 양방향 통신용 이벤트
     let onlyProcessConn = useMemo(() => new SectionStore(), []);
+
 
     //* 그리드 준비 완료
     const onReady = useCallback((e: GridReadyEvent<any>) => {
         // 구독 해지를 위한 ref 등록
         pReleaseRef.current = processCB(
             e.api,
-            conn,
+            connPublic,
             onlyProcessConn
         );
 
@@ -79,9 +82,7 @@ export function GridBasic({
         //* 그리드 rowSelection 설정
         conn.on('rowSelectionType', (type: 'singleRow'|'multiRow') => setRSelection(type));
         //* 리스트 설정
-        conn.on('list', (data: any) => {
-            const list = !data ? [] : data;
-
+        conn.on('list', (list: any) => {
             // 그리드 리스트 설정
             setRowData(oldList => [...list]);
 
@@ -114,6 +115,7 @@ export function GridBasic({
             // 사용 된 store 제거
             conn.destroy();
             conn = null;
+            connPublic = null;
         };
     }, []);
 

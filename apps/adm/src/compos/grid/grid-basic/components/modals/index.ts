@@ -7,11 +7,16 @@ export type RowItem = {[key: string]: any};
 
 //* 모달에서 사용되는 공통 params
 export type GridModalCommParams = {
-    conn?: SectionStore<GridConnMap>;       // Grid 연결
-    title?: string|ReactNode,               // 모달에 보여줄 타이틀
-    callback: () => void;                   // 확인 콜백
-    apiFn: (rows: any) => ResponseResult,   // 관련 api 함수
-    size?: string;                          // 컴포넌트 크기
+    /** 그리드 연걸 Section store */
+    conn?: SectionStore<GridConnMap>;
+    /** 모달에 보여줄 타이틀 */
+    title?: string|ReactNode;
+    /** apiFn에서 정상 처리 후 콜백 함수 */
+    callback: () => void;
+    /** 관련 모달 처리용 api 함수 */
+    apiFn: (rows: any) => ResponseResult;
+    /** 컴포넌트 크기 */
+    size?: string;
 }
 
 /**

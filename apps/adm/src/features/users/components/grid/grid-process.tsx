@@ -1,9 +1,8 @@
 import type { GridApi } from "ag-grid-community";
 import { useLocalSendEvent } from "../../stores";
 import { api_createItem, api_deleteItems, api_list, api_updateItems } from "../../apis";
-import type { GridCreateParams, GridDeleteParams, GridEditParams, GridNodataParams, GridUpdateParams } from "@/compos/grid";
+import type { GridConnPublic, GridCreateParams, GridDeleteParams, GridEditParams, GridUpdateParams } from "@/compos/grid";
 import { FormEditContent, formValidate } from "../form";
-import type { SectionStore } from "@/stores";
 
 /**
  * 그리드 프로세스 처리
@@ -12,22 +11,22 @@ import type { SectionStore } from "@/stores";
  */
 export function gridProcess(
     gridApi: GridApi<any>,
-    gridConn: SectionStore
+    gridConn: GridConnPublic
 ){
     
     //* 리스트 불러오기
     const onListLoad = async () => {
         // 로딩 시작
-        gridConn.trigger('loading', true);
+        gridConn.setLoading(true);
 
         // 리스트 가져오기
         const res = await api_list();
 
         // 그리드에 리스트 전달
-        gridConn.trigger('list', res);
+        gridConn.setList(res);
 
         // 로딩 끝
-        gridConn.trigger('loading', false);
+        gridConn.setLoading(false);
     };
 
     //* User 구독 이벤트
@@ -44,7 +43,7 @@ export function gridProcess(
         switch( eKey ){
             // 추가
             case 'create': {
-                gridConn.trigger('create-modal', {
+                gridConn.openCreateModal({
                     title: 'Add user',
                     srcRow: {
                         username: '',
@@ -70,7 +69,7 @@ export function gridProcess(
                 // 그리드에서 선택된 row 가져오기
                 const rows = gridApi.getSelectedRows();
                 // 계정 활성화 모달
-                gridConn.trigger('update-modal', {
+                gridConn.openUpdateModal({
                     title: 'Activate member',
                     content: 'Do you want to activate the selected users?',
                     rows,
@@ -86,7 +85,7 @@ export function gridProcess(
                 // 그리드에서 선택된 row 가져오기
                 const rows = gridApi.getSelectedRows();
                 // 계정 비활성화 모달
-                gridConn.trigger('update-modal', {
+                gridConn.openUpdateModal({
                     title: 'Deactivate member',
                     content: 'Do you want to deactivate the selected users?',
                     rows,
@@ -108,10 +107,10 @@ export function gridProcess(
                 // 삭제 가능한 사용자가 0명일 경우
                 if( rmRows.length === 0 ){
                     // 경고 모달
-                    gridConn.trigger('nodata-modal', {
+                    gridConn.openWarningModal({
                         title: 'Delete',
                         content: <>Only inactive users can be deleted.</>,
-                    } as GridNodataParams);
+                    });
                     return;
                 }
 
@@ -130,7 +129,7 @@ export function gridProcess(
                 );
 
                 // 삭제 모달
-                gridConn.trigger('delete-modal', {
+                gridConn.openDeleteModal({
                     title: 'Delete',
                     content: msg,
                     rows: rmRows,
@@ -145,7 +144,7 @@ export function gridProcess(
                 const row = eVal as any;
 
                 // 수정 모달
-                gridConn.trigger('edit-modal', {
+                gridConn.openEditModal({
                     title: 'Edit Details',
                     FormCompo: (props: any) => {
                         const {permissionSets, userGroups} = props.row;
@@ -172,15 +171,15 @@ export function gridProcess(
                 // 삭제할 사용자가 inactive 상태가 아닐 경우
                 if( row.status !== 'INACTIVE' ){
                     // 경고 모달
-                    gridConn.trigger('nodata-modal', {
+                    gridConn.openWarningModal({
                         title: 'Delete',
                         content: <>Only inactive users can be deleted.</>,
-                    } as GridNodataParams);
+                    });
                     return;
                 }
 
                 // 삭제 모달
-                gridConn.trigger('delete-modal', {
+                gridConn.openDeleteModal({
                     title: 'Delete',
                     content: <>
                         Are you sure you want to delete?<br />
