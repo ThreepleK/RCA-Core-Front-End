@@ -1,6 +1,5 @@
 import { request } from '@/utils'
 import type { ApiResult } from '.';
-import { it } from 'node:test';
 
 /**
  * 리스트 가져오기
@@ -84,18 +83,39 @@ export function api_updateItems(type: string, rows: any[]){
  * 아이템 삭제
  */
 export function api_deleteItems(datas: any[]){
-    // return request({
-    //     type: 'delete',
-    //     url: '/admin/api/users',
-    //     datas: {id: datas},
-    // });
+    // 1개만 가능하기에 첫번째 값만 추림
+    const row = datas[0];
 
-    // 임시 시연용 api
-    return api_demo();
+    // 삭제 처리
+    return request({
+        type: 'delete',
+        url: '/admin/api/permission-sets',
+        datas: {id: [row]},
+    });
 }
 
 /**
- * 대모 시연용 api
+ * 아이템 복제
+ */
+export function api_cloneItem(id: string, row: any){
+
+    // 서버에 전달 할 내용으로 가공
+    const item = {
+        id: id,
+        name: row.name,
+        description: row.description,
+    };
+
+    // 전달
+    return request({
+        type: 'put',
+        url: '/admin/api/permission-sets',
+        datas: item
+    });
+}
+
+/**
+ * 데모 시연용 api
  */
 export function api_demo(): Promise<ApiResult>{
     return new Promise((resolve) => {

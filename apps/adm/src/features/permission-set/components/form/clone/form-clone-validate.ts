@@ -15,11 +15,19 @@ export async function formCloneValidate(
         code: '',
     };
 
-    //* 그룹명
-    if( r.groupName === '' ){
-        res.code = 'groupName';
+    //* Permission set name
+    if( r.name === '' ){
+        res.code = 'name';
         res.isErr = true;
-        res.msg = '복제 할 그룹명을 입력해주세요.';
+        res.msg = '이름을 입력해주세요.';
+
+        return res;
+    }
+
+    if( r.description === '' ){
+        res.code = 'description';
+        res.isErr = true;
+        res.msg = '설명을 입력해주세요.';
 
         return res;
     }

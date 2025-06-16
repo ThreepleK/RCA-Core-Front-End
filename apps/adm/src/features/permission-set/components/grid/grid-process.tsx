@@ -1,6 +1,6 @@
 import type { GridApi } from "ag-grid-community";
 import { useLocalSendEvent } from "../../stores";
-import { api_createItem, api_deleteItems, api_list, api_updateItems } from "../../apis";
+import { api_cloneItem, api_createItem, api_deleteItems, api_list, api_updateItems } from "../../apis";
 import type { GridConnMap, GridCreateParams, GridDeleteParams, GridEditParams } from "@/compos/grid";
 import { FormClone, formCloneValidate, FormCreateContent, formValidate } from "../form";
 import type { SectionStore } from "@/stores";
@@ -80,25 +80,13 @@ export function gridProcess(
                 gridConn.trigger('edit-modal', {
                     title: 'Clone user group',
                     row: {
-                        groupName: rows[0].groupName,
+                        name: rows[0].name,
+                        description: '',
                     },
                     FormCompo: FormClone,
                     formValidationFn: formCloneValidate,
                     callback: onListLoad,
-                    apiFn: async editRows => {
-                        const resRow = {...rows[0], ...editRows[0]};
-                        console.log('resRow', resRow);
-
-                        return new Promise(resolve => {
-                            const res = {
-                                isErr: false,
-                                msg: '',
-                                res: null,
-                            };
-
-                            resolve(res as any);
-                        });
-                    },
+                    apiFn: editRows => api_cloneItem(rows[0].id, editRows[0]),
                     size: 'sm'
                 } as GridEditParams);
             } break;

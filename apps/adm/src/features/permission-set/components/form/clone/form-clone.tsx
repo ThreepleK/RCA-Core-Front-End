@@ -34,13 +34,20 @@ export function FormClone({row, onSetData, errMsg, errCode}: {
     return <>
         {/* 폼 */}
         <UI_Flex vertical gap='small'>
-            {/* 신규 등록 폼 */}
+            {/* 복제 등록 폼 */}
             <UI_TextInput
-                label="Group name"
-                value={r?.groupName}
-                error={errCode === 'groupName' && errMsg}
+                label="Permission set name"
+                value={r?.name}
+                error={errCode === 'name' && errMsg}
                 required
-                onChange={(e) => onData(e.currentTarget.value, 'groupName')}
+                onChange={(e) => onData(e.currentTarget.value, 'name')}
+            />
+            <UI_TextInput
+                label="Description"
+                value={r?.description}
+                error={errCode === 'description' && errMsg}
+                required
+                onChange={(e) => onData(e.currentTarget.value, 'description')}
             />
         </UI_Flex>
     </>;
