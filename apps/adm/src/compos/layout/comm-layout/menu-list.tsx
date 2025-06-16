@@ -1,51 +1,50 @@
-import { IconFolder } from '@tabler/icons-react';
-import type { MenuProps } from 'antd';
+import { IconFolder } from "@tabler/icons-react";
+import type { MenuProps } from "antd";
 
-
-export type MenuItem = Required<MenuProps>['items'][number];
+export type MenuItem = Required<MenuProps>["items"][number];
 
 //* 메뉴 리스트
 export const MenuList: MenuItem[] = [
     {
-        key: 'general',
+        key: "general",
         icon: <IconFolder size={16} stroke={1.5} />,
-        label: 'General',
+        label: "General",
         children: [
-            { label: 'Users', key: '/adm/users' },
-            { label: 'User Group', key: '/adm/user-group' },
-            { label: 'Permission set', key: '/adm/permission-set' },
-        ]
+            { label: "Users", key: "/adm/users" },
+            { label: "User Group", key: "/adm/user-group" },
+            { label: "Permission set", key: "/adm/permission-set" },
+        ],
     },
     {
-        key: 'system_settings',
-        label: 'System settings',
+        key: "system_settings",
+        label: "System settings",
         icon: <IconFolder size={16} stroke={1.5} />,
         children: [
-            { label: 'Sidebar', key: '/adm/sidebar' },
-            { label: 'Application Menu', key: '#/adm/application-menu' },
-            { label: 'Language', key: '#/adm/i18n' },
-            { label: 'Message', key: '#/adm/message' },
-            { label: 'Code', key: '#/adm/code' },
-            { label: 'Design', key: '/adm/design' },
-            { label: 'License', key: '#/adm/license' },
-        ]
+            { label: "Sidebar", key: "/adm/sidebar" },
+            { label: "Application Menu", key: "#/adm/application-menu" },
+            { label: "Language", key: "/adm/i18n" },
+            { label: "Message", key: "#/adm/message" },
+            { label: "Code", key: "#/adm/code" },
+            { label: "Design", key: "/adm/design" },
+            { label: "License", key: "#/adm/license" },
+        ],
     },
     {
-        type: 'divider',
+        type: "divider",
     },
     {
-        label: 'Application settings',
-        key: '#/adm/app_settings',
+        label: "Application settings",
+        key: "#/adm/app_settings",
     },
     {
-        label: 'Announcement',
-        key: '#/adm/announcement',
+        label: "Announcement",
+        key: "#/adm/announcement",
     },
     {
-        label: 'Monitoring',
-        key: '#/adm/monitoring',
+        label: "Monitoring",
+        key: "#/adm/monitoring",
     },
 ];
 
 //* 기본으로 펼칠 메인 메뉴 키 값
-export const MenuDefaultOpenList: string[] = ['general', 'system_settings'];
+export const MenuDefaultOpenList: string[] = ["general", "system_settings"];

@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+/* 본문 컨텐츠 기본영역 */
+.content {}
+
+/* 우측 상단 */
+.top-right {
+    @apply pr-3;
+}
