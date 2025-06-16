@@ -27,43 +27,49 @@ import { IconMenu2, IconTrash } from "@tabler/icons-react";
     );
 
 const DraggableRow = ({ children, ...props }: any) => {
+    const rowKey = props["data-row-key"];
+    
+    if (!rowKey) {
+            // row-key가 없으면 기본 <tr> 반환 (예: No Data 상태)
+        return <tr {...props}>{children}</tr>;
+    }
+    
     const { attributes, listeners, setNodeRef, transform, transition } =
-        useSortable({ id: props["data-row-key"] });
-
+        useSortable({ id: rowKey });
+    
     const style: React.CSSProperties = {
         ...props.style,
         transform: CSS.Transform.toString(transform),
         transition,
     };
-
-  // toArray를 사용해 ReactNode → ReactElement[]로 변환
+    
     const childrenArray = React.Children.toArray(children) as ReactElement[];
-
+    
     return (
         <tr {...props} ref={setNodeRef} style={style} {...attributes}>
-        {childrenArray.map((child, index) => {
-            if (index === 0 && React.isValidElement(child)) {
-            const childTyped = child as React.ReactElement<any>;
-
-            return React.cloneElement(childTyped, {
-                ...childTyped.props,
-                children: (
-                <span
-                    {...listeners}
-                    style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 8,
-                    }}
-                >
-                    <DragHandle />
-                    {childTyped.props.children}
-                </span>
-                ),
-            });
-            }
-            return child;
-        })}
+            {childrenArray.map((child, index) => {
+                if (index === 0 && React.isValidElement(child)) {
+                    const childTyped = child as React.ReactElement<any>;
+    
+                    return React.cloneElement(childTyped, {
+                        ...childTyped.props,
+                        children: (
+                            <span
+                                {...listeners}
+                                style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: 8,
+                                }}
+                            >
+                                <DragHandle />
+                                {childTyped.props.children}
+                            </span>
+                        ),
+                    });
+                }
+                return child;
+            })}
         </tr>
     );
 };

@@ -1,26 +1,20 @@
 import { useEffect, useState } from "react";
 import { PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import style from "./content-area.module.css";
-import { UI_Button, UI_Flex, UI_Input, UI_Switch, UI_Title } from "@/compos/ui";
+import { UI_Flex, UI_Select, UI_Title } from "@/compos/ui";
 import { useLocalSendEvent } from "../../stores";
-import { UI_Table } from "@/compos/ui/ui-table";
 import type {
-    IFetchLanguageMenu,
     IFetchLanguageMenuItem,
     DataType,
 } from "../../models";
 import { api_getLanguageMenuData } from "../../apis";
-import type { TableColumnsType } from "antd";
+import { SortableTable } from "../table";
 
-export function ContentArea({
-    isCancel,
-    onChangeCancel,
-}: {
-    isCancel: boolean;
-    onChangeCancel: (isCancel: boolean) => void;
-}) {
+export function ContentArea() {
     const [reloadFlag, setReloadFlag] = useState(false);
     const [data, setData] = useState<any[]>([]);
+    const [languageCode, setLanguageCode] = useState<any[]>([]);
+    const [selectedCode, setSelectedCode] = useState<any>();
     const [defaultData, setDefaultData] = useState<any[]>([]);
     const [checkedData, setCheckedData] = useState<any[]>([]);
     const sensors = useSensors(useSensor(PointerSensor));
@@ -28,14 +22,26 @@ export function ContentArea({
     /*
      * 사이드바 메뉴 API 호출
      */
+    // useEffect(() => {
+    //     api_getLanguageMenuData().then(({ isErr, res }) => {
+    //         if (isErr) {
+    //             return;
+    //         }
+    //         // setData(res);
+    //         setData([{ id: '1', language: 'korean', code: 'KO', default: true, status: 'ACTIVE' },{ id: '1', language: 'chinese', code: 'CN', default: false, status: 'ACTIVE' }, { id: '1', language: 'english', code: 'EN', default: false, status: 'ACTIVE' }] );
+    //     });
+    // }, [reloadFlag]);
+
     useEffect(() => {
-        api_getLanguageMenuData().then(({ isErr, res }) => {
-            if (isErr) {
-                return;
-            }
-            setData(res);
-        });
-    }, [reloadFlag]);
+        setData([{ id: '1', language: 'korean', code: 'KO', default: true, status: 'ACTIVE' },
+            { id: '2', language: 'chinese', code: 'CN', default: false, status: 'ACTIVE' }, 
+            { id: '3', language: 'english', code: 'EN', default: false, status: 'INACTIVE' }] );
+
+        setLanguageCode([{ key: 'japanese', label: 'Japanese' },
+            { key: 'german', label: 'German' }, 
+            { key: 'franch', label: 'Franch' }]);
+
+    }, []);
 
     useEffect(() => {
         if (!data) return;
@@ -44,32 +50,21 @@ export function ContentArea({
     }, [data]);
 
     const onChange = (checkedValues) => {
-        console.log("checked = ", checkedValues);
         setCheckedData(checkedValues);
+    };
+
+    const onChangeSelect = (key) => {
+        setSelectedCode(key);
     };
 
     return (
         <div className={style["cont-area"]}>
-            <div className={style["core-table"]}>
+            <div>
                 {/* <UI_Title order={2} className={style.title}>
                     Available Languages
                 </UI_Title> */}
                 <UI_Flex vertical gap="middle">
-                    {/* <UI_FormCheckbox
-                        label="Available languages"
-                        defaultValue={defaultData}
-                        value={checkedData}
-                        onChange={onChange}
-                        vertical
-                        data={[
-                            { value: "english", label: "English" },
-                            { value: "chinese", label: "Chinese" },
-                            { value: "spanish", label: "Spanish" },
-                            { value: "hungarian", label: "Hungarian" },
-                            { value: "korean", label: "Korean" },
-                        ]}
-                    /> */}
-                    checkbox area
+                    <SortableTable dataSource={data} />
                 </UI_Flex>
             </div>
         </div>

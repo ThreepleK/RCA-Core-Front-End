@@ -10,23 +10,14 @@ import { useLocalSendEvent } from './stores';
 import { IconPlus } from '@tabler/icons-react';
 
 export function Language(){
-    const [isCancel, setIsCancel] = useState(false);
 
-    const handleApplyButton = () => {
-      console.log('apply button clicked');
-    };
-
-    const handleCancelButton = () => {
-      setIsCancel(true);
-    };
-    
     return <>
         {/* 페이지 내 Action을 주고 받기 위한 SendActionProvider 추가 */}
         <ContentsLayout>
             {/* 초기 레이아웃 설정 */}
             <InitLayout />
             {/* 컨텐츠 */}
-            <ContentArea isCancel={isCancel} onChangeCancel={setIsCancel}/>
+            <ContentArea />
         </ContentsLayout>
     </>;
 }

@@ -10,81 +10,8 @@
 }
 
 /* 테이블 */
-.core-table {
+.select {
     & {
-        @apply text-2xl mb-5;
-    }
-
-    & > .title {
-        @apply text-xl font-bold mt-5 mb-2 gap-2;
-    }
-
-    & > .table {
-        & {
-            @apply min-w-full text-sm text-gray-700;
-        }
-
-        & > .head {
-            @apply bg-gray-100 px-4 py-2 text-left;
-        }
-
-        & > .drag {
-            @apply pl-4 pr-2 py-2 w-10;
-        }
-    }
-}
-
-.row {
-    @apply px-4 py-2 border-r border-gray-200 w-[150px];
-}
-
-.body {
-    @apply hover:bg-gray-50 border-b border-gray-200;
-}
-
-.body-row {
-    @apply px-4 py-2 border-r border-gray-200;
-}
-
-.input {
-    @apply w-60;
-}
-
-/* 테이블 */
-.custom-table {
-    & {
-        @apply text-2xl mb-5;
-    }
-
-    & > .title-div {
-        @apply flex items-center justify-between mb-2 gap-2;
-
-        & > .title {
-            @apply text-xl font-bold leading-none;
-        }
-
-        & > .button-div {
-            @apply flex gap-2 text-xs;
-
-            & > .button {
-                @apply px-2 py-1 rounded border border-blue-600 bg-white text-blue-600 hover:bg-blue-50 leading-none;
-            }
-
-            & > .add-button {
-                @apply px-3 py-1.5 rounded border border-blue-600 bg-blue-600 text-white hover:bg-blue-700 leading-none;
-            }
-        }
-    }
-
-    & > .table {
-        @apply min-w-full text-sm text-gray-700;
-
-        & > .head {
-            @apply bg-gray-100 px-4 py-2 text-left;
-        }
-
-        & > .drag {
-            @apply pl-4 pr-2 py-2 w-10;
-        }
+        @apply w-[300px];
     }
 }

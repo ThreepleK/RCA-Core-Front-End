@@ -6,8 +6,7 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import { UI_Input, UI_Switch } from "@/compos/ui";
-import { useDataStore, useEventStore } from "../../stores";
+import { UI_Input, UI_Select, UI_Switch } from "@/compos/ui";
 import { UI_Table } from "@/compos/ui/ui-table";
 import {
   arrayMove,
@@ -18,13 +17,13 @@ import {
 import { cloneDeep } from "lodash";
 import { CSS } from "@dnd-kit/utilities";
 import type {
-  IFetchSidebarMenuItem,
+  IFetchLanguageMenuItem,
 } from "../../models";
 import { IconMenu2 } from "@tabler/icons-react";
 
-    const DragHandle = () => (
-        <IconMenu2 style={{ cursor: "grab", color: "#999" }} />
-    );
+const DragHandle = () => (
+    <IconMenu2 style={{ cursor: "grab", color: "#999" }} />
+);
 
 const DraggableRow = ({ children, ...props }: any) => {
     const rowKey = props["data-row-key"];
@@ -74,35 +73,23 @@ const DraggableRow = ({ children, ...props }: any) => {
     );
 };
 
-export function AppTable({
+export function SortableTable({
     dataSource,
   }: {
-    dataSource: IFetchSidebarMenuItem[];
+    dataSource?: IFetchLanguageMenuItem[];
   }) {
   
-    const [data, setData] = useState<IFetchSidebarMenuItem[]>([]);
+    const [data, setData] = useState<IFetchLanguageMenuItem[]>([]);
     const sensors = useSensors(useSensor(PointerSensor));
-    const { eKey, sendEvent } = useEventStore();
-    const { sendApp } = useDataStore();
+    // const { eKey, sendEvent } = useEventStore();
+    // const { sendApp } = useDataStore();
 
     useEffect(() => {
-        if (!dataSource) return;
+        if (!dataSource) return; 
+        
         const clonedData = cloneDeep(dataSource);
-        setData(clonedData);
-        }, [dataSource]);
-
-        useEffect(() => {
-        if (!data) return;
-        sendApp(data);
-        }, [data]);
-
-    useEffect(() => {
-        // cancel 버튼 클릭 시
-        if(eKey === "cancel") {
-            setData(dataSource);
-            sendEvent(null);
-        }
-        }, [eKey]);
+        setData(clonedData)
+        }, [dataSource])
 
     const handleToggleChange = (id: string, checked: boolean) => {
         // const stringId = id.toString();
@@ -128,6 +115,11 @@ export function AppTable({
         );
     };
 
+    const options =[
+        { value: 'ACTIVE', label: 'ACTIVE' },
+        { value: 'INACTIVE', label: 'INACTIVE' },
+    ];
+
     const columns: any = [
         {
             title: "",
@@ -135,37 +127,34 @@ export function AppTable({
             render: (_: any, record: any) => record.sort,
         },
         {
-            title: "Name",
-            dataIndex: "name",
-            width: '20%',
+            title: "Language",
+            dataIndex: "language",
+            width: '25%',
         },
         {
-            title: "Display Name",
-            dataIndex: "displayName",
-            width: '50%',
+            title: "Code",
+            dataIndex: "code",
+            width: '25%',
+        },
+        {
+            title: "Default",
+            dataIndex: "default",
+            width: '25%',
             render: (text, record) => {
-                return <UI_Input
-                value={text}
-                onChange={(e) => {
-                handleDisplayNameChange(record.id, e.currentTarget.value);
-                }}
-            />
-            },
+                console.log('text', text)
+                return text ? 'Default' : <a>Set as default</a>
+            }
         },
         {
-            title: "Display",
-            dataIndex: "isVisible",
-            width: '30%',
-            render: (text, record) => (
-                <UI_Switch
-                checked={text}
-                onChange={(checked) =>
-                    handleToggleChange(record.id, checked)
-                }
-                />
-            ),
+            title: "Status",
+            dataIndex: "status",
+            width: '25%',
+            render: (text, record) => {
+                return <UI_Select value={text} options={options} style={{ width: 120 }}/>
+            }
         },
-    ]
+        
+    ];
 
     const handleAppDragEnd = (event: any) => {
         const { active, over } = event;
@@ -208,4 +197,4 @@ export function AppTable({
     );
 }
 
-export default AppTable;
+export default SortableTable;
